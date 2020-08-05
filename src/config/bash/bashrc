@@ -1,0 +1,68 @@
+#!/usr/bin/env bash
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+# If not running interactively, don't do anything
+[[ $- != *i*  ]] && return
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+# Source System Bash
+
+#Fedora/Redhat/CentOS
+if [ -f /etc/bashrc ]; then
+    source /etc/bashrc
+fi
+
+#Debian/Ubuntu/Arch
+if [ -f /etc/bash.bashrc ]; then
+    source /etc/bash.bashrc
+fi
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+# source all others
+if [ -f "$HOME/.config/bash/rc" ]; then
+    source "$HOME/.config/bash/rc"
+fi
+
+#Local file
+if [ -f "$HOME/.config/local/bash.local" ]; then
+    source "$HOME/.config/local/bash.local"
+fi
+
+#System specific
+if [ -f "$HOME/.config/local/bash."$(hostname -s)".local" ]; then
+    source "$HOME/.config/local/bash."$(hostname -s)".local"
+fi
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+# clean path
+
+NEW_PATH=$(echo $PATH | tr ':' '\n' | sort -u | grep -v -e '^$' | grep -v $HOME/.local/bin | tr '\n' ':')
+export PATH="$HOME/.local/bin:$NEW_PATH"
+unset NEW_PATH
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+# Source additional bash scripts
+
+
+test -r $HOME/.dircolors && eval "$(dircolors $HOME/.dircolors)"
+
+# Set mouse type - changes to blinking bar
+
+echo -e -n "\x1b[\x35 q"
+echo -e -n "\x6b[\x35 q"
+echo -e -n "\e]12;white\a"
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+# set variable for other scripts
+
+export SRCBASHRC="$HOME/.bashrc"
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+#/* vim set expandtab ts=4 noai :

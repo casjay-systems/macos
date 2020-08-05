@@ -1,0 +1,85 @@
+#!/usr/bin/env bash
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# CD Aliases
+alias ..="cd .."
+alias ...="cd ../.."
+alias ....="cd ../../.."
+alias cd..="cd .."
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# System Aliases
+alias :q="exit"
+alias c="clear"
+alias ch="history -c && > ~/.bash_history"
+alias e="vim --"
+alias g="git"
+alias ll="ls -l"
+alias la="ls -a"
+alias m="man"
+alias map="xargs -n1"
+alias n="npm"
+alias path='printf "%b\n" "${PATH//:/\\n}"'
+alias q="exit"
+alias t="tmux"
+alias bashrc="source ~/.bashrc && clear"
+alias tailf="tail -f"
+alias ipconfig="ifconfig"
+alias systemctl="sudo systemctl"
+alias mount='mount -l'
+alias h='history'
+alias j='jobs -l'
+alias now='date +"%T"'
+alias nowtime=now
+alias nowdate='date +"%m-%d-%Y"'
+alias wget='wget -c'
+alias df='df -H'
+alias du='du -ch'
+alias docker='sudo docker'
+alias dockerrun='sudo docker run --rm --network host -it $1'
+alias setver='date +"%m%d%Y%H%M-git" > version.txt'
+alias ssh="ssh -X"
+alias python="winpty /c/Progra~1/Python2/python.exe"
+alias pip="winpty /c/Progra~1/Python2/python.exe -m venv"
+alias python3="winpty /c/Progra~1/Python3/python.exe"
+alias pip3="winpty /c/Progra~1/Python3/python.exe -m venv"
+alias php="winpty /c/Progra~1/PHP/php.exe"
+alias perl="winpty /c/Progra~1/Perl/bin/perl.exe"
+alias ruby=""
+alias node="winpty /c/Progra~1/nodejs/node.exe"
+alias nodejs="node"
+alias npm="winpty /c/Progra~1/nodejs/npm.exe"
+alias go="winpty /c/Progra~1/Go/bin/go.exe"
+alias httpd="winpty /c/Progra~1/Apache/bin/httpd.exe"
+alias gpg="winpty /c/Progra~2/GnuPG/bin/gpg.exe"
+alias gpg-agent="winpty /c/Progra~2/GnuPG/bin/gpg-agent.exe"
+alias vim="winpty /c/Progra~1/Vim81/bin/vim.exe"
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+#Set vim as default
+alias vi='vim'
+alias svi='sudo vi'
+alias vis='vim "+set si"'
+alias edit='vim'
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# Empty trash.
+alias empty-trash="rm -rf ~/.local/share/Trash/files/*"
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# Hide/Show desktop icons.
+alias hide-desktop-icons="gsettings set org.gnome.desktop.background show-desktop-icons false"
+alias show-desktop-icons="gsettings set org.gnome.desktop.background show-desktop-icons true"
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# Open from the terminal.
+alias o="xdg-open"
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+#Fun alias
+alias tw="rainbowstream -iot"
+alias twitter="twitter"
+alias weather='wttrin'
+alias weather2='wttrin2'
+alias command-not-found="fuck"
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
