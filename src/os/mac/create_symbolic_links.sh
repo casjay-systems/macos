@@ -158,7 +158,7 @@ create_symlinks() {
   for i in "${FILES_TO_SYMLINK[@]}"; do
     sourceFile="$srcdir/$i"
     targetFile="$HOME/.$(printf "%s" "$i" | sed "s/.*\/\(.*\)/\1/g")"
-    rm -Rfv $targetFile
+    rm -Rf $targetFile
 
     if [ ! -e "$targetFile" ]; then
 
@@ -194,7 +194,7 @@ create_configfolders() {
   for i in "${CONFFOLDERS_TO_SYMLINK[@]}"; do
     sourceFile="$srcdir/config/$i"
     targetFile="$HOME/.config/$i"
-    rm -Rfv $targetFile
+    rm -Rf $targetFile
 
     if [ ! -e "$targetFile" ]; then
 
@@ -231,7 +231,7 @@ create_librarysymlinks() {
     sourceFile="$srcdir/Library/$i"
     targetFile="$HOME/Library/$i"
     mkdir -p ${targetFile%/*}
-    rm -Rfv $targetFile
+    rm -Rf $targetFile
 
     if [ ! -e "$targetFile" ]; then
 
