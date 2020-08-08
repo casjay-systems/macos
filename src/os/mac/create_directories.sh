@@ -5,6 +5,8 @@ cd "$(dirname "${BASH_SOURCE[0]}")" &&
 
 srcdir="$(cd .. && pwd)"
 
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
 if [ -d "$srcdir/bin" ]; then
   mkdir -p "$HOME/.local/bin"
   rsync -aq "$srcdir/bin/." "$HOME/.local/bin"

@@ -6,9 +6,10 @@ cd "$(dirname "${BASH_SOURCE[0]}")" &&
 srcdir="$(cd .. && pwd)"
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-rm -Rf $HOME/.config/fish/omf >/dev/null 2>&1
-unlink -f $HOME/.config/fish >/dev/null 2>&1
-rm -Rf $HOME/.config/fish >/dev/null 2>&1
+rm -Rf "$HOME/.config/fish/omf" >/dev/null 2>&1
+unlink -f "$HOME/.config/fish" >/dev/null 2>&1
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 setup_fish() {
   echo ""
