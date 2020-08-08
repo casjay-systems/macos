@@ -15,10 +15,6 @@ export ZSH_CACHEDIR="$HOME/.cache/oh-my-zsh"
 export ZSH="$HOME/.local/share/zsh/oh-my-zsh"
 export ZSH_CUSTOM="$HOME/.local/share/zsh/oh-my-zsh/custom"
 
-if (($ + commands[stty])); then
-  stty -ixon
-fi
-
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # create dirs
 
