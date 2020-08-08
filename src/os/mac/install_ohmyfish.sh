@@ -34,7 +34,7 @@ setup_ohmyfish() {
 setup_fishplugins() {
   echo ""
   execute \
-    "fish $srcdir/config/fish/plugins.fish 2>/dev/null" \
+    "fish $HOME/.config/fish/plugins.fish 2>/dev/null" \
     "Installing fish plugins"
 }
 
