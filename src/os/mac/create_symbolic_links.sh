@@ -116,7 +116,7 @@ backup_configfolders() {
 }
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-backup_confsymlinks() {
+backup_librarysymlinks() {
 
   local i=""
   local sourceFile=""
@@ -215,7 +215,7 @@ create_configfolders() {
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-create_confsymlinks() {
+create_librarysymlinks() {
 
   local i=""
   local sourceFile=""
@@ -256,13 +256,13 @@ main() {
 
   backup_configfolders "$@"
 
-  backup_confsymlinks "$@"
+  backup_librarysymlinks "$@"
 
   create_configfolders "$@"
 
   create_symlinks "$@"
 
-  create_confsymlinks "$@"
+  create_librarysymlinks "$@"
 
 }
 
