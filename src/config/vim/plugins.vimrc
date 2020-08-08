@@ -122,6 +122,13 @@ Plugin 'parkr/vim-jekyll'                   "Blogging from the command line
 
 Plugin 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }  "asynchronous completion framework
 
-Plugin 'tomtom/tlib_vim'                    "required for snipmate
-Plugin 'garbas/vim-snipmate'
+if (has('python') || has('python3'))
+    Plugin 'sirver/ultisnips'               "
+"  if has('python3')
+"      Plugin 'Valloric/YouCompleteMe', { 'do': 'cd ~/.local/share/vim/bundle/YouCompleteMe ; git submodule update --init --recursive ; python3 ./install.py' }
+"  elseif has('python')
+"      Plugin 'Valloric/YouCompleteMe', { 'do': 'cd ~/.local/share/vim/bundle/YouCompleteMe ; git submodule update --init --recursive ; python2. /install.py' }
+endif
+    Plugin 'garbas/vim-snipmate'
+    Plugin 'tomtom/tlib_vim' "required for snipmate
 call vundle#end()

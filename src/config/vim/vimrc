@@ -5,6 +5,23 @@
 let s:vimdir = $HOME . '/.config/vim'
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Python version
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+if has('python3')
+    let g:UltiSnipsUsePythonVersion = 3"
+    let g:powerline_pycmd="py3"
+    let g:python3_host_prog = "/usr/bin/python3"
+    set pyxversion=3
+    set pyx=3
+elseif has('python')
+    let g:UltiSnipsUsePythonVersion = 2"
+    let g:powerline_pycmd="py"
+    let g:python_host_prog = "/usr/bin/python2"
+    set pyx=2
+endif
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => create directories
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
@@ -164,6 +181,25 @@ let g:nerdtree_tabs_synchronize_view = 0
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 let g:snipMate = get(g:, 'snipMate', {})
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => deoplete
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+let g:deoplete#enable_at_startup = 1
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" =>  ultisnips
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+let g:UltiSnipsExpandTrigger = "<tab>"
+let g:UltiSnipsListSnippets = '<c-l>'
+let g:UltiSnipsJumpForwardTrigger = "<tab>"
+let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
+let g:UltiSnipsNoPythonWarning = 1
+let g:UltiSnipsEnableSnipMate = 1
+let g:UltiSnipsSnippetsDir="~/.config/vim/snippets"
+let g:UltiSnipsSnippetDirectories=["snips", "UltiSnips"]
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Copy selected text to system clipboard (requires gvim/nvim/vim-x11 installed):
