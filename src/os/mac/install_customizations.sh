@@ -8,6 +8,17 @@ customizedir="$(cd ../../customize && pwd)"
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
+create_user_shortcuts() {
+
+  echo ""
+  execute \
+    "ln -sf $(command -v gdircolors) ~/.local/bin/dircolors" \
+    "Creating dircolors"
+
+}
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
 create_fonts() {
 
   if [ -L ~/.local/share/fonts ]; then unlink ~/Library/Fonts; fi
@@ -29,6 +40,8 @@ create_fonts() {
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 main() {
+
+  create_user_shortcuts
 
   create_fonts
 

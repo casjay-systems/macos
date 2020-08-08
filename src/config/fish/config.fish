@@ -146,7 +146,7 @@ set -g theme_newline_cursor yes
 set -g theme_newline_prompt ' ><((°>)) 🐧 '
 
 # direnv
-direnv hook fish | source
+eval (direnv hook fish)
 
 # sxhkd fix
 set -U SXHKD_SHELL sh
