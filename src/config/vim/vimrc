@@ -5,17 +5,6 @@
 let s:vimdir = $HOME . '/.config/vim'
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Python version
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-if has('python3')
-    let g:UltiSnipsUsePythonVersion = 3"
-    let g:powerline_pycmd="py3"
-    let g:python_host_prog = "/usr/bin/python3"
-    set pyx=3
-endif
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => create directories
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
@@ -175,19 +164,6 @@ let g:nerdtree_tabs_synchronize_view = 0
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 let g:snipMate = get(g:, 'snipMate', {})
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" =>  ultisnips
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-let g:UltiSnipsExpandTrigger = "<tab>"
-let g:UltiSnipsListSnippets = '<c-l>'
-let g:UltiSnipsJumpForwardTrigger = "<tab>"
-let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
-let g:UltiSnipsNoPythonWarning = 1
-let g:UltiSnipsEnableSnipMate = 1
-let g:UltiSnipsSnippetsDir="~/.config/vim/snippets"
-let g:UltiSnipsSnippetDirectories=["snips", "UltiSnips"]
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Copy selected text to system clipboard (requires gvim/nvim/vim-x11 installed):
