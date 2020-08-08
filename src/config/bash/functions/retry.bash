@@ -26,7 +26,7 @@ retry() {
       if [[ $n -lt $max ]]; then
         ((n++))
         echo "Command failed. Attempt $n/$max:"
-        sleep $delay;
+        sleep $delay
       else
         printf_red "The command has failed after $n attempts."
       fi

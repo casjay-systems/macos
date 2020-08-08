@@ -5,6 +5,11 @@ cd "$(dirname "${BASH_SOURCE[0]}")" &&
 
 srcdir="$(cd .. && pwd)"
 
+if [ -d "$srcdir/bin" ]; then
+  mkdir -p "$HOME/.local/bin"
+  cp -Rf "$srcdir/bin/*" "$HOME/.local/bin/"
+fi
+
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 create_directories() {

@@ -1,0 +1,65 @@
+#!/usr/bin/env bash
+
+SCRIPTNAME="$(basename $0)"
+SCRIPTDIR="$(readlink -f -- "$(dirname -- "$0")/..")"
+USER="${SUDO_USER:-${USER}}"
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# @Author      : Jason
+# @Contact     : casjaysdev@casjay.net
+# @File        : explainshell
+# @Created     : Wed, Aug 05, 2020, 02:00 EST
+# @License     : WTFPL
+# @Copyright   : Copyright (c) CasjaysDev
+# @Description : search explainshell.com for commands
+#
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+# Set functions
+
+SCRIPTSFUNCTURL="${SCRIPTSAPPFUNCTURL:-https://github.com/casjay-dotfiles/scripts/raw/master/functions}"
+SCRIPTSFUNCTDIR="${SCRIPTSAPPFUNCTDIR:-$HOME/.config/bash}"
+SCRIPTSFUNCTFILE="${SCRIPTSAPPFUNCTFILE:-applications.bash}"
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+if [ -f "$SCRIPTSFUNCTDIR/functions/$SCRIPTSFUNCTFILE" ]; then
+  . "$SCRIPTSFUNCTDIR/functions/$SCRIPTSFUNCTFILE"
+else
+  curl -LSs "$SCRIPTSFUNCTURL/$SCRIPTSFUNCTFILE" -o "/tmp/$SCRIPTSFUNCTFILE" || exit 1
+  . "/tmp/$SCRIPTSFUNCTFILE"
+fi
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+[ "$1" = "--version" ] && get_app_info "$SCRIPTNAME"
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+__help() {
+  printf_green "Usage: explainshell ls -ltrsa"
+  printf_green "list directory contents"
+  printf_green "-l   use a long listing format"
+  printf_green "-t   sort by modification time, newest first"
+  printf_green "-r   reverse order while sorting"
+  printf_green "-s   print the allocated size of each file, in blocks"
+  printf_green "-a   do not ignore entries starting with ."
+  exit
+}
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+URL=$(echo "http://explainshell.com/explain/$1?args=${@:2}" | sed -e 's/ /+/g')
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+[ ! -z "$1" ] || __help
+[ "$1" = "--help" ] && __help
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+printf_green "$(curl -s "$URL" | sed -n '/<pre/,/<\/pre>/p' | sed -n '/<pre/,/<\/pre>/p' | sed -s 's/<[^>]*>//g' |
+  sed -e 's/^ *//g;s/ *$//g' | grep '.' | cat)"
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+# end

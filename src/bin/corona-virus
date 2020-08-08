@@ -1,0 +1,67 @@
+#!/usr/bin/env bash
+
+SCRIPTNAME="$(basename $0)"
+SCRIPTDIR="$(readlink -f -- "$(dirname -- "$0")/..")"
+USER="${SUDO_USER:-${USER}}"
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# @Author      : Jason
+# @Contact     : casjaysdev@casjay.net
+# @File        : corona-virus
+# @Created     : Wed, Aug 05, 2020, 02:00 EST
+# @License     : WTFPL
+# @Copyright   : Copyright (c) CasjaysDev
+# @Description : corona-virus local stats
+#
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+# Set functions
+
+SCRIPTSFUNCTURL="${SCRIPTSAPPFUNCTURL:-https://github.com/casjay-dotfiles/scripts/raw/master/functions}"
+SCRIPTSFUNCTDIR="${SCRIPTSAPPFUNCTDIR:-$HOME/.config/bash}"
+SCRIPTSFUNCTFILE="${SCRIPTSAPPFUNCTFILE:-applications.bash}"
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+if [ -f "$SCRIPTSFUNCTDIR/functions/$SCRIPTSFUNCTFILE" ]; then
+  . "$SCRIPTSFUNCTDIR/functions/$SCRIPTSFUNCTFILE"
+else
+  curl -LSs "$SCRIPTSFUNCTURL/$SCRIPTSFUNCTFILE" -o "/tmp/$SCRIPTSFUNCTFILE" || exit 1
+  . "/tmp/$SCRIPTSFUNCTFILE"
+fi
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+[ "$1" = "--version" ] && get_app_info "$SCRIPTNAME"
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+if [ "$(stat -c %y ~/.cache/corona-virus 2>/dev/null | cut -d' ' -f1)" != "$(date '+%Y-%m-%d')" ]; then
+  curl -s https://corona-stats.online/us >~/.cache/corona-virus
+  if [ ! -f ~/.cache/corona-virus ]; then
+    echo "Download unsuccessfull"
+    exit 1
+  fi
+fi
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+if [[ $* = --force ]]; then
+  shift
+  rm ~/.cache/corona-virus
+  curl -s https://corona-stats.online/us >~/.cache/corona-virus
+fi
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+if [ ! -z "$1" ]; then
+  LOCATION="$1"
+else
+  LOCATION=USA
+fi
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+echo -n "$LOCATION: "
+
+grep "$LOCATION" ~/.cache/corona-virus | sed "s/\x1b\[[0-9;]*m//g" | sed "s/\s*//g ; s/║//g ; s/│/;/g" | awk -F';' '{print "😷" $3 " (" $9") 💀" $5 " ("$7"%)"}'
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

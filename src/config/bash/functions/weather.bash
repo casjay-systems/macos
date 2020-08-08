@@ -15,14 +15,14 @@
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-wttrin () {
-    curl -LSs http://wttr.in/$1?AFu$2 | grep -v "Location" && echo -e "\n\n"
+wttrin() {
+  curl -LSs http://wttr.in/$1?AFu$2 | grep -v "Location" && echo -e "\n\n"
 }
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-wttrin2 () {
-    curl -LSs http://v2.wttr.in/$1?AFu$2 | grep -v "Location" && echo -e "\n\n"
+wttrin2() {
+  curl -LSs http://v2.wttr.in/$1?AFu$2 | grep -v "Location" && echo -e "\n\n"
 }
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

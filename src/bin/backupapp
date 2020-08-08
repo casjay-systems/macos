@@ -1,0 +1,80 @@
+#!/usr/bin/env bash
+
+SCRIPTNAME="$(basename $0)"
+SCRIPTDIR="$(readlink -f -- "$(dirname -- "$0")/..")"
+USER="${SUDO_USER:-${USER}}"
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# @Author      : Jason
+# @Contact     : casjaysdev@casjay.net
+# @File        : backupapp
+# @Created     : Wed, Aug 05, 2020, 02:00 EST
+# @License     : WTFPL
+# @Copyright   : Copyright (c) CasjaysDev
+# @Description : backup files and folders
+#
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+# Set functions
+
+SCRIPTSFUNCTURL="${SCRIPTSAPPFUNCTURL:-https://github.com/casjay-dotfiles/scripts/raw/master/functions}"
+SCRIPTSFUNCTDIR="${SCRIPTSAPPFUNCTDIR:-$HOME/.config/bash}"
+SCRIPTSFUNCTFILE="${SCRIPTSAPPFUNCTFILE:-applications.bash}"
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+if [ -f "$SCRIPTSFUNCTDIR/functions/$SCRIPTSFUNCTFILE" ]; then
+  . "$SCRIPTSFUNCTDIR/functions/$SCRIPTSFUNCTFILE"
+else
+  curl -LSs "$SCRIPTSFUNCTURL/$SCRIPTSFUNCTFILE" -o "/tmp/$SCRIPTSFUNCTFILE" || exit 1
+  . "/tmp/$SCRIPTSFUNCTFILE"
+fi
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+[ "$1" = "--version" ] && get_app_info "$SCRIPTNAME"
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+__help() {
+  printf_green "Usage: $SCRIPTNAME Directory BackupName"
+  return 0
+}
+
+[ ! -z "$1" ] || __help
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# check for needed applications
+
+check_app tar
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# Main application
+
+backupapp() {
+  local filename count backupdir rmpre4vbackup
+  [ ! -z "$1" ] && local myappdir="$1" || local myappdir="$APPDIR"
+  [ ! -z "$2" ] && local myappname="$2" || local myappname="$APPNAME"
+  local backupdir="${MY_BACKUP_DIR:-$HOME/.local/backups/dotfiles}"
+  local filename="$myappname-$(date +%Y-%m-%d-%H-%M-%S).tar.gz"
+  local count="$(ls $backupdir/$myappname*.tar.gz 2>/dev/null | wc -l 2>/dev/null)"
+  local rmpre4vbackup="$(ls $backupdir/$myappname*.tar.gz 2>/dev/null | head -n 1)"
+  mkdir -p "$backupdir"
+  if [ -e "$myappdir" ]; then
+    echo "" >>"$backupdir/$myappname.log"
+    echo "#################################" >>"$backupdir/$myappname.log"
+    echo "# Started on $(date +'%A, %B %d, %Y %H:%M:%S')" >>"$backupdir/$myappname.log"
+    echo "# $backupdir/$filename $myappdir" >>"$backupdir/$myappname.log"
+    echo "#################################" >>"$backupdir/$myappname.log"
+    tar cfzv "$backupdir/$filename" "$myappdir" >>"$backupdir/$myappname.log" 2>&1 &&
+      printf_green "Backup has completed successfully" ||
+      printf_red "The backup has failed to complete"
+  fi
+  if [ "$count" -gt "3" ]; then rm_rf "$rmpre4vbackup"; fi
+}
+
+backupapp "$@"
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+# end

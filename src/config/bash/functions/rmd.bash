@@ -14,15 +14,14 @@
 # remove files and directories.
 
 rmd() {
-if [ -n "$*" ]; then
-  printf_green "Deleting $@"
-  rm -Rf "$@"
-else
-  printf_red "Must provide path to file or folder for deletion $@"
-fi
+  if [ -n "$*" ]; then
+    printf_green "Deleting $@"
+    rm -Rf "$@"
+  else
+    printf_red "Must provide path to file or folder for deletion $@"
+  fi
 }
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 # vi: ts=4 noai
-

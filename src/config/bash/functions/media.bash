@@ -18,9 +18,9 @@
 # youtube-dl to mplayer
 
 ytstream() {
-  youtube-dl --quiet --no-warnings -f best "$1" -o - 2>/dev/null | \
-  mplayer -cache 1024 -cache-min 10 -really-quiet - 2>/dev/null
-  }
+  youtube-dl --quiet --no-warnings -f best "$1" -o - 2>/dev/null |
+    mplayer -cache 1024 -cache-min 10 -really-quiet - 2>/dev/null
+}
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -42,14 +42,17 @@ mpdd() {
                 /^Title:/{r=r" - "$2};
                 /^time:/{r=$2" "r};
                 /^state: play/{f=1}
-              END{if(f==1){print r}}' <(mpc status;mpc current));
+              END{if(f==1){print r}}' <(
+      mpc status
+      mpc current
+    ))
 
-    _l=${#_r};
-    [[ $_l -eq 0 ]] && continue;
-    [[ -z "$_p" ]] && _p=$_l;
-    echo -ne "\e[s\e[0;${_p}H\e[K\e[u";
-    _p=$((COLUMNS - _l));
-    echo -ne "\e[s\e[0;${_p}H\e[K\e[0;44m\e[1;33m${_r}\e[0m\e[u";
+    _l=${#_r}
+    [[ $_l -eq 0 ]] && continue
+    [[ -z "$_p" ]] && _p=$_l
+    echo -ne "\e[s\e[0;${_p}H\e[K\e[u"
+    _p=$((COLUMNS - _l))
+    echo -ne "\e[s\e[0;${_p}H\e[K\e[0;44m\e[1;33m${_r}\e[0m\e[u"
   done
 }
 
@@ -63,14 +66,14 @@ getart() {
   [[ -d "$ARTDIR" ]] || mkdir -p "$ARTDIR"
 
   local mpccurrent artfile
-  mpccurrent="$(echo "$@"|sed -r 's/(\[|\]|\,)//g')"
+  mpccurrent="$(echo "$@" | sed -r 's/(\[|\]|\,)//g')"
   artfile=$(find "$ARTDIR" -iname "${mpccurrent}*")
   [[ -z "$artfile" ]] && {
     # customize useragent at http://whatsmyuseragent.com/
     local useragent='Mozilla/5.0 (X11; Ubuntu; Linux i686; rv:31.0) Gecko/20100101 Firefox/31.0'
     local link imagelink ext imagepath
     link="www.google.com/search?q=$(urlencode "$mpccurrent")\&tbm=isch"
-#    imagelinks=$(wget -e robots=off --user-agent "$useragent" -qO - "$link" | sed 's/</\n</g' | grep '<a href.*\(png\|jpg\|jpeg\)' | sed 's/.*imgurl=\([^&]*\)\&.*/\1/')
+    #    imagelinks=$(wget -e robots=off --user-agent "$useragent" -qO - "$link" | sed 's/</\n</g' | grep '<a href.*\(png\|jpg\|jpeg\)' | sed 's/.*imgurl=\([^&]*\)\&.*/\1/')
     imagelinks=$(timeout 10s wget -e robots=off --user-agent "$useragent" -o /dev/null -qO - "$link" | sed 's/</\n</g' | grep "ou\":\"http" | sed -nr 's/.*ou\":\"([^"]+).*/\1/p')
     for imagelink in $imagelinks; do
       imagelink=$(echo "$imagelink" | sed -nr 's/(.*\.(jpg|jpeg|png)).*/\1/p')

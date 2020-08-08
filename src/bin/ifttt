@@ -1,0 +1,70 @@
+#!/usr/bin/env bash
+
+SCRIPTNAME="$(basename $0)"
+SCRIPTDIR="$(readlink -f -- "$(dirname -- "$0")/..")"
+USER="${SUDO_USER:-${USER}}"
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# @Author      : Jason
+# @Contact     : casjaysdev@casjay.net
+# @File        : ifttt
+# @Created     : Wed, Aug 05, 2020, 02:00 EST
+# @License     : WTFPL
+# @Copyright   : Copyright (c) CasjaysDev
+# @Description : if this then that script - https://ifttt.com/maker_webhooks/settings
+# @create      : https://ifttt.com/create/if-receive-a-web-request?sid=7
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+# Set functions
+
+SCRIPTSFUNCTURL="${SCRIPTSAPPFUNCTURL:-https://github.com/casjay-dotfiles/scripts/raw/master/functions}"
+SCRIPTSFUNCTDIR="${SCRIPTSAPPFUNCTDIR:-$HOME/.config/bash}"
+SCRIPTSFUNCTFILE="${SCRIPTSAPPFUNCTFILE:-applications.bash}"
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+if [ -f "$SCRIPTSFUNCTDIR/functions/$SCRIPTSFUNCTFILE" ]; then
+  . "$SCRIPTSFUNCTDIR/functions/$SCRIPTSFUNCTFILE"
+else
+  curl -LSs "$SCRIPTSFUNCTURL/$SCRIPTSFUNCTFILE" -o "/tmp/$SCRIPTSFUNCTFILE" || exit 1
+  . "/tmp/$SCRIPTSFUNCTFILE"
+fi
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+[ "$1" = "--version" ] && get_app_info "$SCRIPTNAME"
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+__help() {
+  printf_green "If This Then That - run webhooks from command"
+  printf_green "This requires an api key and the enviroment variable ITTT_ACCESS_TOKEN"
+  printf_green "Get an API key from ifttt maker site: https://ifttt.com/maker_webhooks/settings"
+  printf_green "Create a webhook: https://ifttt.com/create/if-receive-a-web-request?sid=7"
+  exit 0
+}
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+# set variables
+
+[ "$1" = "--help" ] && _help
+[ $# -eq 0 ] && __help
+[ -z $ITTT_ACCESS_TOKEN ] && printf_exit "This requires an api key and the enviroment variable ITTT_ACCESS_TOKEN to be set"
+read event values <<<$(echo -n "$@" | awk 'NR > 1 { $0=sprintf("\"value%d\":\"%s\",", NR-1, $0) } 1' RS=' ' ORS=' ' | sed 's/, $//')
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+# main progam
+
+curl --request POST \
+  --header 'Content-Type: application/json' \
+  --data '{'"${values}"'}' \
+  https://maker.ifttt.com/trigger/${event}/with/key/${ITTT_ACCESS_TOKEN} && echo -e ""
+if test "$?" != "0"; then
+  printf_exit "Unable to send event to IFTTT"
+fi
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+# end

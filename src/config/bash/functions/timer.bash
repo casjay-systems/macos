@@ -18,7 +18,7 @@
 # shows up/down seconds counter. Exits and produces a sound if reaches zero
 
 timer() {
-  local ts=$(($(date +%s)+${1:-0}-1))
+  local ts=$(($(date +%s) + ${1:-0} - 1))
   export ts
   local p1='d=$(($(date +%s)-$ts));[ $d -lt 0 ] && d=$((-d));'
   local p2='[ $d -eq 0 ] && exit 1;'

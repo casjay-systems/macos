@@ -11,11 +11,13 @@
 #
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-notifications() { 
-    [ -z "$1" ] && [ -z "$2" ] && printf_help 'Usage: notifications "title" "message"'
-    local title="$1" ; shift 1
-    local msg="$@" ; shift
-    cmd_exists notify-send && notify-send -u normal -i "notification-message-IM" "$title" "$msg" || return 0
+notifications() {
+  [ -z "$1" ] && [ -z "$2" ] && printf_help 'Usage: notifications "title" "message"'
+  local title="$1"
+  shift 1
+  local msg="$@"
+  shift
+  cmd_exists notify-send && notify-send -u normal -i "notification-message-IM" "$title" "$msg" || return 0
 }
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

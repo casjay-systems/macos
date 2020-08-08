@@ -35,7 +35,7 @@ if cat /proc/version | grep -iq chromium && [ ! -z $DISPLAY ] && [ ! -z $DISPLAY
   export DISPLAY="$DISPLAY_LOW_DENSITY"
 fi
 
-export RESOLUTION="$(xrandr --current | grep  '*' | uniq | awk '{print $1}')"
+export RESOLUTION="$(xrandr --current | grep '*' | uniq | awk '{print $1}')"
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -62,9 +62,9 @@ fi
 # xserver settings
 
 if [ ! -f ~/.Xdefaults ]; then
-    touch ~/.Xdefaults
+  touch ~/.Xdefaults
 else
-    xrdb ~/.Xdefaults 2>/dev/null
+  xrdb ~/.Xdefaults 2>/dev/null
 fi
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -72,10 +72,10 @@ fi
 # xserver settings
 
 if [ ! -f ~/.Xresources ]; then
-    touch ~/.Xresources
-  else
-    xrdb ~/.Xresources 2>/dev/null
-    xrdb -merge ~/.Xresources 2>/dev/null
+  touch ~/.Xresources
+else
+  xrdb ~/.Xresources 2>/dev/null
+  xrdb -merge ~/.Xresources 2>/dev/null
 fi
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -83,7 +83,7 @@ fi
 # ensure .gitconfig exists
 
 if [ -f ~/.config/local/gitconfig.local ] && [ ! -f ~/.gitconfig ]; then
-    cp -f ~/.config/local/gitconfig.local ~/.gitconfig
+  cp -f ~/.config/local/gitconfig.local ~/.gitconfig
 fi
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -124,7 +124,7 @@ export HISTSIZE=10000
 
 export SUDO_PROMPT="$(printf "\t\t\033[1;36m")[sudo]$(printf "\033[0m") password for %p: "
 
-if [ -e "/usr/local/bin/dmenupass" ] && [ ! -z "$DESKTOP_SESSION" ] ; then
+if [ -e "/usr/local/bin/dmenupass" ] && [ ! -z "$DESKTOP_SESSION" ]; then
   export SUDO_ASKPASS="${SUDO_ASKPASS:-/usr/local/bin/dmenupass}"
 fi
 
@@ -147,7 +147,7 @@ export MANPAGER="less -X"
 # add emacs to bin
 
 if [ -d $HOME/.emacs.d/bin ]; then
-    export PATH="$HOME/.emacs.d/bin:$PATH"
+  export PATH="$HOME/.emacs.d/bin:$PATH"
 fi
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -167,7 +167,7 @@ export LC_ALL="en_US.UTF-8"
 
 # rpm devel
 
-export QA_RPATHS="$[ 0x0001|0x0010 ]"
+export QA_RPATHS="$((0x0001 | 0x0010))"
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -187,11 +187,11 @@ export TIZONIA_RC_FILE="$HOME/.config/tizonia/tizonia.conf"
 
 export BANNER="echo"
 if [ -n "$(command -v banner 2>/dev/null)" ]; then
-    export BANNER="banner"
+  export BANNER="banner"
 elif [ -n "$(command -v figlet 2>/dev/null)" ]; then
-    export BANNER="figlet -f banner"
+  export BANNER="figlet -f banner"
 elif [ -n "$(command -v toilet 2>/dev/null)" ]; then
-    export BANNER="toilet -f mono9.tlf"
+  export BANNER="toilet -f mono9.tlf"
 fi
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -199,12 +199,12 @@ fi
 # export color
 
 if [ -f "$HOME/.dircolors" ]; then
-    export DIRCOLOR="$HOME"/.dircolors
+  export DIRCOLOR="$HOME"/.dircolors
 else
-    export DIRCOLOR="$HOME"/.config/dircolors/dracula
+  export DIRCOLOR="$HOME"/.config/dircolors/dracula
 fi
 
-if [ "$OSTYPE" = darwin* ];then
+if [ "$OSTYPE" = darwin* ]; then
   export LSCOLORS=DxgxcxdxCxegedabagacad
 fi
 
@@ -233,7 +233,7 @@ export TERM=screen-256color
 # Setting the temp directory for vim
 
 if [ -z $TEMP ]; then
-    export TEMP=/tmp
+  export TEMP=/tmp
 fi
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -248,11 +248,11 @@ export DEFAULT_LOG="scripts"
 
 # set PATH so it includes user's private bin if it exists
 if [ -d "$HOME"/.local/bin ]; then
-    export PATH="$HOME/.local/bin:$PATH"
+  export PATH="$HOME/.local/bin:$PATH"
 fi
 
 if [ -d "$HOME"/.local/share/scripts/bin ]; then
-    export PATH="$HOME/.local/share/scripts/bin:$PATH"
+  export PATH="$HOME/.local/share/scripts/bin:$PATH"
 fi
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -281,7 +281,7 @@ fi
 # passmgr default settings - copy to your bash.local and change for your setup
 
 if [ -f "$HOME/.config/secure/passmgr.txt" ]; then
-    source "$HOME/.config/secure/passmgr.txt"
+  source "$HOME/.config/secure/passmgr.txt"
 fi
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -289,7 +289,7 @@ fi
 # github default settings - copy to your bash.local and change for your setup
 
 if [ -f "$HOME/.config/secure/github.txt" ]; then
-    source "$HOME/.config/secure/github.txt"
+  source "$HOME/.config/secure/github.txt"
 fi
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -297,7 +297,7 @@ fi
 # gitlab default settings - copy to your bash.local and change for your setup
 
 if [ -f "$HOME/.config/secure/gitlab.txt" ]; then
-    source "$HOME/.config/secure/gitlab.txt"
+  source "$HOME/.config/secure/gitlab.txt"
 fi
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -305,7 +305,7 @@ fi
 # your private git - copy to your bash.local and change for your setup
 
 if [ -f "$HOME/.config/secure/gitpriv.txt" ]; then
-    source "$HOME/.config/secure/gitpriv.txt"
+  source "$HOME/.config/secure/gitpriv.txt"
 fi
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -313,7 +313,7 @@ fi
 # Dotfiles base repo  - copy to your bash.local and change for your setup
 
 if [ -f "$HOME/.config/secure/personal.txt" ]; then
-    source "$HOME/.config/secure/personal.txt"
+  source "$HOME/.config/secure/personal.txt"
 fi
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -321,12 +321,11 @@ fi
 # APIKEYS  - copy to your bash.local and change for your setup
 
 if [ -f "$HOME/.config/secure/apikeys.txt" ]; then
-    source "$HOME/.config/secure/apikeys.txt"
+  source "$HOME/.config/secure/apikeys.txt"
 fi
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 # set variable for other scripts
-
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

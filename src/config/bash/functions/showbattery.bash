@@ -18,9 +18,9 @@
 showbattery() {
   local dir=/sys/class/power_supply/BAT0/
   if [[ -e "$dir"/charge_now ]]; then
-    echo "$(<"$dir"/status) $(( $(<"$dir"/charge_now) * 100 / $(<"$dir"/charge_full) ))%"
+    echo "$(<"$dir"/status) $(($(<"$dir"/charge_now) * 100 / $(<"$dir"/charge_full)))%"
   elif [[ -e "$dir"/energy_now ]]; then
-    echo "$(<"$dir"/status) $(( $(<"$dir"/energy_now) * 100 / $(<"$dir"/energy_full) ))%"
+    echo "$(<"$dir"/status) $(($(<"$dir"/energy_now) * 100 / $(<"$dir"/energy_full)))%"
   fi
 }
 

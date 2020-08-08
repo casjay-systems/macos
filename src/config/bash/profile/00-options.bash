@@ -70,7 +70,7 @@ shopt -s nocaseglob 2>/dev/null
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
- # expand aliases
+# expand aliases
 shopt -s expand_aliases 2>/dev/null
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

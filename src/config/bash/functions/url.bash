@@ -37,12 +37,13 @@ urldecode() {
 # shorten / expand a URL
 
 shortenurl() {
-#    curl -F"shorten=$*" https://0x0.st
-#  wget -q -O - --post-data="shorten=$1" https://0x0.st
+  #    curl -F"shorten=$*" https://0x0.st
+  #  wget -q -O - --post-data="shorten=$1" https://0x0.st
   local url=$1
   [[ -z "$url" ]] && url=$(printclip)
   [[ -z "$url" ]] && echo "Nothing to shorten" && return 1
-  wget -q -O - 'http://is.gd/create.php?logstats=1&format=simple&url='"$(urlencode "$url")"|tee >(putclip);echo
+  wget -q -O - 'http://is.gd/create.php?logstats=1&format=simple&url='"$(urlencode "$url")" | tee >(putclip)
+  echo
 }
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -51,7 +52,7 @@ expandurl() {
   local url=$1
   [[ -z "$url" ]] && url=$(printclip)
   [[ -z "$url" ]] && echo "Nothing to expand" && return 1
-  wget -S "$url" 2>&1 | grep ^Location | awk '{print $2}'|tee >(putclip)
+  wget -S "$url" 2>&1 | grep ^Location | awk '{print $2}' | tee >(putclip)
 }
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

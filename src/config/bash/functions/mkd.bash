@@ -14,17 +14,16 @@
 # Set functions
 
 mkd() {
-    local dir="$1"
-    if [ ! -z "$1" ]; then
-      printf_green "Creating $@"
-      mkdir -p "$@"
-      cd "$dir"
-    else
-      printf_red "Usage: mkd folder\n"
-    fi
+  local dir="$1"
+  if [ ! -z "$1" ]; then
+    printf_green "Creating $@"
+    mkdir -p "$@"
+    cd "$dir"
+  else
+    printf_red "Usage: mkd folder\n"
+  fi
 }
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 # vi: set ts=4 noai
-

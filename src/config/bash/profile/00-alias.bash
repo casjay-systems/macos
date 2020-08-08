@@ -3,14 +3,12 @@
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 # Lock screen.
-alias afk="gnome-screensaver-command --lock"    #lock screen
+alias afk="gnome-screensaver-command --lock" #lock screen
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-
-
 # Empty trash.
-alias empty-trash="rm -rf ~/.local/share/Trash/files/*"  #Delete old files
+alias empty-trash="rm -rf ~/.local/share/Trash/files/*" #Delete old files
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -30,4 +28,3 @@ alias ports="sudo netstat -taupln | grep LISTEN"
 alias netstat="sudo netstat"
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-

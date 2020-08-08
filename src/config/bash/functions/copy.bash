@@ -22,7 +22,7 @@ copy() {
   local dest=$2
   local size=$(stat -c%s "$1")
   [[ -d "$dest" ]] && dest="$2/$(basename "$1")"
-  dd if="$1" 2> /dev/null | pv -petrb -s "$size" | dd of="$dest"
+  dd if="$1" 2>/dev/null | pv -petrb -s "$size" | dd of="$dest"
 }
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

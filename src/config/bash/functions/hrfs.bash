@@ -18,7 +18,7 @@
 
 hrfs() {
 
-    printf "%s" "$1" |
+  printf "%s" "$1" |
     awk '{
             i = 1;
             split("B KB MB GB TB PB EB ZB YB WTFB", v);
@@ -41,9 +41,9 @@ hrfs() {
             }
         }' |
     sed -e ":l" \
-        -e "s/\([0-9]\)\([0-9]\{3\}\)/\1,\2/; t l"
-    #    └─ add thousands separator
-    #       (changes "1023.2 KB" to "1,023.2 KB")
+      -e "s/\([0-9]\)\([0-9]\{3\}\)/\1,\2/; t l"
+  #    └─ add thousands separator
+  #       (changes "1023.2 KB" to "1,023.2 KB")
 }
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
