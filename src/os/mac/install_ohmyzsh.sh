@@ -75,7 +75,7 @@ setup_syntax() {
   if [ -d "$HOME/.local/share/zsh/oh-my-zsh/custom/plugins/zsh-syntax-highlighting/.git" ]; then
     echo ""
     execute \
-      "cd $HOME/.local/share/zsh/oh-my-zsh/custom/themes/plugins/zsh-syntax-highlighting && \
+      "cd $HOME/.local/share/zsh/oh-my-zsh/custom/plugins/zsh-syntax-highlighting && \
       git pull -q" \
       "Updating zsh-syntax-highlighting"
   else
