@@ -6,6 +6,8 @@ cd "$(dirname "${BASH_SOURCE[0]}")" &&
 srcdir="$(cd .. && pwd)"
 mkdir -p ~/.local/backups/dotfiles/{configs,home}
 backups="~/.local/backups/dotfiles"
+mkdir -p "$HOME/.ncmpcpp"
+ln -sf "$HOME/.config/mpd/ncmpcpp.conf" "$HOME/.ncmpcpp/config"
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 

@@ -17,7 +17,7 @@ export LESS_TERMCAP_ue=$(printf "\e[0m")
 export LESS_TERMCAP_us=$(printf "\e[1;32m")
 
 # Enable dircolors
-if (( $+commands[dircolors] )); then
+if (($ + commands[dircolors])); then
   if [ -f "$HOME"/.dircolors ]; then
     eval "$(dircolors $HOME/.dircolors)"
   else

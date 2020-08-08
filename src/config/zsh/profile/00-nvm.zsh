@@ -3,7 +3,7 @@
 if [ -s "$HOME/.local/share/nvm" ]; then
   export NVM_BIN="$HOME/.local/bin"
   export NVM_DIR="$HOME/.local/share/nvm"
-  function nvm {
+  function nvm() {
     if [ -s "$NVM_DIR"/nvm.sh ]; then
       source "$NVM_DIR"/nvm.sh
       nvm use system

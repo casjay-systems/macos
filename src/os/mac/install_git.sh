@@ -18,18 +18,18 @@ install_git() {
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 install_ohmygit() {
 
-  if [ ! -d ~/.config/git/plugins/.git ]; then
+  if [ ! -d "$HOME/.local/share/git/plugins/.git" ]; then
 
     echo ""
     execute \
-      "rm -Rf ~/.config/git/plugins && \
-      git clone https://github.com/arialdomartini/oh-my-git.git ~/.config/git/plugins" \
-      "cloning oh-my-git → ~/.config/git/plugins"
+      "rm -Rf $HOME/.local/share/git/plugins && \
+      git clone https://github.com/arialdomartini/oh-my-git.git $HOME/.local/share/git/plugins" \
+      "cloning oh-my-git → $HOME/.local/share/git/plugins"
 
   else
     echo ""
     execute \
-      "cd ~/.config/git/plugins && \
+      "cd $HOME/.local/share/git/plugins && \
       git pull -q" \
       "Updating oh-my-git"
 

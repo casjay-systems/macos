@@ -21,9 +21,9 @@ setup_ohmyfish() {
   echo ""
   execute \
     "rm -Rf ~/.config/fish/omf && \
-    curl -LSs https://get.oh-my.fish > "$HOME"/.config/fish/omf-install \
-    fish "$HOME"/.config/fish/omf-install --path=~/.config/fish/plugins --config=~/.config/fish/omf --noninteractive --yes \
-    fish "$HOME"/.config/fish/plugins.fish \
+    curl -LSsq https://get.oh-my.fish >~/.config/fish/omf-install \
+    fish ~/.config/fish/omf-install --path=~/.local/share/fish/oh-my-fish --config=~/.config/fish/omf --noninteractive --yes \
+    fish ~/.config/fish/plugins.fish \
     rm -Rf "$HOME"/.config/fish/omf-install" \
     "Installing oh-my-fish"
 

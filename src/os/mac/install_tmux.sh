@@ -22,24 +22,24 @@ setup_tmuxplugins() {
 
     echo ""
     execute \
-      "cd ~/.config/tmux/plugins/tpm && \
+      "cd $HOME/.local/share/tmux/plugins/tpm && \
       git pull -q" \
       "Updating tmux plugin manager"
     echo ""
     execute \
-      "~/.config/tmux/plugins/tpm/scripts/install_plugins.sh 2> /dev/null" \
+      "$HOME/.local/share/tmux/plugins/tpm/scripts/install_plugins.sh 2> /dev/null" \
       "Updating tmux plugins"
   else
 
     echo ""
     execute \
-      "rm -Rf ~/.config/tmux/plugins/tpm && \
-      git clone -q https://github.com/tmux-plugins/tpm ~/.config/tmux/plugins/tpm" \
-      "https://github.com/tmux-plugins/tpm → ~/.config/tmux/plugins/tpm"
+      "rm -Rf $HOME/.local/share/tmux/plugins/tpm && \
+      git clone -q https://github.com/tmux-plugins/tpm $HOME/.local/share/tmux/plugins/tpm" \
+      "https://github.com/tmux-plugins/tpm → $HOME/.local/share/tmux/plugins/tpm"
     echo ""
     execute \
-      "~/.config/tmux/plugins/tpm/scripts/install_plugins.sh" \
-      "Installing tmux plugins → ~/.config/tmux/plugins"
+      "$HOME/.local/share/tmux/plugins/tpm/scripts/install_plugins.sh" \
+      "Installing tmux plugins → $HOME/.local/share/tmux/plugins"
   fi
 }
 

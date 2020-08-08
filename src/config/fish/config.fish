@@ -18,7 +18,7 @@ end
 
 # Useful functions {{{
 function fish_greeting
-#  echo "I'm completely operational, and all my circuits are functioning perfectly."
+    #  echo "I'm completely operational, and all my circuits are functioning perfectly."
 end
 
 # }}}
@@ -82,12 +82,12 @@ set -g -x NVM_BIN "$HOME/.local/bin"
 set -g -x GPG_TTY (tty)
 
 # Less Colors for Man Pages
-set -g -x LESS_TERMCAP_mb (printf '\e[01;31m')       # begin blinking
-set -g -x LESS_TERMCAP_md (printf '\e[01;38;5;74m')  # begin bold
-set -g -x LESS_TERMCAP_me (printf '\e[0m')           # end mode
-set -g -x LESS_TERMCAP_se (printf '\e[0m')           # end standout-mode
-set -g -x LESS_TERMCAP_so (printf '\e[38;5;246m')    # begin standout-mode - info box
-set -g -x LESS_TERMCAP_ue (printf '\e[0m')           # end underline
+set -g -x LESS_TERMCAP_mb (printf '\e[01;31m') # begin blinking
+set -g -x LESS_TERMCAP_md (printf '\e[01;38;5;74m') # begin bold
+set -g -x LESS_TERMCAP_me (printf '\e[0m') # end mode
+set -g -x LESS_TERMCAP_se (printf '\e[0m') # end standout-mode
+set -g -x LESS_TERMCAP_so (printf '\e[38;5;246m') # begin standout-mode - info box
+set -g -x LESS_TERMCAP_ue (printf '\e[0m') # end underline
 set -g -x LESS_TERMCAP_us (printf '\e[04;38;5;146m') # begin underline
 
 # }}}

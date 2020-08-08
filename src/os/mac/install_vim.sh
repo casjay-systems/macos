@@ -18,18 +18,18 @@ install_vim() {
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  if [ ! -d ~/.config/vim/bundle/Vundle.vim/.git ]; then
+  if [ ! -d "$HOME/.local/share/vim/bundle/Vundle.vim/.git" ]; then
     echo ""
     execute \
-      "rm -Rf ~/.config/vim/bundle/Vundle.vim && \
-      git clone -q https://github.com/VundleVim/Vundle.vim.git ~/.config/vim/bundle/Vundle.vim && \
+      "rm -Rf $HOME/.local/share/vim/bundle/Vundle.vim && \
+      git clone -q https://github.com/VundleVim/Vundle.vim.git $HOME/.local/share/vim/bundle/Vundle.vim && \
       vim +PluginInstall +qall < /dev/null > /dev/null 2>&1" \
-      "vim +PluginInstall +qall → ~/.config/vim/bundle/"
+      "vim +PluginInstall +qall → $HOME/.local/share/vim/bundle/"
 
   else
     echo ""
     execute \
-      "cd ~/.config/vim/bundle/Vundle.vim && \
+      "cd $HOME/.local/share/vim/bundle/Vundle.vim && \
       git pull -q && \
       vim +PluginInstall +qall < /dev/null > /dev/null 2>&1" \
       "Updating Vundle and Plugins"
