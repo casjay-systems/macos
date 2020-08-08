@@ -252,17 +252,22 @@ create_librarysymlinks() {
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 main() {
-
+  print_in_purple "\n • Backing up Home files\n\n"
   backup_symlinks "$@"
 
+  print_in_purple "\n • Backing up Config Folders\n\n"
   backup_configfolders "$@"
 
+  print_in_purple "\n • Backing up Library Files\n\n"
   backup_librarysymlinks "$@"
 
+  print_in_purple "\n • Installing Home Files\n\n"
   create_configfolders "$@"
 
+  print_in_purple "\n • Installing Config Folders\n\n"
   create_symlinks "$@"
 
+  print_in_purple "\n • Installing Library files\n\n"
   create_librarysymlinks "$@"
 
 }
