@@ -1,7 +1,7 @@
 #!/usr/bin/env zsh
 #zsh config
 
-ZSH_DISABLE_COMPFIX=true
+ZSH_DISABLE_COMPFIX="true"
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
