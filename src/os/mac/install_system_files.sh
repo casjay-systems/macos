@@ -18,9 +18,10 @@ if (sudo -vn && sudo -ln) 2>&1 | grep -v 'may not' >/dev/null; then
     echo ""
     execute \
       "sudo -H python3 -mpip install neovim powerline-status && \
-      sudo easy_install pip &&
-      sudo -H python2 -mpip install greenlet && \
-      sudo -H python2 -mpip install neovim" \
+      sudo -H python3 -mpip install cpython && \
+      sudo -H python3 -mpip --no-cache-dir install git+https://github.com/pyx-project/pyx.git@fc66c078727b02693b122ad346b9fa5472e06eb7 && \
+      sudo -H python3 -mpip install greenlet && \
+      sudo -H python3 -mpip install neovim" \
       "Installing python3 modules"
 
   }
