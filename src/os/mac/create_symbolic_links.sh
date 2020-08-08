@@ -28,7 +28,20 @@ declare -a FILES_TO_SYMLINK=(
 
 declare -a CONFFOLDERS_TO_SYMLINK=(
   \
-  "$(ls -d config/)"
+  "bash"
+  "dircolors"
+  "filezilla"
+  "fish"
+  "fontconfig"
+  "git"
+  "mpd"
+  "nano"
+  "neofetch"
+  "neovim"
+  "tmux"
+  "vim"
+  "youtube-dl"
+  "zsh"
 
 )
 
