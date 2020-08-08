@@ -2,7 +2,7 @@
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # @Author      : Jason
-# @Contact     : casjaysdev@casjay.com
+# @Contact     : casjaysdev@casjay.net
 # @File        : show_wifi_clients.bash
 # @Created     : Mon, Dec 31, 2019, 00:00 EST
 # @License     : WTFPL

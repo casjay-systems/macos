@@ -189,7 +189,7 @@ if [ -z $UPDATE ]; then
       echo ""
       execute \
         "$macosdir/pkgs/lists/mac-sys.sh 2> /dev/null &&
-       sudo touch /usr/local/Homebrew/.srcinstall" \
+        sudo touch /usr/local/Homebrew/.srcinstall" \
         "Installing Packages..... This May take awhile please be patient... Possibly 20+ Minutes"
     fi
     printf "${PURPLE}\n • Done Setting up for the Mac${NC}\n\n"

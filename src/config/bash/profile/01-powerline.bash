@@ -95,7 +95,7 @@ bashprompt() {
 
   ### Ruby #######################################################
 __ifruby(){
-if [ -f *.rb ]; then
+if [ $(ls *.rb 2> /dev/null | wc -l) -ne 0 ]; then
   if [ `which rbenv 2> /dev/null` ]; then
       __ruby_version() { printf $(rbenv version-name); }
   elif [ `which ruby 2> /dev/null` ]; then
@@ -117,7 +117,7 @@ fi
 
   ### Node.js ####################################################
 __ifnode() {
-if [ -f *.js ] || [ -f package*.json ] || [ -f *.yarn* ] || grep -q "NODE*" .env 2>/dev/null; then
+if [ $(ls *.js package*.json *.yarn* 2>/dev/null | wc -l) -ne 0 ] || grep -q "NODE*" .env 2>/dev/null; then
  if [[ "$(nvm_version 2>/dev/null)" =~ "system" ]]; then
   if [ `which nodenv 2> /dev/null` ]; then
     __node_version() { printf $(nodenv version-name); }
@@ -146,7 +146,7 @@ fi
 
   ### python ####################################################
 __ifpython() {
-if [ -f $VIRTUAL_ENV/pyvenv.cfg ] && [ ! -z "$VIRTUAL_ENV" ]; then
+if [[ $(ls $VIRTUAL_ENV/pyvenv.cfg 2> /dev/null | wc -l) -ne 0 ]] && [[ ! -z "$VIRTUAL_ENV" ]]; then
   __python_info() {
    PYTHON_VERSION="$(`which python3` --version)"
    PYTHON_VIRTUALENV="$(basename "$VIRTUAL_ENV")"
@@ -159,7 +159,7 @@ fi
 
   ### php ####################################################
 __ifphp() {
-if [ -f *.php ]; then
+if [[ $(ls *.php* 2> /dev/null | wc -l) -ne 0 ]]; then
   if [ `which php 2>/dev/null` ]; then
        __php_version () { printf $(php --version | awk '{print $2}' | head -n 1); }
   else
@@ -276,4 +276,3 @@ fi
 }
 
 bashprompt 2>/dev/null
-

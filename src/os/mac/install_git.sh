@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 cd "$(dirname "${BASH_SOURCE[0]}")" &&
-    . "../utils.sh"
+  . "../utils.sh"
 
 srcdir="$(cd .. && pwd)"
 
@@ -9,33 +9,33 @@ srcdir="$(cd .. && pwd)"
 
 install_git() {
 
-echo ""
-    execute \
-        "ln -sf $srcdir/config/git/gitconfig ~/.gitconfig" \
-        "$srcdir/config/git/gitconfig  → ~/.gitconfig"
+  echo ""
+  execute \
+    "ln -sf $srcdir/config/git/gitconfig ~/.gitconfig" \
+    "$srcdir/config/git/gitconfig  → ~/.gitconfig"
 
 }
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 install_ohmygit() {
 
-    if [ ! -d ~/.config/git/plugins/.git ]; then
+  if [ ! -d ~/.config/git/plugins/.git ]; then
 
-echo ""
-        execute \
-            "rm -Rf ~/.config/git/plugins && \
-             git clone https://github.com/arialdomartini/oh-my-git.git ~/.config/git/plugins" \
-            "cloning oh-my-git → ~/.config/git/plugins"
+    echo ""
+    execute \
+      "rm -Rf ~/.config/git/plugins && \
+      git clone https://github.com/arialdomartini/oh-my-git.git ~/.config/git/plugins" \
+      "cloning oh-my-git → ~/.config/git/plugins"
 
-    else
-echo ""
-        execute \
-            "cd ~/.config/git/plugins && \
-             git pull -q" \
-            "Updating oh-my-git"
+  else
+    echo ""
+    execute \
+      "cd ~/.config/git/plugins && \
+      git pull -q" \
+      "Updating oh-my-git"
 
-    fi
-isInFile=$(cat ~/.config/local/bash.local | grep -c "oh-my-git")
-if [ $isInFile -eq 0 ]; then
+  fi
+  isInFile=$(cat ~/.config/local/bash.local | grep -c "oh-my-git")
+  if [ $isInFile -eq 0 ]; then
 
     declare -r CONFIGS="
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -45,11 +45,11 @@ if [ $isInFile -eq 0 ]; then
     && source \"\$HOME/.config/git/plugins/prompt.sh\"
 "
 
-echo ""
+    echo ""
     execute \
-        "printf '%s' '$CONFIGS' >> ~/.config/local/bash.local" \
-        "Enabling oh-my-git in ~/.config/local/bash.local"
-fi
+      "printf '%s' '$CONFIGS' >> ~/.config/local/bash.local" \
+      "Enabling oh-my-git in ~/.config/local/bash.local"
+  fi
 
 }
 
@@ -57,27 +57,27 @@ fi
 
 create_gitconfig_local() {
 
-    declare -r FILE_PATH="$HOME/.config/local/gitconfig.local"
+  declare -r FILE_PATH="$HOME/.config/local/gitconfig.local"
 
-    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-    if [ ! -e "$FILE_PATH" ]; then
-        printf "" >>"$FILE_PATH"
+  if [ ! -e "$FILE_PATH" ]; then
+    printf "" >>"$FILE_PATH"
 
-        print_result $? "$FILE_PATH"
+    print_result $? "$FILE_PATH"
 
-    fi
+  fi
 }
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 main() {
 
-        create_gitconfig_local
+  create_gitconfig_local
 
-        install_git
+  install_git
 
-        install_ohmygit
+  install_ohmygit
 
 }
 

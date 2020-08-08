@@ -375,29 +375,6 @@ netstatg() {
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-# calendar using vim
-calendar() {
-    vim -c ":Calendar"
-}
-
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-notes() {
-  local title="TITLE"
-  local date="$(date +"%m-%d-%Y-%H-%M-$title")"
-  vim -c ":Note "$date""
-}
-
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-todo () {
-  local date="$(date +"%m-%d-%Y-%H-%M")"
-  mkdir -p "$HOME/.local/share/editors/todo"
-  vim "$HOME/.local/share/editors/todo/$date.md" -c ":setlocal ft=notes syntax=markdown"
-}
-
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
 scratchpad() {
   find ~/.local/share/editors/scratchpads/ -type f -mtime +7 -name '*' -exec rm -Rf {} \; >/dev/null 2>&1
   local TMUX=""
@@ -410,7 +387,7 @@ scratchpad() {
     echo -e "$date\n" > "$HOME/.local/share/editors/scratchpads/$pid"
     tmux -f /dev/null new -s scratchpad > /dev/null 2>&1 vim "$HOME/.local/share/editors/scratchpads/$pid"
   else
-    tmux attach -t scratchpad > /dev/null 2>&1 
+    tmux attach -t scratchpad > /dev/null 2>&1
   fi
 }
 

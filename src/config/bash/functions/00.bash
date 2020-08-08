@@ -2,7 +2,7 @@
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # @Author      : Jason
-# @Contact     : casjaysdev@casjay.com
+# @Contact     : casjaysdev@casjay.net
 # @File        : 00-functions.bash
 # @Created     : Mon, Dec 23, 2019, 14:13 EST
 # @License     : WTFPL

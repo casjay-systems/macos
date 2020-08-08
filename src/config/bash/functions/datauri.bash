@@ -2,7 +2,7 @@
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # @Author      : Jason
-# @Contact     : casjaysdev@casjay.com
+# @Contact     : casjaysdev@casjay.net
 # @File        : datauri
 # @Created     : Mon, Dec 31, 2019, 00:00 EST
 # @License     : WTFPL

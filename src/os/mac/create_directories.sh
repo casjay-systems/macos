@@ -1,26 +1,27 @@
 #!/usr/bin/env bash
 
-cd "$(dirname "${BASH_SOURCE[0]}")" \
-    && . "../utils.sh"
+cd "$(dirname "${BASH_SOURCE[0]}")" &&
+  . "../utils.sh"
 
 srcdir="$(cd .. && pwd)"
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 create_directories() {
-echo ""
-    declare -a DIRECTORIES=(
-        "$HOME/.config"
-        "$HOME/.config/local"
-        "$HOME/Projects"
-        "$HOME/Downloads/torrents"
-        "$HOME/Library/Fonts"
+  echo ""
+  declare -a DIRECTORIES=(
+    "$HOME/.config"
+    "$HOME/.config/local"
+    "$HOME/.local/bin"
+    "$HOME/Projects"
+    "$HOME/Downloads/torrents"
+    "$HOME/Library/Fonts"
 
-    )
+  )
 
-    for i in "${DIRECTORIES[@]}"; do
-        mkd "$i"
-    done
+  for i in "${DIRECTORIES[@]}"; do
+    mkd "$i"
+  done
 
 }
 
@@ -28,7 +29,7 @@ echo ""
 
 main() {
 
-    create_directories
+  create_directories
 
 }
 

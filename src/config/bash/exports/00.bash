@@ -130,40 +130,11 @@ fi
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-# basher
-
-if [ -d "$HOME/.local/share/bash/basher" ]; then
-  export BASHER_ROOT="$HOME"/.local/share/bash/basher
-  export PATH="$HOME/.local/share/bash/basher/bin:$PATH"
-  eval "$(basher init -)"
-fi
-
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
 # export gpg tty
 
 export GPG_TTY="$(tty)"
 export SSH_AUTH_SOCK="/run/user/$(id -u)/gnupg/S.gpg-agent.ssh"
 eval $(gpg-agent --daemon 2>/dev/null)
-
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-# Use custom `less` colors for `man` pages.
-
-# Start blinking
-export LESS_TERMCAP_mb=$(tput bold; tput setaf 2) # green
-# Start bold
-export LESS_TERMCAP_md=$(tput bold; tput setaf 2) # green
-# Start stand out
-export LESS_TERMCAP_so=$(tput bold; tput setaf 3) # yellow
-# End standout
-export LESS_TERMCAP_se=$(tput rmso; tput sgr0)
-# Start underline
-export LESS_TERMCAP_us=$(tput smul; tput bold; tput setaf 1) # red
-# End Underline
-export LESS_TERMCAP_ue=$(tput sgr0)
-# End bold, blinking, standout, underline
-export LESS_TERMCAP_me=$(tput sgr0)
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -222,26 +193,6 @@ elif [ -n "$(command -v figlet 2>/dev/null)" ]; then
 elif [ -n "$(command -v toilet 2>/dev/null)" ]; then
     export BANNER="toilet -f mono9.tlf"
 fi
-
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-# Ruby Version Manager
-
-export GEM_HOME="$HOME/.local/share/gem"
-export rvm_ignore_gemrc_issues=1
-export rvm_silence_path_mismatch_check_flag=1
-
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-# node version manager
-
-export NO_UPDATE_NOTIFIER="true"
-export NVM_BIN="$HOME/.local/bin"
-export NVM_DIR="$HOME/.local/share/nvm"
-export NODE_REPL_HISTORY_SIZE=10000
-if [ ! -d $HOME/.local/share/nvm ]; then mkdir -p $HOME/.local/share/nvm ; fi
-if [ -s "$NVM_DIR/nvm.sh" ]; then source "$NVM_DIR/nvm.sh" ; fi
-if [ -s "$NVM_DIR/bash_completion" ]; then source "$NVM_DIR"/bash_completion ; fi
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 

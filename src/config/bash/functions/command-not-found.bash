@@ -2,7 +2,7 @@
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # @Author      : Jason
-# @Contact     : casjaysdev@casjay.com
+# @Contact     : casjaysdev@casjay.net
 # @File        : command-not-found.bash
 # @Created     : Mon, Dec 31, 2019, 00:00 EST
 # @License     : WTFPL
@@ -18,7 +18,7 @@ orig_command_not_found_handle () {
   if [ "${OS}" = "Linux" ] ; then
     printf_green "Searching the repo for $1"
     sleep 1
-    devnull pkmgr silent "$@"
+    findInstallApp "$1"
       if [ $? -eq 0 ]; then
         printf_green "Package $1 Installed"
       else

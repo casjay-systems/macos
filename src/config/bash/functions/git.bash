@@ -2,7 +2,7 @@
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # @Author      : Jason
-# @Contact     : casjaysdev@casjay.com
+# @Contact     : casjaysdev@casjay.net
 # @File        : git.bash
 # @Created     : Mon, Dec 31, 2019, 00:00 EST
 # @License     : WTFPL
@@ -35,9 +35,12 @@ get_git_repository_details() {
     printf "%s" "$1$branchName$tmp"
 }
 
+if ! cmd_exists gitreinit; then
 gitreinit () {
     oldpwd="$(pwd)"
     gitdir="$(echo $(git rev-parse --git-dir 2>/dev/null)/..)"
+    repo="$(git remote -v | grep fetch | head -n 1 | awk '{print $2}' 2>/dev/null)"
+    
     if [ ! -d "$gitdir" ]; then
          printf_exit "Not a git repo"
          exit 1
@@ -58,62 +61,100 @@ gitreinit () {
     getexitcode "Reinit completed\n"
     cd $oldpwd
 }
+fi
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-gitcommit () {
-    oldpwd="$(pwd)"
-    gitdir="$(echo $(git rev-parse --git-dir 2>/dev/null)/..)"
-    if [ ! -d "$gitdir" ]; then
-         printf_exit "Not a git repo"
-         exit 1
-    else
-         cd $gitdir
-    fi
+if ! cmd_exists gitcommit; then
+gitcommit() {
+[ "$1" = "-m" ] || [ "$1" = "--mess" ] || [ "$1" = "--message" ] && \
+shift 1 && MESSAGE="$1" && shift
 
-    printf_warning "Commiting Changes" && \
-    [ -f gitmasterconfig ] && [ -d .git ] && \
-    cp -f gitmasterconfig .git/config
-    devnull git add . && \
-    git commit -q -S && \
-    devnull git push -f -q
-    getexitcode "code has been committed\n"
-    cd $oldpwd
+case "$MESSAGE" in 
+  tomany) shift 1 ; mess=" 🦈🏠🐜 Fixes and Updates 🐜🦈🏠 " ;;
+  docker) shift 1 ; mess=" 🐜 Added Docker Workflow 🐜 " ;;
+  node) shift 1 ; mess=" 🐜 Added nodejs Workflow 🐜 " ;;
+  ruby) shift 1 ; mess=" 🐜 Added ruby Workflow 🐜 " ;;
+  php) shift 1 ; mess=" 🐜 Added php Workflow 🐜 " ;;
+  perl) shift 1 ; mess=" 🐜 Added perl Workflow 🐜 " ;;
+  python) shift 1 ; mess=" 🐜 Added python Workflow 🐜 " ;;
+  bug) shift 1 ; mess=" 🐛 Bug fixes 🐛 " ;;
+  fixes) shift 1 ; mess=" ❇ fixes ❇ " ;;
+  add) shift 1 ; mess="$1" ; shift 1 ;;
+  *) shift 1 ; mess=" 😉 fixes 😉 " ;;
+esac
+
+oldpwd="$(pwd)"
+gitdir="$(echo $(git rev-parse --git-dir 2>/dev/null)/..)"
+repo="$(git remote -v | grep fetch | head -n 1 | awk '{print $2}' 2>/dev/null)"
+[ ! -z "$repo" ] || repo="localdir"
+
+if [ ! -d "$gitdir" ]; then
+  printf_exit "Not a git repo"
+  exit 1
+else
+  cd $gitdir
+fi
+
+printf_warning "Commiting Changes with $mess" && \
+[ "$repo" != "localdir" ] || \
+  devnull git pull -q 2>/dev/null || \
+  printf_exit "Failed to pull"
+
+date +"%m%d%Y%H%M-git" > version.txt && \
+[ -f gitmasterconfig ] && [ -d .git ] && \
+  cp -f gitmasterconfig .git/config
+  devnull git add . && \
+[ "$1" ] && \
+  git commit -q -S "$1" "$2" 2>/dev/null || \
+  git commit -q -S  -m " 🦈🏠🐜 Fixes and Updates 🐜🦈🏠 "  2>/dev/null && \
+  [ "$repo" = "localdir" ] || devnull git push -q 2>/dev/null || \
+  [ "$repo" = "localdir" ] || devnull git push -q 2>/dev/null
+getexitcode "Successfully pushed to \n\t\t$repo"
+cd $oldpwd
+
 }
+fi
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
+if ! cmd_exists gitup; then
 gitup () {
     oldpwd="$(pwd)"
-    repo="$(git remote -v | grep fetch | head -n 1 | awk '{print $2}')"
     gitdir="$(echo $(git rev-parse --git-dir 2>/dev/null)/..)"
+    repo="$(git remote -v | grep fetch | head -n 1 | awk '{print $2}' 2>/dev/null)"
+    
     if [ ! -d "$gitdir" ]; then
-         printf_exit "Not a git repo"
-         exit 1
+      printf_exit "This does not seem to be a git repo"
+      exit 1
     else
-         cd $gitdir
+      cd $gitdir
     fi
 
     printf_warning "Commiting Changes" && \
-    devnull git pull -q && \
+    devnull git pull -q || \
+    printf_exit "Failed to pull" && \
     date +"%m%d%Y%H%M-git" > version.txt && \
     [ -f gitmasterconfig ] && [ -d .git ] && \
       cp -f gitmasterconfig .git/config
       devnull git add . && \
     [ "$1" ] && \
       git commit -q -S "$1" "$2" || \
-      git commit -q -S && \
+      git commit -q -S  -m " 🦈🏠🐜 Fixes and Updates 🐜🦈🏠 " && \
       devnull git push -q || devnull git push -q
     getexitcode "Successfully pushed to \n\t\t$repo"
     cd $oldpwd
 }
+fi
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
+if ! cmd_exists gitpu; then
 gitpu () {
     oldpwd="$(pwd)"
-    repo="$(git remote -v | grep fetch | head -n 1 | awk '{print $2}')"
     gitdir="$(echo $(git rev-parse --git-dir 2>/dev/null)/..)"
+    repo="$(git remote -v | grep fetch | head -n 1 | awk '{print $2}' 2>/dev/null)"
+    
     if [ ! -d "$gitdir" ]; then
          printf_exit "Not a git repo"
          exit 1
@@ -128,6 +169,7 @@ gitpu () {
     getexitcode "Successfully pulled from \n\t\t$repo\n"
     cd $oldpwd
 }
+fi
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 

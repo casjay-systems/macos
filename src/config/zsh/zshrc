@@ -42,6 +42,16 @@ fi
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
+# Load all files from .config/zsh/completions directory
+if [[ -d $HOME/.config/zsh/completions ]]; then
+  for completions in $HOME/.config/zsh/completions/*.zsh; do
+    source $completions 2>/dev/null
+    unset completions
+  done
+fi
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
 # Make sure oh-my-zsh is loaded
 if [[ -f "$HOME/.local/share/zsh/oh-my-zsh/oh-my-zsh.sh" ]]; then
     source "$HOME/.config/zsh/profile/00-oh-my-zsh.zsh" 2>/dev/null

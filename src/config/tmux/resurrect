@@ -1,0 +1,19 @@
+pane	0	1	:bash	1	:*	1	:~	1	bash	:
+pane	0	2	:bash	0	:-	1	:~	1	bash	:
+pane	0	3	:bash	0	:	1	:~	1	bash	:
+pane	0	4	:bash	0	:	1	:~	1	bash	:
+pane	0	5	:bash	0	:	1	:~	1	bash	:
+pane	0	6	:bash	0	:	1	:~	1	bash	:
+pane	0	7	:bash	0	:	1	:~	1	bash	:
+pane	0	8	:bash	0	:	1	:~	1	bash	:
+pane	0	9	:bash	0	:	1	:~	1	bash	:
+window	0	1	1	:*	bbde,239x62,0,0,1
+window	0	2	0	:-	bbdf,239x62,0,0,2
+window	0	3	0	:	bbe0,239x62,0,0,3
+window	0	4	0	:	bbe1,239x62,0,0,4
+window	0	5	0	:	bbe2,239x62,0,0,5
+window	0	6	0	:	bbe3,239x62,0,0,6
+window	0	7	0	:	bbe4,239x62,0,0,7
+window	0	8	0	:	bbe5,239x62,0,0,8
+window	0	9	0	:	bbe6,239x62,0,0,9
+state	0	
