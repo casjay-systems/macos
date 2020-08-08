@@ -47,7 +47,7 @@ declare -a CONFFOLDERS_TO_SYMLINK=(
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-declare -a CONFFILES_TO_SYMLINK=(
+declare -a LIBRARYFILES_TO_SYMLINK=(
   \
   "Developer/Xcode/UserData/FontAndColorThemes/Dracula.xccolortheme"
   "Preferences/com.googlecode.iterm2.plist"
@@ -126,7 +126,7 @@ backup_librarysymlinks() {
   skip_questions "$@" &&
     skipQuestions=true
 
-  for i in "${CONFFILES_TO_SYMLINK[@]}"; do
+  for i in "${LIBRARYFILES_TO_SYMLINK[@]}"; do
     sourceFile="$srcdir/Library⁩/$i"
     targetFile="$HOME/Library⁩/$i"
     nameFile="$(printf "%s" "$i" | sed "s/.*\/\(.*\)/\1/g")"
@@ -135,8 +135,8 @@ backup_librarysymlinks() {
 
       echo ""
       execute \
-        "rsync -aq $targetFile/. $backups/configs/$nameFile >/dev/null 2>&1 || true" \
-        "Backing up $targetFile → $backups/configs/$nameFile"
+        "rsync -aq $targetFile/. $backups/Library⁩/$nameFile >/dev/null 2>&1 || true" \
+        "Backing up $targetFile → $backups/Library⁩/$nameFile"
     fi
 
   done
@@ -225,7 +225,7 @@ create_librarysymlinks() {
   skip_questions "$@" &&
     skipQuestions=true
 
-  for i in "${CONFFILES_TO_SYMLINK[@]}"; do
+  for i in "${LIBRARYFILES_TO_SYMLINK[@]}"; do
     sourceFile="$srcdir/Library/$i"
     targetFile="$HOME/Library/$i"
 
