@@ -330,7 +330,7 @@ attemp_install_menus() {
     sleep 2
     clear
     printf_custom "191" "\n\n\n\n\t\tattempting install of $prog\n\t\tThis could take a bit...\n\n\n"
-    devnull pkmgr silent "$1"
+    brew install -y "$1"
     [ $? -ne 0 ] && dialog --timeout 10 --trim --cr-wrap --colors --title "failed" --msgbox "$1 failed to install" 10 41
     clear
   fi
@@ -490,53 +490,12 @@ check_app() {
     read -n 1 -s choice && echo
     if [[ $choice == "y" || $choice == "Y" ]]; then
       for miss in $MISSING; do
-        if cmd_exists yay; then
-          execute "pkmgr --enable-aur install $miss" "Installing $miss" | printf_readline
-        else
-          execute "pkmgr install $miss" "Installing $miss" | printf_readline
-        fi
+        brew install $miss
       done
     fi
   else
     return 1
   fi
-}
-
-##################################################################################################
-
-check_pip() {
-  local MISSING=""
-  for cmd in "$@"; do cmdif $cmd || MISSING+="$cmd "; done
-  if [ ! -z "$MISSING" ]; then
-    printf_question "$1 is not installed Would you like install it" [y/N]
-    read -n 1 -s choice
-    if [[ $choice == "y" || $choice == "Y" ]]; then
-      for miss in $MISSING; do
-        execute "pkmgr pip $miss" "Installing $miss"
-      done
-    fi
-  else
-    return 1
-  fi
-}
-
-##################################################################################################
-
-check_cpan() {
-  local MISSING=""
-  for cmd in "$@"; do cmdif $cmd || MISSING+="$cmd "; done
-  if [ ! -z "$MISSING" ]; then
-    printf_question "$1 is not installed Would you like install it" [y/N]
-    read -n 1 -s choice
-    if [[ $choice == "y" || $choice == "Y" ]]; then
-      for miss in $MISSING; do
-        execute "pkmgr cpan $miss" "Installing $miss"
-      done
-    fi
-  else
-    return 1
-  fi
-
 }
 
 ##################################################################################################
