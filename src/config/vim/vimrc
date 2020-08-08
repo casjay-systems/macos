@@ -51,7 +51,7 @@ set term=xterm-256color
 
 if has('mac')
     set shell=/usr/local/bin/bash
-elif has('unix')
+elseif has('unix')
     set shell=/bin/bash
 endif
 

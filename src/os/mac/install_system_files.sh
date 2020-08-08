@@ -17,7 +17,10 @@ if (sudo -vn && sudo -ln) 2>&1 | grep -v 'may not' >/dev/null; then
 
     echo ""
     execute \
-      "sudo -H python3 -mpip install powerline-status" \
+      "sudo -H python3 -mpip install neovim powerline-status && \
+      sudo easy_install pip &&
+      sudo -H python2 -mpip install greenlet && \
+      sudo -H python2 -mpip install neovim" \
       "Installing python3 modules"
 
   }
