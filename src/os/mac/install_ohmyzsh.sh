@@ -101,6 +101,8 @@ main() {
 
   setup_syntax
 
+  sudo chmod -R 755 /usr/local/share/zsh/site-functions /usr/local/share/zsh/site-functions
+
 }
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
