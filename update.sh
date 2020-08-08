@@ -1,4 +1,5 @@
-#!/bin/bash
+#!/usr/bin/env bash
+
 #colors
 red='\e[1;31m%s\e[0m\n'
 green='\e[1;32m%s\e[0m\n'
@@ -14,25 +15,25 @@ choice=""
 
 # Version check
 if [ -z "$DOTFILESDIR" ]; then
-    dotfilesdir="$DOTFILESDIR"
+  dotfilesdir="$DOTFILESDIR"
 else
-    dotfilesdir=~/.local/dotfiles/desktops
+  dotfilesdir=~/.local/dotfiles/desktops
 fi
 if [ -f $dotfilesdir/version.txt ]; then
-    printf "\t$magenta" "Checking for updates"
-    NEWVERSION="$(echo $(curl -Lsq https://github.com/casjay-systems/macos/raw/master/version.txt | grep -v "#" | tail -n 1))"
-    OLDVERSION="$(echo $(cat $dotfilesdir/version.txt | tail -n 1))"
-    if [ "$NEWVERSION" == "$OLDVERSION" ]; then
-        printf "\t\t$green No updates available current version is $OLDVERSION\n"
+  printf "\t$magenta" "Checking for updates"
+  NEWVERSION="$(echo $(curl -Lsq https://github.com/casjay-systems/macos/raw/master/version.txt | grep -v "#" | tail -n 1))"
+  OLDVERSION="$(echo $(cat $dotfilesdir/version.txt | tail -n 1))"
+  if [ "$NEWVERSION" == "$OLDVERSION" ]; then
+    printf "\t\t$green No updates available current version is $OLDVERSION\n"
+  else
+    printf "\t\t$red Update available - New version is $NEWVERSION"
+    printf "\t\t$red Would you like to update? [y/N]"
+    read -n 1 -s choice
+    if [ $choice == "y" ]; then
+      cd "$dotfilesdir" && git pull -q
+      printf "\t\t$green Updated to latest version = $NEWVERSION\n"
     else
-        printf "\t\t$red Update available - New version is $NEWVERSION"
-        printf "\t\t$red Would you like to update? [y/N]"
-        read -n 1 -s choice
-        if [ $choice == "y" ]; then
-            cd $dotfilesdir && git pull -q
-            printf "\t\t$green Updated to latest version = $NEWVERSION\n"
-        else
-            printf "\t\t$magenta You decided not to update\n"
-        fi
+      printf "\t\t$magenta You decided not to update\n"
     fi
+  fi
 fi
