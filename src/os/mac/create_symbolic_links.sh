@@ -160,10 +160,10 @@ create_symlinks() {
     targetFile="$HOME/.$(printf "%s" "$i" | sed "s/.*\/\(.*\)/\1/g")"
 
     if [ ! -e "$targetFile" ]; then
-      rm -Rf $targetFile
+      rm -Rfv $targetFile
       echo ""
       execute \
-        "ln -fs $sourceFile $targetFile" \
+        "ln -sf $sourceFile $targetFile" \
         "$targetFile → $sourceFile"
 
     elif [ "$(readlink "$targetFile")" == "$sourceFile" ]; then
@@ -195,10 +195,10 @@ create_configfolders() {
     targetFile="$HOME/.config/$i"
 
     if [ ! -e "$targetFile" ]; then
-      rm -Rf $targetFile
+      rm -Rfv $targetFile
       echo ""
       execute \
-        "ln -fs $sourceFile $targetFile" \
+        "ln -sf $sourceFile $targetFile" \
         "$targetFile → $sourceFile"
 
     elif [ "$(readlink "$targetFile")" == "$sourceFile" ]; then
@@ -231,10 +231,10 @@ create_librarysymlinks() {
     mkdir -p ${targetFile%/*}
 
     if [ ! -e "$targetFile" ]; then
-      rm -Rf $targetFile
+      rm -Rfv $targetFile
       echo ""
       execute \
-        "ln -fs $sourceFile $targetFile" \
+        "ln -sf $sourceFile $targetFile" \
         "$targetFile → $sourceFile"
 
     elif [ "$(readlink "$targetFile")" == "$sourceFile" ]; then
