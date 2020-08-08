@@ -21,20 +21,18 @@ install_vim() {
   if [ ! -d "$HOME/.local/share/vim/bundle/Vundle.vim/.git" ]; then
     echo ""
     execute \
-      "bash -c "rm -Rf $HOME/.local/share/vim/bundle/Vundle.vim \
-      git clone -q https://github.com/VundleVim/Vundle.vim.git $HOME/.local/share/vim/bundle/Vundle.vim &&
-      vim -u "$HOME/.config/vim/plugins.vimrc" +PluginInstall +qall \
-        "vim +PluginInstall → $HOME/.local/share/vim/bundle/" </dev/null 2>&1""
+      "rm -Rf $HOME/.local/share/vim/bundle/Vundle.vim \
+      git clone -q https://github.com/VundleVim/Vundle.vim.git $HOME/.local/share/vim/bundle/Vundle.vim && \
+      vim -u "$HOME/.config/vim/plugins.vimrc" +PluginInstall +qall < /dev/null > /dev/null 2>&1" \
+      "vim +PluginInstall → $HOME/.local/share/vim/bundle/"
 
   else
-
     echo ""
     execute \
-      "bash -c "cd $HOME/.local/share/vim/bundle/Vundle.vim \
-      git pull -q &&
-      vim -u "$HOME/.config/vim/plugins.vimrc" +PluginInstall +qall \
-        "Updating Vundle and Plugins" </dev/null >/dev/null 2>&1""
-
+      "cd $HOME/.local/share/vim/bundle/Vundle.vim \
+      git pull -q && \
+      vim -u "$HOME/.config/vim/plugins.vimrc" +PluginInstall +qall < /dev/null > /dev/null 2>&1" \
+      "Updating Vundle and Plugins"
   fi
 }
 
