@@ -53,11 +53,11 @@ function z -d "Jump to a recent directory."
                     for( i in rank ) print i "|" 0.9*rank[i] "|" time[i] # aging
                 } else for( i in rank ) print i "|" rank[i] "|" time[i]
             }
-        ' $datafile ^/dev/null > $tempfile
+        ' $datafile ^/dev/null >$tempfile
 
         command mv -f $tempfile $datafile
 
-    # tab completion
+        # tab completion
     else
         if [ "$argv[1]" = "--complete" ]
             command awk -v q="$argv[2]" -F"|" '

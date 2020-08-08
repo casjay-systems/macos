@@ -44,11 +44,4 @@ alias sort="LC_ALL=C sort"
 alias uniq="LC_ALL=C uniq"
 alias lynx="lynx -cfg=$HOME/.config/lynx/lynx.cfg -lss=$HOME/.config/lynx/lynx.lss"
 
-alias ll="ls -l --color=auto" 2>/dev/null
-alias l.="ls -d .* --color=auto" 2>/dev/null
-alias ls="ls --color=auto" 2>/dev/null
-alias grep="grep --color=auto" 2>/dev/null
-alias egrep="egrep --color=auto" 2>/dev/null
-alias fgrep="fgrep --color=auto" 2>/dev/null
-
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

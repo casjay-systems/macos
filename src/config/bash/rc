@@ -14,12 +14,12 @@ esac
 #source users functions
 
 userbashfunctions() {
-local d=$(ls "$HOME"/.config/bash/functions/*.bash 2>/dev/null | wc -l)
-if [ "$d" != "0"  ]; then
-for f in "$HOME"/.config/bash/functions/*.bash ; do
-  source "$f"
-  done
-fi
+  local d=$(ls "$HOME"/.config/bash/functions/*.bash 2>/dev/null | wc -l)
+  if [ "$d" != "0" ]; then
+    for f in "$HOME"/.config/bash/functions/*.bash; do
+      source "$f"
+    done
+  fi
 }
 
 userbashfunctions
@@ -29,12 +29,12 @@ userbashfunctions
 #ensure the exports get loaded
 
 userbashexports() {
-local d=$(ls "$HOME"/.config/bash/exports/*.bash 2>/dev/null | wc -l)
-if [ "$d" != "0"  ]; then
-for f in "$HOME"/.config/bash/exports/*.bash ; do
-  source "$f" >/dev/null 2>&1
-  done
-fi
+  local d=$(ls "$HOME"/.config/bash/exports/*.bash 2>/dev/null | wc -l)
+  if [ "$d" != "0" ]; then
+    for f in "$HOME"/.config/bash/exports/*.bash; do
+      source "$f" >/dev/null 2>&1
+    done
+  fi
 }
 
 userbashexports
@@ -44,12 +44,12 @@ userbashexports
 # Source additional bash scripts
 
 userbashprofile() {
-local d=$(ls "$HOME"/.config/bash/profile/*.bash 2>/dev/null | wc -l)
-if [ "$d" != "0"  ]; then
-for f in "$HOME"/.config/bash/profile/*.bash ; do
-  source "$f" >/dev/null 2>&1
-  done
-fi
+  local d=$(ls "$HOME"/.config/bash/profile/*.bash 2>/dev/null | wc -l)
+  if [ "$d" != "0" ]; then
+    for f in "$HOME"/.config/bash/profile/*.bash; do
+      source "$f" >/dev/null 2>&1
+    done
+  fi
 }
 
 userbashprofile
@@ -59,12 +59,12 @@ userbashprofile
 # Source additional aliases scripts
 
 userbashaliases() {
-local d=$(ls "$HOME"/.config/bash/aliases/*.bash 2>/dev/null | wc -l)
-if [ "$d" != "0"  ]; then
-for f in "$HOME"/.config/bash/aliases/*.bash ; do
-  source "$f" >/dev/null 2>&1
-  done
-fi
+  local d=$(ls "$HOME"/.config/bash/aliases/*.bash 2>/dev/null | wc -l)
+  if [ "$d" != "0" ]; then
+    for f in "$HOME"/.config/bash/aliases/*.bash; do
+      source "$f" >/dev/null 2>&1
+    done
+  fi
 }
 
 userbashaliases
@@ -74,12 +74,12 @@ userbashaliases
 # Source additional completion scripts
 
 userbashcompletions() {
-local d=$(ls "$HOME"/.config/bash/completions/*.bash 2>/dev/null | wc -l)
-if [ "$d" != "0"  ]; then
-for f in "$HOME"/.config/bash/completions/*.bash ; do
-  source "$f" >/dev/null 2>&1
-  done
-fi
+  local d=$(ls "$HOME"/.config/bash/completions/*.bash 2>/dev/null | wc -l)
+  if [ "$d" != "0" ]; then
+    for f in "$HOME"/.config/bash/completions/*.bash; do
+      source "$f" >/dev/null 2>&1
+    done
+  fi
 }
 
 userbashcompletions
@@ -89,12 +89,12 @@ userbashcompletions
 # Source additional user bash scripts
 
 userbashprofilelocal() {
-local d=$(ls "$HOME"/.config/bash/local/*.bash 2>/dev/null | wc -l)
-if [ "$d" != "0"  ]; then
-for f in "$HOME"/.config/bash/local/*.bash ; do
-  source "$f"  >/dev/null 2>&1
-  done
-fi
+  local d=$(ls "$HOME"/.config/bash/local/*.bash 2>/dev/null | wc -l)
+  if [ "$d" != "0" ]; then
+    for f in "$HOME"/.config/bash/local/*.bash; do
+      source "$f" >/dev/null 2>&1
+    done
+  fi
 }
 
 userbashprofilelocal
@@ -104,7 +104,6 @@ userbashprofilelocal
 show_welcome
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
 
 # run neofetch
 #if echo "$-" | grep i > /dev/null; then
@@ -123,4 +122,3 @@ show_welcome
 
 # end
 #/* vim set expandtab ts=2 noai :
-

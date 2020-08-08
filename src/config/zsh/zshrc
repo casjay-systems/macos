@@ -1,6 +1,8 @@
 #!/usr/bin/env zsh
 #zsh config
 
+ZSH_DISABLE_COMPFIX=true
+
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 # ensure exports is loaded
@@ -173,5 +175,3 @@ fi
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 export SRCZSHRC="$HOME/.zshrc"
-
-

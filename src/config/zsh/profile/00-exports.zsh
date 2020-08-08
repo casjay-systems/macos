@@ -95,27 +95,6 @@ export MANPAGER="less -X"
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-# xserver settings
-
-if [[ ! -f ~/.Xdefaults ]]; then
-  touch ~/.Xdefaults
-else
-  xrdb ~/.Xdefaults 2>/dev/null
-fi
-
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-# xserver settings
-
-if [[ ! -f ~/.Xresources ]]; then
-  touch ~/.Xresources
-else
-  xrdb ~/.Xresources 2>/dev/null
-  xrdb -merge ~/.Xresources 2>/dev/null
-fi
-
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
 # ensure .gitconfig exists
 
 if [[ -f ~/.config/local/gitconfig.local ]] && [[ ! -f ~/.gitconfig ]]; then
@@ -253,16 +232,6 @@ fi
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 # export color
-
-unset -f DIRCOLOR LSCOLORS LS_COLORS 2>/dev/null
-
-if [[ -f "$HOME/.dircolors" ]]; then
-  DIRCOLOR="$HOME"/.dircolors
-else
-  DIRCOLOR="$HOME"/.config/dircolors/dracula
-fi
-
-export DIRCOLOR
 
 if [[ "$OSTYPE" = darwin* ]]; then
   LSCOLORS=DxgxcxdxCxegedabagacad

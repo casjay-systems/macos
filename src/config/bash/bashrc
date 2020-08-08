@@ -46,10 +46,6 @@ unset NEW_PATH
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-# Source additional bash scripts
-
-test -r $HOME/.dircolors && eval "$(dircolors $HOME/.dircolors)"
-
 # Set mouse type - changes to blinking bar
 
 echo -e -n "\x1b[\x35 q"
