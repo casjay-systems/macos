@@ -5,6 +5,23 @@
 let s:vimdir = $HOME . '/.config/vim'
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Python version
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+if has('python3')
+    let g:UltiSnipsUsePythonVersion = 3"
+    let g:powerline_pycmd="py3"
+    let g:python3_host_prog = "/usr/bin/python3"
+    set pyxversion=3
+    set pyx=3
+elseif has('python')
+    let g:UltiSnipsUsePythonVersion = 2"
+    let g:powerline_pycmd="py"
+    let g:python_host_prog = "/usr/bin/python2"
+    set pyx=2
+endif
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => create directories
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
@@ -21,7 +38,7 @@ endif
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 if filereadable(glob("~/.config/vim/plugins.vimrc"))
-    source ~/.config/vim/plugins.vimrc
+     source ~/.config/vim/plugins.vimrc
 endif
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -36,9 +53,7 @@ set viminfo+=n~/.config/vim/.info/viminfo
 
 set term=xterm-256color
 
-if has('mac')
-    set shell=/usr/local/bin/bash
-elseif has('unix')
+if has('unix')
     set shell=/bin/bash
 endif
 
@@ -96,7 +111,7 @@ highlight link javascriptType Keyword
 set guifont=Hack\ Nerd\ Font\ 10
 
 if has('gui_running')
-    colorscheme dracula
+     colorscheme dracula
 endif
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -166,12 +181,6 @@ let g:nerdtree_tabs_synchronize_view = 0
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 let g:snipMate = get(g:, 'snipMate', {})
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => deoplete
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-let g:deoplete#enable_at_startup = 1
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " =>  ultisnips
