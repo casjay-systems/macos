@@ -23,8 +23,7 @@ setup_ohmyfish() {
   echo ""
   execute \
     "curl -LSsq https://get.oh-my.fish > $HOME/.config/fish/omf-install && \
-    fish $HOME/.config/fish/omf-install --path=$HOME/.local/share/fish/oh-my-fish --config=$HOME/.config/fish/omf --noninteractive --yes \
-    fish $HOME/.config/fish/plugins.fish" \
+    fish $HOME/.config/fish/omf-install --path=$HOME/.local/share/fish/oh-my-fish --config=$HOME/.config/fish/omf --noninteractive --yes" \
     "Installing oh-my-fish"
 
 }
