@@ -3,9 +3,9 @@
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 #Set vim as default
-alias vi="/usr/bin/vim"          #vim
-alias vim="/usr/bin/vim"         #vim
-alias svi="sudo /usr/bin/vim"    #start vim with sudo
-alias vis="/usr/bin/vim +set si" #
+alias vi="/usr/local/bin/vim"          #vim
+alias vim="/usr/local/bin/vim"         #vim
+alias svi="sudo /usr/local/bin/vim"    #start vim with sudo
+alias vis="/usr/local/bin/vim +set si" #
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+export PATH="/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin
+
 # Define colors
 PURPLE='\033[0;35m'
 BLUE='\033[0;34m'

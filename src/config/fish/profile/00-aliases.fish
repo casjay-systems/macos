@@ -44,15 +44,15 @@ alias lynx="lynx -cfg=$HOME/.config/lynx/lynx.cfg -lss=$HOME/.config/lynx/lynx.l
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 #Set vim as default
-alias vi="/usr/bin/vim" #vim
-alias vim="/usr/bin/vim" #vim
-alias svi="sudo /usr/bin/vim" #start vim with sudo
-alias vis="/usr/bin/vim +set si" #
+alias vi="/usr/local/bin/vim" #vim
+alias vim="/usr/local/bin/vim" #vim
+alias svi="sudo /usr/local/bin/vim" #start vim with sudo
+alias vis="/usr/local/bin/vim +set si" #
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 #Set neovim
-alias nvim="/usr/bin/nvim -u $HOME/.config/neovim/init.vim"
+alias nvim="/usr/local/bin/nvim -u $HOME/.config/neovim/init.vim"
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Lock screen.

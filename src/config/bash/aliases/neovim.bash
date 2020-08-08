@@ -3,6 +3,6 @@
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 #Set neovim
-alias nvim="/usr/bin/nvim -u $HOME/.config/neovim/init.vim"
+alias nvim="/usr/local/bin/nvim -u $HOME/.config/neovim/init.vim"
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
