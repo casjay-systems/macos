@@ -31,7 +31,7 @@ install_vim() {
     execute \
       "cd $HOME/.local/share/vim/bundle/Vundle.vim && \
       git pull -q && \
-      vim +PluginInstall +qall < /dev/null > /dev/null 2>&1" \
+      vim -u "$HOME/.config/vim/plugins.vimrc" +PluginInstall +qall < /dev/null > /dev/null 2>&1" \
       "Updating Vundle and Plugins"
   fi
 }
