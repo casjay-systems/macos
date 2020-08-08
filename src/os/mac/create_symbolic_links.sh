@@ -49,8 +49,11 @@ declare -a CONFFOLDERS_TO_SYMLINK=(
 
 declare -a CONFFILES_TO_SYMLINK=(
   \
-  "Preferences/com.googlecode.iterm2.plist"
   "Library/Developer/Xcode/UserData/FontAndColorThemes/Dracula.xccolortheme"
+  "Library/Preferences/com.googlecode.iterm2.plist"
+  "Library/Preferences/.GlobalPreferences.plist"
+  "Library/Preferences/com.apple.Terminal.plist"
+  "Library/Preferences/com.apple.finder.plist"
 
 )
 
