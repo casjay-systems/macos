@@ -6,24 +6,24 @@ cd "$(dirname "${BASH_SOURCE[0]}")" &&
 srcdir="$(cd .. && pwd)"
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+rm -Rf $HOME/.config/fish/omf >/dev/null 2>&1
+unlink -f $HOME/.config/fish >/dev/null 2>&1
+rm -Rf $HOME/.config/fish >/dev/null 2>&1
 
 setup_fish() {
   echo ""
   execute \
-    "unlink ~/.config/fish \
-    rm -Rf ~/.config/fish \
-    ln -sf $srcdir/config/fish ~/.config/" \
-    "$srcdir/config/fish → ~/.config/fish"
+    "ln -sf $srcdir/config/fish $HOME/.config/" \
+    "$srcdir/config/fish → $HOME/.config/fish"
 }
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 setup_ohmyfish() {
   echo ""
   execute \
-    "rm -Rf ~/.config/fish/omf \
-    curl -LSsq https://get.oh-my.fish >~/.config/fish/omf-install \
-    fish ~/.config/fish/omf-install --path=~/.local/share/fish/oh-my-fish --config=~/.config/fish/omf --noninteractive --yes \
-    fish ~/.config/fish/plugins.fish" \
+    "curl -LSsq https://get.oh-my.fish > $HOME/.config/fish/omf-install && \
+    fish $HOME/.config/fish/omf-install --path=$HOME/.local/share/fish/oh-my-fish --config=$HOME/.config/fish/omf --noninteractive --yes \
+    fish $HOME/.config/fish/plugins.fish" \
     "Installing oh-my-fish"
 
 }

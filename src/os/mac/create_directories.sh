@@ -7,7 +7,7 @@ srcdir="$(cd .. && pwd)"
 
 if [ -d "$srcdir/bin" ]; then
   mkdir -p "$HOME/.local/bin"
-  rsync -arhP "$srcdir/bin/." "$HOME/.local/bin"
+  rsync -aq "$srcdir/bin/." "$HOME/.local/bin"
 fi
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
