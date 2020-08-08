@@ -36,7 +36,7 @@ setup_omyzsh() {
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 setup_zsh9k() {
-  if [ -d $HOME/.local/share/zsh/oh-my-zsh/custom/themes/powerlevel9k/.git ]; then
+  if [ -d "$HOME/.local/share/zsh/oh-my-zsh/custom/themes/powerlevel9k/.git" ]; then
     echo ""
     execute \
       "cd $HOME/.local/share/zsh/oh-my-zsh/custom/themes/powerlevel9k && \
@@ -54,7 +54,7 @@ setup_zsh9k() {
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 setup_zsh10k() {
-  if [ -d $HOME/.local/share/zsh/oh-my-zsh/custom/themes/powerlevel10k/.git ]; then
+  if [ -d "$HOME/.local/share/zsh/oh-my-zsh/custom/themes/powerlevel10k/.git" ]; then
     echo ""
     execute \
       "cd $HOME/.local/share/zsh/oh-my-zsh/custom/themes/powerlevel10k && \
@@ -71,6 +71,24 @@ setup_zsh10k() {
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
+setup_syntax() {
+  if [ -d "$HOME/.local/share/zsh/oh-my-zsh/custom/plugins/zsh-syntax-highlighting/.git" ]; then
+    echo ""
+    execute \
+      "cd $HOME/.local/share/zsh/oh-my-zsh/custom/themes/plugins/zsh-syntax-highlighting && \
+      git pull -q" \
+      "Updating zsh-syntax-highlighting"
+  else
+    echo ""
+    execute \
+      "rm -Rf $HOME/.local/share/zsh/oh-my-zsh/custom/plugins/zsh-syntax-highlighting && \
+      git clone -q https://github.com/zsh-users/zsh-syntax-highlighting.git $HOME/.local/share/zsh/oh-my-zsh/custom/plugins/zsh-syntax-highlighting" \
+      "https://github.com/zsh-users/zsh-syntax-highlighting.git → $HOME/.local/share/zsh/oh-my-zsh/custom/plugins/zsh-syntax-highlighting"
+  fi
+}
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
 main() {
 
   setup_zsh
@@ -80,6 +98,8 @@ main() {
   setup_zsh9k
 
   setup_zsh10k
+
+  setup_syntax
 
 }
 
