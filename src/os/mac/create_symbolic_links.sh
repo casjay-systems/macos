@@ -6,8 +6,11 @@ cd "$(dirname "${BASH_SOURCE[0]}")" &&
 srcdir="$(cd .. && pwd)"
 mkdir -p ~/.local/backups/dotfiles/{configs,home}
 backups="~/.local/backups/dotfiles"
-mkdir -p "$HOME/.ncmpcpp"
-ln -sf "$HOME/.config/mpd/ncmpcpp.conf" "$HOME/.ncmpcpp/config"
+
+if [ ! -f "$HOME/.ncmpcpp/config" ]; then
+  mkdir "$HOME/.ncmpcpp"
+  ln -sf "$srcdir/config/mpd/ncmpcpp.conf" "$HOME/.ncmpcpp/config"
+fi
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -75,7 +78,6 @@ backup_symlinks() {
     nameFile="$(printf "%s" "$i" | sed "s/.*\/\(.*\)/\1/g")"
 
     if [ -f $targetFile ] && [ ! -L $targetFile ]; then
-
       echo ""
       execute \
         "rsync -aq $targetFile/. $backups/home/$nameFile >/dev/null 2>&1 || true" \
@@ -104,7 +106,6 @@ backup_configfolders() {
     nameFile="$(printf "%s" "$i" | sed "s/.*\/\(.*\)/\1/g")"
 
     if [ -f $targetFile ] && [ ! -L $targetFile ]; then
-
       echo ""
       execute \
         "rsync -aq $targetFile/. $backups/config/$nameFile >/dev/null 2>&1 || true" \
@@ -132,7 +133,6 @@ backup_librarysymlinks() {
     nameFile="$(printf "%s" "$i" | sed "s/.*\/\(.*\)/\1/g")"
 
     if [ -f $targetFile ] || [ -d $targetFile ] && [ ! -L $targetFile ]; then
-
       echo ""
       execute \
         "rsync -aq $targetFile/. $backups/Library⁩/$nameFile >/dev/null 2>&1 || true" \
@@ -158,9 +158,10 @@ create_symlinks() {
   for i in "${FILES_TO_SYMLINK[@]}"; do
     sourceFile="$srcdir/$i"
     targetFile="$HOME/.$(printf "%s" "$i" | sed "s/.*\/\(.*\)/\1/g")"
+    rm -Rfv $targetFile
 
     if [ ! -e "$targetFile" ]; then
-      rm -Rfv $targetFile
+
       echo ""
       execute \
         "ln -sf $sourceFile $targetFile" \
@@ -193,9 +194,10 @@ create_configfolders() {
   for i in "${CONFFOLDERS_TO_SYMLINK[@]}"; do
     sourceFile="$srcdir/config/$i"
     targetFile="$HOME/.config/$i"
+    rm -Rfv $targetFile
 
     if [ ! -e "$targetFile" ]; then
-      rm -Rfv $targetFile
+
       echo ""
       execute \
         "ln -sf $sourceFile $targetFile" \
@@ -229,9 +231,10 @@ create_librarysymlinks() {
     sourceFile="$srcdir/Library/$i"
     targetFile="$HOME/Library/$i"
     mkdir -p ${targetFile%/*}
+    rm -Rfv $targetFile
 
     if [ ! -e "$targetFile" ]; then
-      rm -Rfv $targetFile
+
       echo ""
       execute \
         "ln -sf $sourceFile $targetFile" \
