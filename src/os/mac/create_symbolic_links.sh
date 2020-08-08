@@ -130,7 +130,7 @@ backup_librarysymlinks() {
     sourceFile="$srcdir/Library⁩/$i"
     targetFile="$HOME/Library⁩/$i"
     nameFile="$(printf "%s" "$i" | sed "s/.*\/\(.*\)/\1/g")"
-    mkdir -p ${targetFile%/*}
+
     if [ -f $targetFile ] || [ -d $targetFile ] && [ ! -L $targetFile ]; then
 
       echo ""
@@ -228,6 +228,7 @@ create_librarysymlinks() {
   for i in "${LIBRARYFILES_TO_SYMLINK[@]}"; do
     sourceFile="$srcdir/Library/$i"
     targetFile="$HOME/Library/$i"
+    mkdir -p ${targetFile%/*}
 
     if [ ! -e "$targetFile" ]; then
       rm -Rf $targetFile
