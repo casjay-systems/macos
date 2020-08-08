@@ -23,7 +23,7 @@ install_vim() {
     execute \
       "rm -Rf $HOME/.local/share/vim/bundle/Vundle.vim && \
       git clone -q https://github.com/VundleVim/Vundle.vim.git $HOME/.local/share/vim/bundle/Vundle.vim && \
-      vim -u "$HOME/.config/vim/plugins.vimrc" +PluginInstall +qall < /dev/null > /dev/null 2>&1" \
+      vim -u "$HOME/.config/vim/plugins.vimrc" +PluginInstall +qall < /dev/null 2>&1" \
       "vim +PluginInstall → $HOME/.local/share/vim/bundle/"
 
   else
