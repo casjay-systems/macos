@@ -14,7 +14,7 @@ OLDVERSION=""
 choice=""
 
 # Version check
-if [ -z "$DOTFILESDIR" ]; then
+if [ -n "$DOTFILESDIR" ]; then
   dotfilesdir="$DOTFILESDIR"
 else
   dotfilesdir="$HOME/.local/dotfiles/desktops"
@@ -38,5 +38,5 @@ if [ -f "$dotfilesdir/version.txt" ]; then
     fi
   fi
 else
-  printf "\t\t$redCan't find $dotfilesdir/version.txt"
+  printf "\t\t$red Can't find $dotfilesdir/version.txt"
 fi
