@@ -54,6 +54,7 @@ declare -a CONFFOLDERS_TO_SYMLINK=(
 declare -a LIBRARYFILES_TO_SYMLINK=(
   \
   "Developer/Xcode/UserData/FontAndColorThemes/Dracula.xccolortheme"
+  "Preferences/com.apple.systempreferences.plist"
   "Preferences/com.googlecode.iterm2.plist"
   "Preferences/.GlobalPreferences.plist"
   "Preferences/com.apple.Terminal.plist"
