@@ -149,7 +149,7 @@ if [ -d $dotfilesDirectory/.git ]; then
   git pull --recurse-submodules -fq && \
   cd ~" \
     "Updating dotfiles"
-  NEWVERSION="$(echo $(cat $srcdir/os/version.txt | tail -n 1))"
+  NEWVERSION="$(echo $(cat $dotfilesDirectory/version.txt | tail -n 1))"
   REVER="$(cd $dotfilesDirectory && git rev-parse --short HEAD)"
   printf "${GREEN}   [✔] Updated to $NEWVERSION - revision: $REVER${NC}\n\n"
 
@@ -159,7 +159,7 @@ else
   rm -Rf $dotfilesDirectory
   git clone --depth=1 -q --recursive https://github.com/casjay-systems/macos.git $dotfilesDirectory >/dev/null 2>&1
   printf "\n${GREEN}   [✔] clone https://github.com/casjay-systems/macos.git  → $dotfilesDirectory \n"
-  NEWVERSION="$(echo $(cat $srcdir/os/version.txt | tail -n 1))"
+  NEWVERSION="$(echo $(cat $dotfilesDirectory/version.txt | tail -n 1))"
   REVER="$(cd $dotfilesDirectory && git rev-parse --short HEAD)"
   printf "${GREEN}   [✔] downloaded version $NEWVERSION - revision: $REVER${NC}\n\n"
   cd "$srcdir/os" && source "utils.sh"
@@ -318,7 +318,7 @@ print_in_purple "\n • Running cleanup complete\n\n"
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Print installed version
 
-NEWVERSION="$(echo $(cat $srcdir/os/version.txt | tail -n 1))"
+NEWVERSION="$(echo $(cat $dotfilesDirectory/version.txt | tail -n 1))"
 # End Install
 RESULT=$?
 printf "\n${GREEN}       *** 😃 installation of dotfiles completed 😃 *** ${NC}\n"
