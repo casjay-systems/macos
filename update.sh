@@ -17,10 +17,11 @@ choice=""
 if [ -z "$DOTFILESDIR" ]; then
   dotfilesdir="$DOTFILESDIR"
 else
-  dotfilesdir=~/.local/dotfiles/desktops
+  dotfilesdir="$HOME/.local/dotfiles/desktops"
 fi
-if [ -f $dotfilesdir/version.txt ]; then
-  printf "\t$magenta" "Checking for updates"
+
+if [ -f "$dotfilesdir/version.txt" ]; then
+  printf "\t\t$magenta" "Checking for updates"
   NEWVERSION="$(echo $(curl -Lsq https://github.com/casjay-systems/macos/raw/master/version.txt | grep -v "#" | tail -n 1))"
   OLDVERSION="$(echo $(cat $dotfilesdir/version.txt | tail -n 1))"
   if [ "$NEWVERSION" == "$OLDVERSION" ]; then
@@ -36,4 +37,6 @@ if [ -f $dotfilesdir/version.txt ]; then
       printf "\t\t$magenta You decided not to update\n"
     fi
   fi
+else
+  printf "\t\t$redCan't find $dotfilesdir/version.txt"
 fi
