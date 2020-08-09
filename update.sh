@@ -25,18 +25,18 @@ if [ -f "$dotfilesdir/version.txt" ]; then
   NEWVERSION="$(echo $(curl -Lsq https://github.com/casjay-systems/macos/raw/master/version.txt | grep -v "#" | tail -n 1))"
   OLDVERSION="$(echo $(cat $dotfilesdir/version.txt | tail -n 1))"
   if [ "$NEWVERSION" == "$OLDVERSION" ]; then
-    printf "\t\t$green No updates available current version is $OLDVERSION\n"
+    printf "\t\t$green" "No updates available current version is $OLDVERSION\n"
   else
-    printf "\t\t$red Update available - New version is $NEWVERSION"
-    printf "\t\t$red Would you like to update? [y/N]"
+    printf "\t\t$red" "Update available - New version is $NEWVERSION"
+    printf "\t\t$red" "Would you like to update? [y/N]"
     read -n 1 -s choice
     if [ $choice == "y" ]; then
       cd "$dotfilesdir" && git pull -q
-      printf "\t\t$green Updated to latest version = $NEWVERSION\n"
+      printf "\t\t$green" "Updated to latest version = $NEWVERSION\n"
     else
-      printf "\t\t$magenta You decided not to update\n"
+      printf "\t\t$magenta" "You decided not to update\n"
     fi
   fi
 else
-  printf "\t\t$red Can't find $dotfilesdir/version.txt"
+  printf "\t\t$red" "Can't find $dotfilesdir/version.txt"
 fi
