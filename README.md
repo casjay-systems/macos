@@ -6,20 +6,20 @@ files described in the [`Local Settings`](#local-settings) section.
 
 ## Table of Contents
 
-- [Jason's DotFiles](#jasons-dotfiles)
-  - [Table of Contents](#table-of-contents)
-  - [Setup](#setup)
-  - [Customize](#customize)
-    - [Local Settings](#local-settings)
-      - [`~/.config/local/bash.local`](#bash.local)
-      - [`~/.config/local/gitconfig.local`](#gitconfig.local)
-      - [`~/.config/local/vimrc.local`](#vimrc.local)
-    - [Forks](#forks)
-  - [Update](#update)
-  - [Screenshots](#screenshots)
-    - [Git](#git)
-    - [tmux & vim](#tmux--vim)
-  - [License](#license)
+1. [Jason's DotFiles](#jasons-dotfiles)
+   1. [Table of Contents](#table-of-contents)
+   2. [Setup](#setup)
+   3. [Customize](#customize)
+      1. [Local Settings](#local-settings)
+         1. [`~/.config/local/bash.local`](#configlocalbashlocal)
+         2. [`~/.config/local/gitconfig.local`](#configlocalgitconfiglocal)
+         3. [`~/.config/local/vimrc.local`](#configlocalvimrclocal)
+      2. [Forks](#forks)
+   4. [Update](#update)
+   5. [Screenshots](#screenshots)
+      1. [Git](#git)
+      2. [tmux & vim](#tmux--vim)
+   6. [License](#license)
 
 ## Setup
 
@@ -29,14 +29,14 @@ terminal:
 (:red_circle: **Tested on Debian, Ubuntu, Fedora, Kali, ParrotOS, ArcoLinux, and MacOS)**  
   
 (:warning: **DO NOT** run the `setup` snippet if you do not fully
-understand [what it does][setup]. Seriously, **DON'T**!). 
+understand [what it does][setup]. Seriously, **DON'T**!).
   
-| OS | Snippet |
-|:---|:---|
-| `Auto` | `bash -c "$(curl -LsS https://github.com/casjay-systems/linux/raw/master/install.sh)"`|
-| `Linux Installer` | `bash -c "$(curl -LsS https://github.com/casjay-systems/linux/raw/master/install.sh)"` |
-| `MacOS Installer` | `bash -c "$(curl -LsS https://github.com/casjay-systems/macos/raw/master/install.sh)"` |
-| `Windows Installer` | `bash -c "$(curl -LsS https://github.com/casjay-systems/windows/raw/master/install.sh)"` |
+| OS                  | Snippet                                                                                                                                                                                   |
+| :------------------ | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `Auto`              | `bash -c "$(curl -LsS https://github.com/casjay-systems/linux/raw/master/install.sh)"`                                                                                                    |
+| `Linux Installer`   | `bash -c "$(curl -LsS https://github.com/casjay-systems/linux/raw/master/install.sh)"`                                                                                                    |
+| `MacOS Installer`   | `bash -c "$(curl -LsS https://github.com/casjay-systems/macos/raw/master/install.sh)"`                                                                                                    |
+| `Windows Installer` | `powershell.exe -Command Invoke-WebRequest https://github.com/casjay-systems/windows/raw/master/install.cmd -o %USERPROFILE%\Downloads\install.cmd; %USERPROFILE%\Downloads\install.cmd"` |
 
 That's it! :sparkles:
 
@@ -227,6 +227,3 @@ The code is available under the [MIT license][license].
 [bash]: src/bash
 [shell]: src/shell
 [symlink]: src/os/create_symbolic_links.sh
-    
-    
-
