@@ -15,6 +15,7 @@ install_git() {
     "$srcdir/config/git/gitconfig  → ~/.gitconfig"
 
 }
+
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 install_ohmygit() {
 

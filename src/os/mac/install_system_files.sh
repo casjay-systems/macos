@@ -105,8 +105,8 @@ if (sudo -vn && sudo -ln) 2>&1 | grep -v 'may not' >/dev/null; then
 
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-    echo "$MYUSER ALL=(ALL)   NOPASSWD: ALL" >$FILE_PATH
-    chmod -f 440 $FILE_PATH
+    echo "$MYUSER ALL=(ALL)   NOPASSWD: ALL" >"$FILE_PATH"
+    chmod -f 440 "$FILE_PATH"
 
     print_result $? "$FILE_PATH"
   }

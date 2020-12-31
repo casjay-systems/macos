@@ -10,8 +10,8 @@ GREEN='\033[32m'
 NC='\033[0m'
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-if [ -f ~/.config/dotfiles/env ]; then
-  source ~/.config/dotfiles/env
+if [ -f "$HOME"/.config/dotfiles/env ]; then
+  source "$HOME"/.config/dotfiles/env
 fi
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -79,8 +79,7 @@ if [ -z "$UPDATE" ]; then
   if ! (sudo true && sudo -ln) 2>&1 | grep -v 'may not' >/dev/null; then
     printf "
   ${RED}\n • Please run one of the following commands as root:${NC}
-  ${GREEN}You can just do${RED} su -c $srcdir/os/mac/pkgs/lists/mac-sys.sh${NC}
-             \n${RED}then come back to this installer ${NC}\n\n"
+  ${GREEN}You can just do${RED} su -c $srcdir/os/mac/pkgs/lists/mac-sys.sh${NC}\n${RED}then come back to this installer ${NC}\n\n"
     exit
   fi
 fi
@@ -147,7 +146,7 @@ if [ -d $dotfilesDirectory/.git ]; then
   execute \
     "cd $dotfilesDirectory && \
   git pull --recurse-submodules -fq && \
-  cd ~" \
+  cd "$HOME"" \
     "Updating dotfiles"
   NEWVERSION="$(echo $(cat $dotfilesDirectory/version.txt | tail -n 1))"
   REVER="$(cd $dotfilesDirectory && git rev-parse --short HEAD)"
@@ -168,10 +167,10 @@ fi
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Make Directories and fix permissions
 
-mkdir -p ~/.gnupg ~/.ssh 2>/dev/null
+mkdir -p "$HOME"/.gnupg "$HOME"/.ssh 2>/dev/null
 find "$HOME" -xtype l -delete 2>/dev/null
-find ~/.gnupg ~/.ssh -type f -exec chmod 600 {} \; 2>/dev/null
-find ~/.gnupg ~/.ssh -type d -exec chmod 700 {} \; 2>/dev/null
+find "$HOME"/.gnupg "$HOME"/.ssh -type f -exec chmod 600 {} \; 2>/dev/null
+find "$HOME"/.gnupg "$HOME"/.ssh -type d -exec chmod 700 {} \; 2>/dev/null
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -279,28 +278,28 @@ cd $HOME
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Fix permissions again
 find "$HOME" -xtype l -delete find "$HOME" -xtype l -delete 2>/dev/null
-find ~/.gnupg ~/.ssh -type f -exec chmod 600 {} \; 2>/dev/null
-find ~/.gnupg ~/.ssh -type d -exec chmod 700 {} \; 2>/dev/null
+find "$HOME"/.gnupg "$HOME"/.ssh -type f -exec chmod 600 {} \; 2>/dev/null
+find "$HOME"/.gnupg "$HOME"/.ssh -type d -exec chmod 700 {} \; 2>/dev/null
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Create env file
-if [ ! -d ~/.config/dotfiles ]; then mkdir -p ~/.config/dotfiles; fi
-if [ ! -f ~/.config/dotfiles/env ]; then
-  echo "" >~/.config/dotfiles/env
-  echo "UPDATE="yes"" >>~/.config/dotfiles/env
-  echo "dotfilesDirectory="$dotfilesDirectory"" >>~/.config/dotfiles/env
-  echo "srcdir="$dotfilesDirectory/src"" >>~/.config/dotfiles/env
-  echo "macosdir="$srcdir/os/macos"" >>~/.config/dotfiles/env
-  echo "INSTALLEDVER="$NEWVERSION"" >>~/.config/dotfiles/env
-  echo "DISTRO="$DISTRO"" >>~/.config/dotfiles/env
-  echo "CODENAME="$CODENAME"" >>~/.config/dotfiles/env
-  echo "GIT="$GIT"" >>~/.config/dotfiles/env
-  echo "CURL="$CURL"" >>~/.config/dotfiles/env
-  echo "WGET="$WGET"" >>~/.config/dotfiles/env
-  echo "VIM="$VIM"" >>~/.config/dotfiles/env
-  echo "TMUX="$TMUX"" >>~/.config/dotfiles/env
-  echo "ZSH="$ZSH"" >>~/.config/dotfiles/env
-  echo "FISH="$FISH"" >>~/.config/dotfiles/env
-  echo "BREW="$BREW"" >>~/.config/dotfiles/env
+if [ ! -d "$HOME"/.config/dotfiles ]; then mkdir -p "$HOME"/.config/dotfiles; fi
+if [ ! -f "$HOME"/.config/dotfiles/env ]; then
+  echo "" >"$HOME"/.config/dotfiles/env
+  echo "UPDATE="yes"" >>"$HOME"/.config/dotfiles/env
+  echo "dotfilesDirectory="$dotfilesDirectory"" >>"$HOME"/.config/dotfiles/env
+  echo "srcdir="$dotfilesDirectory/src"" >>"$HOME"/.config/dotfiles/env
+  echo "macosdir="$srcdir/os/macos"" >>"$HOME"/.config/dotfiles/env
+  echo "INSTALLEDVER="$NEWVERSION"" >>"$HOME"/.config/dotfiles/env
+  echo "DISTRO="$DISTRO"" >>"$HOME"/.config/dotfiles/env
+  echo "CODENAME="$CODENAME"" >>"$HOME"/.config/dotfiles/env
+  echo "GIT="$GIT"" >>"$HOME"/.config/dotfiles/env
+  echo "CURL="$CURL"" >>"$HOME"/.config/dotfiles/env
+  echo "WGET="$WGET"" >>"$HOME"/.config/dotfiles/env
+  echo "VIM="$VIM"" >>"$HOME"/.config/dotfiles/env
+  echo "TMUX="$TMUX"" >>"$HOME"/.config/dotfiles/env
+  echo "ZSH="$ZSH"" >>"$HOME"/.config/dotfiles/env
+  echo "FISH="$FISH"" >>"$HOME"/.config/dotfiles/env
+  echo "BREW="$BREW"" >>"$HOME"/.config/dotfiles/env
 fi
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 

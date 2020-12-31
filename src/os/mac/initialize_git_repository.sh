@@ -25,7 +25,7 @@ initialize_git_repository() {
     # Run the following Git commands in the root of
     # the dotfiles directory, not in the `os/` directory.
 
-    cd $srcdir ||
+    cd "$srcdir" ||
       print_error "Failed to 'cd $srcdir'"
 
     execute \
