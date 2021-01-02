@@ -8,7 +8,7 @@ TAPS="homebrew/cask-fonts "
 # Define brew apps
 BREW="git svn fortune cowsay neofetch coreutils fish bash zsh bash-completion@2 rsync "
 BREW+="nano neovim macvim emacs thefuck fnm byobu nethogs iftop iperf jq dialog links html2text "
-BREW+="mpd ncmpcpp newsboat pass editorconfig tmux screen hub zsh fish zsh-completions speedtest-cli"
+BREW+="mpd ncmpcpp newsboat pass editorconfig tmux screen hub zsh fish zsh-completions speedtest-cli "
 BREW+="ruby php perl nodejs golang nvm youtube-dl direnv wget curl iproute2mac powerline-go dict "
 
 #Define brew casks apps
