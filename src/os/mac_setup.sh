@@ -404,10 +404,6 @@ if [ ! -f "$HOME"/.config/dotfiles/env ]; then
   echo "BREW="$BREW"" >>"$HOME"/.config/dotfiles/env
 fi
 
-if (sudo true && sudo -ln) 2>&1 | grep -v 'may not' >/dev/null; then
-  sudo touch /usr/local/Homebrew/.srcinstall
-fi
-
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 # run clean up
@@ -416,6 +412,12 @@ print_in_purple "\n • Running cleanup\n"
 
 # fi
 print_in_purple "\n • Running cleanup complete\n"
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+if (sudo true && sudo -ln) 2>&1 | grep -v 'may not' >/dev/null; then
+  sudo touch /usr/local/Homebrew/.srcinstall
+fi
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Print installed version
