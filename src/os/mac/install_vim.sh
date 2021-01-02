@@ -32,7 +32,7 @@ install_vim() {
   else
     echo ""
     execute \
-      "git -C cd $HOME/.local/share/vim/bundle/Vundle.vim pull -q && \
+      "git -C $HOME/.local/share/vim/bundle/Vundle.vim pull -q && \
       plug_inst" \
       "Updating Vundle and Plugins"
   fi
