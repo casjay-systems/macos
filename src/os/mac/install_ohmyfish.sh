@@ -11,7 +11,7 @@ setup_fish() {
   unlink "$HOME/.config/fish" 2>/dev/null || rm -Rf $HOME/.config/fish 2>/dev/null
   if [ -f "$srcdir/config/fish/install.sh" ]; then
     execute "bash -c $srcdir/config/fish/install.sh" "Installing fish: $srcdir/config/fish/install.sh"
-  elif [ -d "$srcdir/config/fish" ]; then
+  elif [ -d "$srcdir/config/fish" ] && [ ! -L "$HOME/.config/fish" ]; then
     execute \
       "ln -sf $srcdir/config/fish ~/.config/" \
       "$srcdir/config/fish → ~/.config/fish"
@@ -26,8 +26,7 @@ setup_ohmyfish() {
   if [ ! -f "$srcdir/config/fish/install.sh" ]; then
     if [ -d "$HOME/.local/share/fish/oh-my-fish/.git" ]; then
       execute \
-        "git -C $HOME/.local/share/fish/oh-my-fish pull -q >/dev/null 2>&1 && \
-        fish -c omf update" \
+        "fish -c omf update" \
         "Updating oh-my-fish"
     else
       if [ ! -d "$HOME/.local/share/omf" ]; then

@@ -25,7 +25,7 @@ install_ohmygit() {
     if [ ! -d "$HOME/.local/share/git/oh-my-git/.git" ]; then
       execute \
         "rm -Rf $HOME/.local/share/git/oh-my-git && \
-      git clone https://github.com/arialdomartini/oh-my-git $HOME/.local/share/git/oh-my-git" \
+        git clone https://github.com/arialdomartini/oh-my-git $HOME/.local/share/git/oh-my-git" \
         "cloning oh-my-git → $HOME/.local/share/git/oh-my-git"
     else
       execute \

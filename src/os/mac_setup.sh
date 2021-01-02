@@ -400,12 +400,10 @@ fi
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 # run clean up
-print_in_purple "\n • Running cleanup\n"
-if (sudo true && sudo -ln) 2>&1 | grep -v 'may not' >/dev/null; then
-  #    execute \
-#    "sudo echo "" \
-#    "Clean up"
-fi
+#print_in_purple "\n • Running cleanup\n"
+#if (sudo true && sudo -ln) 2>&1 | grep -v 'may not' >/dev/null; then
+#
+#fi
 
 print_in_purple "\n • Running cleanup complete\n"
 
