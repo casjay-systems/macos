@@ -133,15 +133,15 @@ CURDOTFVERSION="$(echo $(curl -Lsq https://github.com/casjay-systems/macos/raw/m
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Print distro info
 
-printf "\n\n${PURPLE}  *** • Your Distro is a Mac and is based on BSD • ***${NC}\n\n"
-printf "${GREEN}  *** • git, curl, wget, vim, tmux, zsh, fish, sudo are present • ***${NC}\n\n"
-printf "${GREEN}  *** • Installing version $CURDOTFVERSION • ***${NC}\n\n"
+printf "\n\n${PURPLE}  *** • Your Distro is a Mac and is based on BSD • ***${NC}\n"
+printf "${GREEN}  *** • git, curl, wget, vim, tmux, zsh, fish, sudo are present • ***${NC}\n"
+printf "${GREEN}  *** • Installing version $CURDOTFVERSION • ***${NC}\n"
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Setup the dotfiles Directory
 
 if [ -d $dotfilesDirectory/.git ]; then
-  printf "\n${PURPLE} • Updating the git repo - $dotfilesDirectory${NC}\n\n"
+  printf "\n${PURPLE} • Updating the git repo - $dotfilesDirectory${NC}\n"
   cd "$srcdir/os" && source "utils.sh"
 
   echo ""
@@ -179,7 +179,7 @@ find "$HOME"/.gnupg "$HOME"/.ssh -type d -exec chmod 700 {} \; 2>/dev/null
 # Check for then get root permissions
 if [ -z $UPDATE ]; then
   if (sudo true && sudo -ln) 2>&1 | grep -v 'may not' >/dev/null; then
-    printf "\n${RED} • Getting root privileges${NC}\n\n"
+    printf "\n${RED} • Getting root privileges${NC}\n"
     ask_for_sudo
     printf "\n${GREEN} • Received root privileges${NC}\n\n"
 
@@ -187,7 +187,7 @@ if [ -z $UPDATE ]; then
     # Install Packages
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     # MacOS setup
-    printf "\n${PURPLE} • Setting up for MacOS $get_os_version ${NC}\n\n"
+    printf "\n${PURPLE} • Setting up for MacOS $get_os_version ${NC}\n"
     if [[ ! -f /usr/local/Homebrew/.srcinstall ]]; then
       printf "${GREEN}  *** • This May take awhile please be patient...${NC}\n"
       printf "${GREEN}  *** • Possibly 20+ Minutes.. So go have a nice cup of coffee!${NC}\n"
@@ -200,14 +200,14 @@ fi
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Install additional system files if root
 if (sudo true && sudo -ln) 2>&1 | grep -v 'may not' >/dev/null; then
-  print_in_purple "\n • Installing system files\n\n"
+  print_in_purple "\n • Installing system files\n"
   sudo $macosdir/install_system_files.sh
   print_in_purple "\n • Installing system files completed\n\n"
 fi
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Create user themes/fonts/icons or install to system if root
-print_in_purple "\n • Installing Customizations\n\n"
+print_in_purple "\n • Installing Customizations\n"
 $macosdir/install_customizations.sh
 print_in_purple "\n • Installing Customizations completed\n\n"
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -218,19 +218,19 @@ $macosdir/create_directories.sh
 print_in_purple "\n • Creating directories completed\n\n"
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Create user .local files
-print_in_purple "\n • Create local config files\n\n"
+print_in_purple "\n • Create local config files\n"
 $macosdir/create_local_config_files.sh
 print_in_purple "\n • Create local config files completed\n\n"
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Create user dotfile symlinks
-print_in_purple "\n • Create user files\n\n"
+print_in_purple "\n • Create user files\n"
 $macosdir/create_symbolic_links.sh
-print_in_purple "\n • Create user files completed\n\n"
+print_in_purple "\n • Create user files completed\n"
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Create and Setup git
 GIT=$(command -v git 2>/dev/null)
 if [ -z "$GIT" ]; then print_in_red "\n • The git package is not installed\n\n"; else
-  print_in_purple "\n • Installing GIT\n\n"
+  print_in_purple "\n • Installing GIT\n"
   $macosdir/install_git.sh
   print_in_purple "\n • Installing GIT completed\n\n"
 fi
@@ -238,7 +238,7 @@ fi
 # Create and Setup vim
 VIM=$(command -v vim 2>/dev/null)
 if [ -z "$VIM" ]; then print_in_red "\n • The vim package is not installed\n\n"; else
-  print_in_purple "\n • Installing vim with plugins\n\n"
+  print_in_purple "\n • Installing vim with plugins\n"
   $macosdir/install_vim.sh
   print_in_purple "\n • Installing vim with plugins completed\n\n"
 fi
@@ -246,7 +246,7 @@ fi
 # Create and Setup tmux
 TMUX=$(command -v tmux 2>/dev/null)
 if [ -z "$TMUX" ]; then print_in_red "\n • The tmux package is not installed\n\n"; else
-  print_in_purple "\n • Installing tmux plugins\n\n"
+  print_in_purple "\n • Installing tmux plugins\n"
   $macosdir/install_tmux.sh
   print_in_purple "\n • Installing tmux plugins completed\n\n"
 fi
@@ -254,7 +254,7 @@ fi
 # Create and Setup zsh
 ZSH=$(command -v zsh 2>/dev/null)
 if [ -z "$ZSH" ]; then print_in_red "\n • The zsh package is not installed\n\n"; else
-  print_in_purple "\n • Installing zsh with plugins\n\n"
+  print_in_purple "\n • Installing zsh with plugins\n"
   $macosdir/install_ohmyzsh.sh
   print_in_purple "\n • Installing zsh with plugins completed\n\n"
 fi
@@ -262,9 +262,9 @@ fi
 # Create and Setup fish
 FISH=$(command -v fish 2>/dev/null)
 if [ -z "$FISH" ]; then print_in_red "\n • The fish package is not installed\n\n"; else
-  print_in_purple "\n • Installing fish shell and plugins\n\n"
+  print_in_purple "\n • Installing fish shell and plugins\n"
   $macosdir/install_ohmyfish.sh
-  print_in_purple "\n • Installing fish shell and plugins completed\n\n"
+  print_in_purple "\n • Installing fish shell and plugins completed\n"
 fi
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Install additional system files if root
@@ -317,7 +317,7 @@ fi
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 # run clean up
-print_in_purple "\n • Running cleanup\n\n"
+print_in_purple "\n • Running cleanup\n"
 if (sudo true && sudo -ln) 2>&1 | grep -v 'may not' >/dev/null; then
   echo ""
 #    execute \
@@ -325,7 +325,7 @@ if (sudo true && sudo -ln) 2>&1 | grep -v 'may not' >/dev/null; then
 #    "Clean up"
 fi
 
-print_in_purple "\n • Running cleanup complete\n\n"
+print_in_purple "\n • Running cleanup complete\n"
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Print installed version
