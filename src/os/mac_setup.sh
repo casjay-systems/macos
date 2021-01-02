@@ -191,7 +191,7 @@ if [ -z $UPDATE ]; then
     if [[ ! -f /usr/local/Homebrew/.srcinstall ]]; then
       printf "${GREEN}  *** • This May take awhile please be patient...${NC}\n"
       printf "${GREEN}  *** • Possibly 20+ Minutes.. So go have a nice cup of coffee!${NC}\n"
-      bash "$macosdir/pkgs/lists/mac-sys.sh" && touch /usr/local/Homebrew/.srcinstall
+      source $macosdir/pkgs/lists/mac-sys.sh && touch /usr/local/Homebrew/.srcinstall
     fi
     printf "${PURPLE}\n • Done Setting up for the Mac${NC}\n\n"
   fi
