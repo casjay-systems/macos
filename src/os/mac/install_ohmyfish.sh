@@ -8,7 +8,7 @@ srcdir="$(cd .. && pwd)"
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 setup_fish() {
-  unlink "$HOME/.config/fish" 2>/dev/null || rm -Rf $HOME/.config/fish 2>/dev/null
+  unlink "$HOME/.config/fish" 2>/dev/null || rm -Rf "$HOME/.config/fish" 2>/dev/null
   if [ -f "$srcdir/config/fish/install.sh" ]; then
     execute "bash -c $srcdir/config/fish/install.sh" "Installing fish: $srcdir/config/fish/install.sh"
   elif [ -d "$srcdir/config/fish" ] && [ ! -L "$HOME/.config/fish" ]; then

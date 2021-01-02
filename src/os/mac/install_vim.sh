@@ -35,10 +35,10 @@ install_vimplugins() {
         vim +PluginInstall +qall < /dev/null > /dev/null 2>&1" \
         "Updating Vundle and Plugins"
     else
+      rm -Rf $HOME/.local/share/vim/Vundle.vim
       execute \
-        "rm -Rf $HOME/.local/share/vim/Vundle.vim && \
-        git clone -q https://github.com/VundleVim/Vundle.vim.git $HOME/.local/share/vim/Vundle.vim && \
-        vim +PluginInstall +qall < /dev/null > /dev/null 2>&1" \
+        "git clone -q https://github.com/VundleVim/Vundle.vim.git $HOME/.local/share/vim/Vundle.vim && \
+        /usr/local/bin/vim -u $srcdir/config/vim/plugins.vimrc +PluginInstall +qall < /dev/null > /dev/null 2>&1" \
         "vim +PluginInstall +qall → $HOME/.local/share/vim/"
     fi
   fi
