@@ -177,7 +177,7 @@ if [ -z "$GIT" ] || [ -z "$CURL" ] || [ -z "$WGET" ] || [ -z "$VIM" ] || [ -z "$
         exit "$?"
       fi
     fi
-    sudo brew install -f ${MISSING} >/dev/null 2>&1 >/dev/null 2>&1
+    sudo brew install -f ${MISSING} >/dev/null 2>&1
     if [ "$?" -ne 0 ]; then
       printf "\n${RED}  *** • brew setup has failed• ***${NC}\n\n"
       exit "$?"
