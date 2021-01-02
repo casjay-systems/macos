@@ -1,12 +1,32 @@
 #!/usr/bin/env bash
 
-export dotfilesDirectory="$HOME/.local/dotfiles/desktops"
+export PATH="/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin:$PATH"
+
+#Modify and set if using the auth token
+AUTHTOKEN=""
+# either http https or git
+GITPROTO="https://"
+#Your git repo
+GITREPO="github.com/casjay-systems/macos"
+# Git Command - Private Repo
+#GITURL="$GITPROTO$AUTHTOKEN:x-oauth-basic@$GITREPO"
+#Public Repo
+GITURL="$GITPROTO$GITREPO"
+# Default NTP Server
+NTPSERVER="0.casjay.pool.ntp.org"
+# Set the temp directory
+DOTTEMP="/tmp/dotfiles-desktop-$USER"
+# Default dotfiles dir
+# Set primary dir - not used
+DOTFILES="$HOME/.local/dotfiles/macos"
+
+export dotfilesDirectory="$DOTFILES"
 export srcdir="$dotfilesDirectory/src"
 export macosdir="$srcdir/os/mac"
 
 export HOMEBREW_INSTALL_BADGE="☕️ 🐸"
 export HOMEBREW_CASK_OPTS="--appdir=/Applications"
-export PATH="/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin:$PATH"
+export SUDO_PROMPT="$(printf "\033[1;36m")           • [sudo]$(printf "\033[0m") password for %p: "
 
 ##### for when I'm forgetful
 if [ -z $dotfilesDirectory ]; then printf "\n${RED}  *** dotfiles directory not specified ***${NC}\n"; fi
