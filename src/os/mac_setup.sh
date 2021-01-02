@@ -171,9 +171,9 @@ if [ -z "$GIT" ] || [ -z "$CURL" ] || [ -z "$WGET" ] || [ -z "$VIM" ] || [ -z "$
   printf "\n${RED}  *** • Attempting to install the missing package[s]• ***${NC}\n\n"
   if (sudo true && sudo -ln) 2>&1 | grep -v 'may not' >/dev/null; then
     if [ -z "$BREW" ]; then
-      /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+      /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" || exit "$?"
     fi
-    sudo brew install -f ${MISSING} >/dev/null 2>&1 >/dev/null 2>&1
+    sudo brew install -f ${MISSING} >/dev/null 2>&1 >/dev/null 2>&1 || exit "$?"
   else
     printf "${RED}  *** • I can't get root access You will have to manually install the missing programs • ***${NC}\n"
     printf "${RED}  *** • ${MISSING} • ***${NC}\n\n\n"
