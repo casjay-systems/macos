@@ -51,7 +51,7 @@ fi
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 # Automatic linux install
-
+say 'Initializing the installer please wait!'
 ####################################################################################################
 clear                                                                                             #
 printf "\n\n\n\n\n   ${BLUE}      *** Initializing the installer please wait *** ${NC} \n\n\n\n " #
