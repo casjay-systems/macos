@@ -201,29 +201,29 @@ printf "${GREEN}  *** • Installing version $CURDOTFVERSION • ***${NC}\n"
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Setup the dotfiles Directory
 
-printf "\n${PURPLE} • Setting up the git repo - $dotfilesDirectory${NC}\n"
+printf "\n${PURPLE} • Setting up the git repo${NC}\n"
 if [ -d $dotfilesDirectory/.git ]; then
   cd "$srcdir/os" && source "utils.sh"
 
   execute \
-    "cd $dotfilesDirectory && \
-  git pull --recurse-submodules -fq && \
-  cd "$HOME"" \
+    "git -C $dotfilesDirectory pull --recurse-submodules -fq" \
     "Updating $dotfilesDirectory"
   NEWVERSION="$(echo $(cat $dotfilesDirectory/version.txt | tail -n 1))"
   REVER="$(cd $dotfilesDirectory && git rev-parse --short HEAD)"
-  printf "${GREEN}   [✔] Updated to $NEWVERSION - revision: $REVER${NC}\n\n"
+  printf "${GREEN}   [✔] Updated to $NEWVERSION - revision: $REVER${NC}\n"
 
 else
 
   rm -Rf "$dotfilesDirectory"
-  git clone --depth=1 -q --recursive https://github.com/casjay-systems/macos.git $dotfilesDirectory >/dev/null 2>&1
-  printf "\n${GREEN}   [✔] clone https://github.com/casjay-systems/macos.git  → $dotfilesDirectory \n"
+  execute \
+    "git clone --depth=1 -q --recursive https://github.com/casjay-systems/macos.git "$dotfilesDirectory" >/dev/null 2>&1" \
+    "clone https://github.com/casjay-systems/macos.git  → $dotfilesDirectory"
   NEWVERSION="$(echo $(cat $dotfilesDirectory/version.txt | tail -n 1))"
   REVER="$(cd $dotfilesDirectory && git rev-parse --short HEAD)"
-  printf "${GREEN}   [✔] downloaded version $NEWVERSION - revision: $REVER${NC}\n\n"
+  printf "${GREEN}   [✔] downloaded version $NEWVERSION - revision: $REVER${NC}\n"
   cd "$srcdir/os" && source "utils.sh"
 fi
+printf "${PURPLE} • Setting up the git repo completed${NC}\n\n"
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Make Directories and fix permissions
@@ -252,7 +252,7 @@ if [ -z "$UPDATE" ] || [ "$1" = "--force" ]; then
       printf "${GREEN}  *** • Possibly 20+ Minutes.. So go have a nice cup of coffee!${NC}\n"
       source "$macosdir/pkgs/lists/mac-sys.sh" && touch /usr/local/Homebrew/.srcinstall
     fi
-    printf "${PURPLE}\n • Done Setting up for the Mac${NC}\n\n"
+    printf "\n${PURPLE} • Done Setting up for the Mac${NC}\n\n"
   fi
 fi
 ###################################################################
@@ -261,37 +261,37 @@ fi
 if (sudo true && sudo -ln) 2>&1 | grep -v 'may not' >/dev/null; then
   print_in_purple "\n • Installing system files\n"
   sudo $macosdir/install_system_files.sh
-  print_in_purple "\n • Installing system files completed\n\n"
+  print_in_purple " • Installing system files completed\n\n"
 fi
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Create user themes/fonts/icons or install to system if root
 print_in_purple "\n • Installing Customizations\n"
 $macosdir/install_customizations.sh
-print_in_purple "\n • Installing Customizations completed\n\n"
+print_in_purple " • Installing Customizations completed\n\n"
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Create user directories
 print_in_purple "\n • Creating directories\n"
 $macosdir/create_directories.sh
-print_in_purple "\n • Creating directories completed\n\n"
+print_in_purple " • Creating directories completed\n\n"
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Create user .local files
 print_in_purple "\n • Create local config files\n"
 $macosdir/create_local_config_files.sh
-print_in_purple "\n • Create local config files completed\n\n"
+print_in_purple " • Create local config files completed\n\n"
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Create user dotfile symlinks
 print_in_purple "\n • Create user files\n"
 $macosdir/create_symbolic_links.sh
-print_in_purple "\n • Create user files completed\n"
+print_in_purple " • Create user files completed\n"
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Create and Setup git
 GIT=$(command -v git 2>/dev/null)
 if [ -z "$GIT" ]; then print_in_red "\n • The git package is not installed\n\n"; else
   print_in_purple "\n • Installing GIT\n"
   $macosdir/install_git.sh
-  print_in_purple "\n • Installing GIT completed\n\n"
+  print_in_purple " • Installing GIT completed\n\n"
 fi
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Create and Setup vim
@@ -299,7 +299,7 @@ VIM=$(command -v vim 2>/dev/null)
 if [ -z "$VIM" ]; then print_in_red "\n • The vim package is not installed\n\n"; else
   print_in_purple "\n • Installing vim with plugins\n"
   $macosdir/install_vim.sh
-  print_in_purple "\n • Installing vim with plugins completed\n\n"
+  print_in_purple " • Installing vim with plugins completed\n\n"
 fi
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Create and Setup tmux
@@ -307,7 +307,7 @@ TMUX=$(command -v tmux 2>/dev/null)
 if [ -z "$TMUX" ]; then print_in_red "\n • The tmux package is not installed\n\n"; else
   print_in_purple "\n • Installing tmux plugins\n"
   $macosdir/install_tmux.sh
-  print_in_purple "\n • Installing tmux plugins completed\n\n"
+  print_in_purple " • Installing tmux plugins completed\n\n"
 fi
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Create and Setup zsh
@@ -315,7 +315,7 @@ ZSH=$(command -v zsh 2>/dev/null)
 if [ -z "$ZSH" ]; then print_in_red "\n • The zsh package is not installed\n\n"; else
   print_in_purple "\n • Installing zsh with plugins\n"
   $macosdir/install_ohmyzsh.sh
-  print_in_purple "\n • Installing zsh with plugins completed\n\n"
+  print_in_purple " • Installing zsh with plugins completed\n\n"
 fi
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Create and Setup fish
@@ -323,7 +323,7 @@ FISH=$(command -v fish 2>/dev/null)
 if [ -z "$FISH" ]; then print_in_red "\n • The fish package is not installed\n\n"; else
   print_in_purple "\n • Installing fish shell and plugins\n"
   $macosdir/install_ohmyfish.sh
-  print_in_purple "\n • Installing fish shell and plugins completed\n"
+  print_in_purple " • Installing fish shell and plugins completed\n"
 fi
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
