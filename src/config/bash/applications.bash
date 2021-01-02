@@ -1,8 +1,15 @@
 #!/usr/bin/env bash
 
+export PATH="$(echo /usr/local/bin:$PATH:/usr/sbin:/sbin | tr ':' '\n' | awk '!seen[$0]++' | tr '\n' ':' | sed 's#::#:.#g')"
+
 #trap '' err exit SIGINT SIGTERM
 export WHOAMI="${USER}"
 export SUDO_PROMPT="$(printf "\t\t\033[1;31m")[sudo]$(printf "\033[1;36m") password for $(printf "\033[1;32m")%p: $(printf "\033[0m")"
+
+TMP="${TMP:-/tmp}"
+TEMP="${TEMP:-/tmp}"
+
+APPNAME="${APPNAME:-app-installer}"
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # @Author      : Jason
@@ -15,12 +22,36 @@ export SUDO_PROMPT="$(printf "\t\t\033[1;31m")[sudo]$(printf "\033[1;36m") passw
 #
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
+devnull() { "$@" >/dev/null 2>&1 || return $?; }
+
 # fail if git is not installed
 
 if ! command -v "git" >/dev/null 2>&1; then
   echo -e "\t\t\033[0;31mGit is not installed\033[0m"
   exit 1
 fi
+
+##################################################################################################
+
+case "$(uname -s)" in
+Darwin)
+  dircolors() { gdircolors; }
+  export -f dircolors
+  ;;
+esac
+
+##################################################################################################
+
+# Set Main Repo for dotfiles
+export DFMGRREPO="${DFMGRREPO:-https://github.com/dfmgr}"
+export PKMGRREPO="${PKMGRREPO:-https://github.com/pkmgr}"
+export DEVENVMGR="${DEVENVMGR:-https://github.com/devenvmgr}"
+export ICONMGRREPO="${ICONMGRREPO:-https://github.com/iconmgr}"
+export FONTMGRREPO="${FONTMGRREPO:-https://github.com/fontmgr}"
+export THEMEMGRREPO="${THEMEMGRREPO:-https://github.com/thememgr}"
+export DOCKERMGRREPO="${DOCKERMGRREPO:-https://github.com/dockermgr}"
+export SYSTEMMGRREPO="${SYSTEMMGRREPO:-https://github.com/systemmgr}"
+export WALLPAPERMGRREPO="${WALLPAPERMGRREPO:-https://github.com/wallpapermgr}"
 
 ##################################################################################################
 
@@ -50,29 +81,41 @@ printf_yellow() { printf_color "\t\t$1\n" 3; }
 printf_blue() { printf_color "\t\t$1\n" 4; }
 printf_cyan() { printf_color "\t\t$1\n" 6; }
 printf_info() { printf_color "\t\t[ ℹ️ ] $1\n" 3; }
-printf_exit() {
-  printf_color "\t\t$1\n" 1
-  sleep 3
-  exit 1
-}
-printf_help() {
-  printf_color "\t\t$1\n" 1
-  exit 0
-}
 printf_read() { printf_color "\t\t$1" 5; }
 printf_success() { printf_color "\t\t[ ✔ ] $1\n" 2; }
 printf_error() { printf_color "\t\t[ ✖ ] $1 $2\n" 1; }
 printf_warning() { printf_color "\t\t[ ❗ ] $1\n" 3; }
-printf_question() { printf_color "\t\t[ ❓ ] $1 - [❓]" 6; }
+printf_question() { printf_color "\t\t[ ❓ ] $1 " 6; }
 printf_error_stream() { while read -r line; do printf_error "↳ ERROR: $line"; done; }
-printf_execute_success() { printf_color "\t\t[ ✔ ] $1 [ ✔ ] \n" 2; }
-printf_execute_error() { printf_color "\t\t[ ✖ ] $1 $2 [ ✖ ] \n" 1; }
+printf_execute_success() { printf_color "\t\t[ ✔ ] $1\n" 2; }
+printf_execute_error() { printf_color "\t\t[ ✖ ] $1 $2\n" 1; }
 printf_execute_result() {
   if [ "$1" -eq 0 ]; then printf_execute_success "$2"; else printf_execute_error "$2"; fi
   return "$1"
 }
+
 printf_execute_error_stream() { while read -r line; do printf_execute_error "↳ ERROR: $line"; done; }
 printf_not_found() { if ! cmd_exists "$1"; then printf_exit "The $1 command is not installed"; fi; }
+
+##################################################################################################
+
+printf_exit() {
+  [[ $1 == ?(-)+([0-9]) ]] && local color="$1" && shift 1 || local color="1"
+  local msg="$*"
+  shift
+  printf_color "\t\t$msg " "$color"
+  echo ""
+  exit 1
+}
+
+##################################################################################################
+
+printf_help() {
+  [[ $1 == ?(-)+([0-9]) ]] && local color="$1" && shift 1 || local color="2"
+  printf_color "\t\t$1" "$color"
+  echo ""
+  exit 0
+}
 
 ##################################################################################################
 
@@ -100,7 +143,7 @@ printf_newline() {
 
 printf_custom() {
   [[ $1 == ?(-)+([0-9]) ]] && local color="$1" && shift 1 || local color="3"
-  local msg="$@"
+  local msg="$*"
   shift
   printf_color "\t\t$msg" "$color"
   echo ""
@@ -111,9 +154,9 @@ printf_custom() {
 printf_custom_question() {
   local custom_question
   [[ $1 == ?(-)+([0-9]) ]] && local color="$1" && shift 1 || local color="1"
-  local msg="$@"
+  local msg="$*"
   shift
-  printf_color "\t\t$msg" "$color"
+  printf_color "\t\t$msg " "$color"
 }
 
 ##################################################################################################
@@ -126,22 +169,12 @@ printf_read_question() {
 
 printf_head() {
   [[ $1 == ?(-)+([0-9]) ]] && local color="$1" && shift 1 || local color="6"
-  local msg="$@"
+  local msg="$*"
   shift
   printf_color "
 \t\t##################################################
 \t\t$msg
 \t\t##################################################\n\n" "$color"
-}
-
-##################################################################################################
-
-notifications() {
-  local title="$1"
-  shift 1
-  local msg="$@"
-  shift
-  cmd_exists notify-send && notify-send -u normal -i "notification-message-IM" "$title" "$msg" || return 0
 }
 
 ##################################################################################################
@@ -161,15 +194,168 @@ printf_result() {
 
 ##################################################################################################
 
+notifications() {
+  local title="$1"
+  shift 1
+  local msg="$*"
+  shift
+  cmd_exists notify-send && notify-send -u normal -i "notification-message-IM" "$title" "$msg" || return 0
+}
+##################################################################################################
+
+mkd() { if [ ! -e "$1" ]; then devnull mkdir -p "$@"; else return 0; fi; }
+
+ensure_dirs() {
+  if [[ $EUID -ne 0 ]] || [[ "$WHOAMI" != "root" ]]; then
+    mkd "$BIN"
+    mkd "$SHARE"
+    mkd "$LOGDIR"
+    mkd "$LOGDIR/dfmgr"
+    mkd "$LOGDIR/fontmg"
+    mkd "$LOGDIR/iconmgr"
+    mkd "$LOGDIR/systemmgr"
+    mkd "$LOGDIR/thememgr"
+    mkd "$LOGDIR/wallpapermgr"
+    mkd "$COMPDIR"
+    mkd "$STARTUP"
+    mkd "$BACKUPDIR"
+    mkd "$FONTDIR"
+    mkd "$ICONDIR"
+    mkd "$THEMEDIR"
+    mkd "$FONTCONF"
+    mkd "$CASJAYSDEVSHARE"
+    mkd "$CASJAYSDEVSAPPDIR"
+    mkd "$USRUPDATEDIR"
+    mkd "$SYSUPDATEDIR"
+    mkd "$SHARE/applications"
+    mkd "$SHARE/CasjaysDev/functions"
+    mkd "$SHARE/wallpapers/system"
+  fi
+  return 0
+}
+
+##################################################################################################
+
+user_installdirs() {
+  if [[ $(id -u) -eq 0 ]] || [[ $EUID -eq 0 ]] || [[ "$WHOAMI" = "root" ]]; then
+    export INSTALL_TYPE=user
+    export HOME="/root"
+    export BIN="$HOME/.local/bin"
+    export CONF="$HOME/.config"
+    export SHARE="$HOME/.local/share"
+    export LOGDIR="$HOME/.local/log"
+    export STARTUP="$HOME/.config/autostart"
+    export SYSBIN="/usr/local/bin"
+    export SYSCONF="/usr/local/etc"
+    export SYSSHARE="/usr/local/share"
+    export SYSLOGDIR="/usr/local/log"
+    export BACKUPDIR="$HOME/.local/backups/dotfiles"
+    export COMPDIR="$HOME/.local/share/bash-completion/completions"
+    export THEMEDIR="$SHARE/themes"
+    export ICONDIR="$SHARE/icons"
+    export FONTDIR="$SHARE/fonts"
+    export FONTCONF="$SYSCONF/fontconfig/conf.d"
+    export CASJAYSDEVSHARE="$SHARE/CasjaysDev"
+    export CASJAYSDEVSAPPDIR="$CASJAYSDEVSHARE/apps"
+    export WALLPAPERS="${WALLPAPERS:-$SYSSHARE/wallpapers}"
+    #    USRUPDATEDIR="$SHARE/CasjaysDev/apps/dotfiles"
+    #    SYSUPDATEDIR="$SYSSHARE/CasjaysDev/apps/dotfiles"
+  else
+    export INSTALL_TYPE=user
+    export HOME="${HOME}"
+    export BIN="$HOME/.local/bin"
+    export CONF="$HOME/.config"
+    export SHARE="$HOME/.local/share"
+    export LOGDIR="$HOME/.local/log"
+    export STARTUP="$HOME/.config/autostart"
+    export SYSBIN="$HOME/.local/bin"
+    export SYSCONF="$HOME/.config"
+    export SYSSHARE="$HOME/.local/share"
+    export SYSLOGDIR="$HOME/.local/log"
+    export BACKUPDIR="$HOME/.local/backups/dotfiles"
+    export COMPDIR="$HOME/.local/share/bash-completion/completions"
+    export THEMEDIR="$SHARE/themes"
+    export ICONDIR="$SHARE/icons"
+    export FONTDIR="$SHARE/fonts"
+    export FONTCONF="$SYSCONF/fontconfig/conf.d"
+    export CASJAYSDEVSHARE="$SHARE/CasjaysDev"
+    export CASJAYSDEVSAPPDIR="$CASJAYSDEVSHARE/apps"
+    export WALLPAPERS="$HOME/.local/share/wallpapers"
+    #    USRUPDATEDIR="$SHARE/CasjaysDev/apps/dotfiles"
+    #    SYSUPDATEDIR="$SYSSHARE/CasjaysDev/apps/dotfiles"
+  fi
+}
+
+user_installdirs
+
+##################################################################################################
+
+system_installdirs() {
+  if [[ $(id -u) -eq 0 ]] || [[ $EUID -eq 0 ]] || [[ "$WHOAMI" = "root" ]]; then
+    #printf_info "Install Type: system - ${WHOAMI}"
+    #printf_red "\t\tInstalling as root ❓\n"
+    export INSTALL_TYPE=system
+    export BACKUPDIR="$HOME/.local/backups/dotfiles"
+    export HOME="/root"
+    export BIN="/usr/local/bin"
+    export CONF="/usr/local/etc"
+    export SHARE="/usr/local/share"
+    export LOGDIR="/usr/local/log"
+    export STARTUP="/dev/null"
+    export SYSBIN="/usr/local/bin"
+    export SYSCONF="/usr/local/etc"
+    export SYSSHARE="/usr/local/share"
+    export SYSLOGDIR="/usr/local/log"
+    export COMPDIR="/etc/bash_completion.d"
+    export THEMEDIR="/usr/local/share/themes"
+    export ICONDIR="/usr/local/share/icons"
+    export FONTDIR="/usr/local/share/fonts"
+    export FONTCONF="/usr/local/share/fontconfig/conf.d"
+    export CASJAYSDEVSHARE="/usr/local/share/CasjaysDev"
+    export CASJAYSDEVSAPPDIR="/usr/local/share/CasjaysDev/apps"
+    export WALLPAPERS="/usr/local/share/wallpapers"
+    #    USRUPDATEDIR="/usr/local/share/CasjaysDev/apps"
+    #    SYSUPDATEDIR="/usr/local/share/CasjaysDev/apps"
+  else
+    export INSTALL_TYPE=system
+    export BACKUPDIR="${BACKUPS:-$HOME/.local/backups/dotfiles}"
+    export HOME="${HOME:-/home/$WHOAMI}"
+    export BIN="$HOME/.local/bin"
+    export CONF="$HOME/.config"
+    export SHARE="$HOME/.local/share"
+    export LOGDIR="$HOME/.local/log"
+    export STARTUP="$HOME/.config/autostart"
+    export SYSBIN="$HOME/.local/bin"
+    export SYSCONF="$HOME/.local/etc"
+    export SYSSHARE="$HOME/.local/share"
+    export SYSLOGDIR="$HOME/.local/log"
+    export COMPDIR="$HOME/.local/share/bash-completion/completions"
+    export THEMEDIR="$HOME/.local/share/themes"
+    export ICONDIR="$HOME/.local/share/icons"
+    export FONTDIR="$HOME/.local/share/fonts"
+    export FONTCONF="$HOME/.local/share/fontconfig/conf.d"
+    export CASJAYSDEVSHARE="$HOME/.local/share/CasjaysDev"
+    export CASJAYSDEVSAPPDIR="$HOME/.local/share/CasjaysDev/apps"
+    export WALLPAPERS="$HOME/.local/share/wallpapers"
+    #    USRUPDATEDIR="$HOME/.local/share/CasjaysDev/apps"
+    #    SYSUPDATEDIR="/usr/local/share/CasjaysDev/apps"
+  fi
+}
+
+##################################################################################################
+
 die() { echo -e "$1" exit ${2:9999}; }
-devnull() { "$@" >/dev/null 2>&1 || return $?; }
 devnull1() { "$@" 1>/dev/null || return $?; }
 devnull2() { "$@" 2>/dev/null || return $?; }
-killpid() { devnull kill -9 $(pidof "$1"); }
+killpid() { devnull kill -9 "$(pidof "$1")"; }
 hostname2ip() { getent hosts "$1" | cut -d' ' -f1 | head -n1; }
 cmd_exists() {
-  devnull unalias "$1"
-  devnull command -v "$1"
+  local pkg LISTARRAY
+  declare -a LISTARRAY="$*"
+  for cmd in $LISTARRAY; do
+    unalias $cmd >/devnull 2>&1
+    type -P "$cmd" | grep -q "/" 2>/dev/null
+  done
 }
 set_trap() { trap -p "$1" | grep "$2" &>/dev/null || trap '$2' "$1"; }
 getuser() { [ -z "$1" ] && cut -d: -f1 /etc/passwd | grep "$USER" || cut -d: -f1 /etc/passwd | grep "$1"; }
@@ -194,14 +380,15 @@ system_service_disable() {
 }
 run_post() {
   local e="$1"
-  local m="$(echo $1 | sed 's#devnull ##g')"
+  local m="${e//devnull//}"
+  #local m="$(echo $1 | sed 's#devnull ##g')"
   execute "$e" "executing: $m"
   setexitstatus
   set --
 }
 
-printclip() { clip -o -s; }
-putclip() { xclip -i -sel c; }
+printclip() { cmd_exists xclip && xclip -o -s || return 1; }
+putclip() { cmd_exists xclip && xclip -i -sel c || return 1; }
 
 ##################################################################################################
 
@@ -211,8 +398,9 @@ get_app_info() {
   if [ -f "$FILE" ]; then
     echo ""
     cat "$SCRIPTSFUNCTDIR/bin/$APPNAME" | grep "# @" | grep " : " >/dev/null 2>&1 &&
-      cat "$SCRIPTSFUNCTDIR/bin/$APPNAME" | grep "# @" | grep " : " | printf_newline "3" ||
-      printf_red "File was found, however, No information was not found"
+      cat "$SCRIPTSFUNCTDIR/bin/$APPNAME" | grep "# @" | grep " : " | printf_newline "3" &&
+      printf_green "Scripts Version: $(cat $SCRIPTSFUNCTDIR/version.txt)" ||
+      printf_red "File was found, however, No information was provided"
     echo ""
   else
     printf_red "File was not found"
@@ -222,31 +410,30 @@ get_app_info() {
 
 ##################################################################################################
 
-#transmission-remote-cli() { cmd_exists transmission-remote-cli || cmd_exists transmission-remote  ;}
+#transmission-remote-cli() { cmd_exists transmission-remote-cli || cmd_exists transmission-remote; }
 
 ##################################################################################################
 
-if ! cmd_exists backupapp; then
-  backupapp() {
-    local filename count backupdir rmpre4vbackup
-    [ ! -z "$1" ] && local myappdir="$1" || local myappdir="$APPDIR"
-    [ ! -z "$2" ] && local myappname="$2" || local myappname="$APPNAME"
-    local backupdir="${MY_BACKUP_DIR:-$HOME/.local/backups/dotfiles}"
-    local filename="$myappname-$(date +%Y-%m-%d-%H-%M-%S).tar.gz"
-    local count="$(ls $backupdir/$myappname*.tar.gz 2>/dev/null | wc -l 2>/dev/null)"
-    local rmpre4vbackup="$(ls $backupdir/$myappname*.tar.gz 2>/dev/null | head -n 1)"
-    mkdir -p "$backupdir"
-    if [ -e "$myappdir" ] && [ ! -d $myappdir/.git ]; then
-      echo "#################################" >>"$backupdir/$myappname.log"
-      echo "# Started on $(date +'%A, %B %d, %Y %H:%M:%S')" >>"$backupdir/$myappname.log"
-      echo "# $backupdir/$filename $myappdir" >>"$backupdir/$myappname.log"
-      echo "#################################" >>"$backupdir/$myappname.log"
-      tar cfzv "$backupdir/$filename" "$myappdir" >>"$backupdir/$myappname.log" 2>&1 &&
-        rm -Rf "$myappdir"
-    fi
-    if [ "$count" -gt "3" ]; then rm_rf $rmpre4vbackup; fi
-  }
-fi
+backupapp() {
+  local filename count backupdir rmpre4vbackup
+  [ ! -z "$1" ] && local myappdir="$1" || local myappdir="$APPDIR"
+  [ ! -z "$2" ] && local myappname="$2" || local myappname="$APPNAME"
+  local backupdir="${MY_BACKUP_DIR:-$HOME/.local/backups/dotfiles}"
+  local filename="$myappname-$(date +%Y-%m-%d-%H-%M-%S).tar.gz"
+  local count="$(ls $backupdir/$myappname*.tar.gz 2>/dev/null | wc -l 2>/dev/null)"
+  local rmpre4vbackup="$(ls $backupdir/$myappname*.tar.gz 2>/dev/null | head -n 1)"
+  mkdir -p "$backupdir"
+  if [ -e "$myappdir" ] && [ ! -d $myappdir/.git ]; then
+    echo "#################################" >>"$backupdir/$myappname.log"
+    echo "# Started on $(date +'%A, %B %d, %Y %H:%M:%S')" >>"$backupdir/$myappname.log"
+    echo "# Backing up $myappdir" >>"$backupdir/$myappname.log"
+    echo "#################################" >>"$backupdir/$myappname.log"
+    tar cfzv "$backupdir/$filename" "$myappdir" >>"$backupdir/$myappname.log" 2>&1 &&
+      echo -e "Backup has completed successfully\n#################################\n\n" >>"$backupdir/$myappname.log"
+    rm -Rf "$myappdir"
+  fi
+  if [ "$count" -gt "3" ]; then rm_rf $rmpre4vbackup; fi
+}
 
 ##################################################################################################
 
@@ -268,10 +455,10 @@ runapp() {
     echo "#################################" >>"$logdir/$logname.err"
     "$@" >>"$logdir/$logname.log" 2>>"$logdir/$logname.err"
   else
-    echo "#################################" >>"$logdir/${SCRIPTNAME:-$1}.log"
-    echo "$(date +'%A, %B %d, %Y')" >>"$logdir/${SCRIPTNAME:-$1}.log"
-    echo "#################################" >>"$logdir/${SCRIPTNAME:-$1}.err"
-    "$@" >>"$logdir/${SCRIPTNAME:-$1}.log" 2>>"$logdir/${SCRIPTNAME:-$1}.err"
+    echo "#################################" >>"$logdir/${APPNAME:-$1}.log"
+    echo "$(date +'%A, %B %d, %Y')" >>"$logdir/${APPNAME:-$1}.log"
+    echo "#################################" >>"$logdir/${APPNAME:-$1}.err"
+    "$@" >>"$logdir/${APPNAME:-$1}.log" 2>>"$logdir/${APPNAME:-$1}.err"
   fi
 }
 
@@ -310,7 +497,7 @@ mv_f() { if [ -e "$1" ]; then devnull mv -f "$@"; fi; }
 mkd() { devnull mkdir -p "$@"; }
 replace() { find "$1" -not -path "$1/.git/*" -type f -exec sed -i "s#$2#$3#g" {} \; >/dev/null 2>&1; }
 rmcomments() { sed 's/[[:space:]]*#.*//;/^[[:space:]]*$/d'; }
-countwd() { cat $@ | wc-l | rmcomments; }
+countwd() { cat "$@" | wc-l | rmcomments; }
 urlcheck() { devnull curl --config /dev/null --connect-timeout 3 --retry 3 --retry-delay 1 --output /dev/null --silent --head --fail "$1"; }
 urlinvalid() { if [ -z "$1" ]; then
   printf_red "Invalid URL\n"
@@ -330,8 +517,8 @@ attemp_install_menus() {
     sleep 2
     clear
     printf_custom "191" "\n\n\n\n\t\tattempting install of $prog\n\t\tThis could take a bit...\n\n\n"
-    brew install -y "$1"
-    [ $? -ne 0 ] && dialog --timeout 10 --trim --cr-wrap --colors --title "failed" --msgbox "$1 failed to install" 10 41
+    devnull pkmgr silent "$1"
+    [ "$?" -ne 0 ] && dialog --timeout 10 --trim --cr-wrap --colors --title "failed" --msgbox "$1 failed to install" 10 41
     clear
   fi
 }
@@ -353,7 +540,7 @@ custom_menus() {
 run_prog_menus() {
   local prog="$1"
   shift 1
-  local args="$@"
+  local args="$*"
   if cmd_exists $prog; then
     devnull2 "$prog" "$@" || clear printf_red "An error has occured"
   else
@@ -367,10 +554,10 @@ run_prog_menus() {
 open_file_menus() {
   local prog="$1"
   shift 1
-  local args="$@"
+  local args="$*"
   if cmd_exists $prog; then
     local file=$(dialog --title "Play a file" --stdout --title "Please choose a file or url to play" --fselect "$HOME/" 14 48)
-    [ -z "$FILE" ] && devnull2 "$prog" ""$file"" || clear
+    [ -z "$FILE" ] && devnull2 "$prog" "$file" || clear
     printf_red "No file selected"
   else
     attemp_install_menus $prog &&
@@ -393,6 +580,17 @@ __getpythonver() {
   if [ "$(cmdif yay)" ] || [ "$(cmdif pacman)" ]; then PYTHONVER="python" && PIP="pip3"; fi
 }
 __getpythonver
+
+##################################################################################################
+
+__getphpver() {
+  if cmdif php; then
+    PHPVER="$(php -v | grep --only-matching --perl-regexp "(PHP )\d+\.\\d+\.\\d+" | cut -c 5-7)"
+  else
+    PHPVER=""
+  fi
+  echo $PHPVER
+}
 
 ##################################################################################################
 
@@ -466,14 +664,14 @@ git_clone() {
 ##################################################################################################
 
 git_update() {
-  cd "$APPDIR"
+  cd "$APPDIR" || exit 1
   local repo="$(git remote -v | grep fetch | head -n 1 | awk '{print $2}')"
   devnull git reset --hard &&
     devnull git pull --recurse-submodules -fq &&
     devnull git submodule update --init --recursive -q &&
     devnull git reset --hard -q
   if [ "$?" -ne "0" ]; then
-    cd "$HOME"
+    cd "$HOME" || exit 1
     backupapp "$APPDIR" "$APPNAME" &&
       devnull rm_rf "$APPDIR" &&
       git_clone "$repo" "$APPDIR"
@@ -490,11 +688,71 @@ check_app() {
     read -n 1 -s choice && echo
     if [[ $choice == "y" || $choice == "Y" ]]; then
       for miss in $MISSING; do
-        brew install $miss
+        execute "pkmgr silent-install $miss" "Installing $miss" | printf_readline || return 1
+      done
+    else
+      return 1
+    fi
+  fi
+}
+
+##################################################################################################
+
+check_pip() {
+  local MISSING=""
+  for cmd in "$@"; do cmdif $cmd || MISSING+="$cmd "; done
+  if [ ! -z "$MISSING" ]; then
+    printf_question "$1 is not installed Would you like install it" [y/N]
+    read -n 1 -s choice
+    if [[ $choice == "y" || $choice == "Y" ]]; then
+      for miss in $MISSING; do
+        execute "pkmgr pip $miss" "Installing $miss"
       done
     fi
   else
     return 1
+  fi
+}
+
+##################################################################################################
+
+check_cpan() {
+  local MISSING=""
+  for cmd in "$@"; do cmdif $cmd || MISSING+="$cmd "; done
+  if [ ! -z "$MISSING" ]; then
+    printf_question "$1 is not installed Would you like install it" [y/N]
+    read -n 1 -s choice
+    if [[ $choice == "y" || $choice == "Y" ]]; then
+      for miss in $MISSING; do
+        execute "pkmgr cpan $miss" "Installing $miss"
+      done
+    fi
+  else
+    return 1
+  fi
+
+}
+
+##################################################################################################
+
+git_clone() {
+  local repo="$1"
+  rm_rf "$2"
+  devnull git clone --depth=1 -q --recursive "$@"
+}
+
+##################################################################################################
+
+git_update() {
+  local repo="$(git remote -v | grep fetch | head -n 1 | awk '{print $2}')"
+  devnull git reset --hard &&
+    devnull git pull --recurse-submodules -fq &&
+    devnull git submodule update --init --recursive -q &&
+    devnull git reset --hard -q
+  if [ "$?" -ne "0" ]; then
+    cd "$HOME" || exit 1
+    backupapp &&
+      devnull git_clone "$repo" $APPDIR
   fi
 }
 
@@ -518,37 +776,14 @@ sudoask() {
       sleep 10
       rm -Rf "$HOME/.sudo"
       kill -0 "$$" || return
-    done &>/dev/null &
-  fi
-}
-
-##################################################################################################
-
-git_clone() {
-  local repo="$1"
-  rm_rf "$2"
-  devnull git clone --depth=1 -q --recursive "$@"
-}
-
-##################################################################################################
-
-git_update() {
-  local repo="$(git remote -v | grep fetch | head -n 1 | awk '{print $2}')"
-  devnull git reset --hard &&
-    devnull git pull --recurse-submodules -fq &&
-    devnull git submodule update --init --recursive -q &&
-    devnull git reset --hard -q
-  if [ "$?" -ne "0" ]; then
-    cd "$HOME"
-    backupapp &&
-      devnull git_clone "$repo" $APPDIR
+    done &>/dev/null 2>/dev/null &
   fi
 }
 
 ##################################################################################################
 
 sudoexit() {
-  if [ $? -eq 0 ]; then
+  if can_i_sudo; then
     sudoask || printf_green "Getting privileges successfull continuing"
   else
     printf_red "Failed to get privileges\n"
@@ -558,14 +793,11 @@ sudoexit() {
 ##################################################################################################
 
 requiresudo() {
-  if [ -f "$(command -v sudo 2>/dev/null)" ]; then
-    if (sudo -vn && sudo -ln) 2>&1 | grep -v 'may not' >/dev/null; then
-      sudoask
-      sudoexit
-      sudo "$@" 2>/dev/null
-    fi
+  if can_i_sudo; then
+    sudoask && sudoexit && sudo "$@" 2>/dev/null
   else
     printf_red "You dont have access to sudo\n\t\tPlease contact the syadmin for access"
+    return 1
   fi
 }
 
@@ -600,6 +832,7 @@ execute() {
   rm -rf "$TMP_FILE"
   return $exitCode
 }
+
 ##################################################################################################
 
 show_spinner() {
@@ -633,5 +866,173 @@ show_spinner() {
 
 ##################################################################################################
 
+dfmgr_install() {
+  user_installdirs
+  PREFIX="dfmgr"
+  REPO="${DFMGRREPO}"
+  REPORAW="$REPO/$APPNAME/raw"
+  HOMEDIR="$CONF"
+  APPDIR="${APPDIR:-$HOMEDIR/$APPNAME}"
+  USRUPDATEDIR="$SHARE/CasjaysDev/apps/$PREFIX"
+  SYSUPDATEDIR="$SYSSHARE/CasjaysDev/apps/$PREFIX"
+  APPVERSION="$(curl -LSs ${REPO:-https://github.com/$PREFIX}/$APPNAME/raw/master/version.txt)"
+  ARRAY="$(cat /usr/local/share/CasjaysDev/scripts/helpers/$PREFIX/array)"
+  LIST="$(cat /usr/local/share/CasjaysDev/scripts/helpers/$PREFIX/list)"
+  mkdir -p "$USRUPDATEDIR" "$SYSUPDATEDIR"
+}
+
+##################################################################################################
+
+dockermgr_install() {
+  user_installdirs
+  PREFIX="dockermgr"
+  REPO="${DOCKERMGRREPO}"
+  REPORAW="$REPO/$APPNAME/raw"
+  HOMEDIR="$SHARE/CasjaysDev/$PREFIX"
+  APPDIR="${APPDIR:-$HOMEDIR/$APPNAME}"
+  USRUPDATEDIR="$SHARE/CasjaysDev/apps/$PREFIX"
+  SYSUPDATEDIR="$SYSSHARE/CasjaysDev/apps/$PREFIX"
+  APPVERSION="$(curl -LSs ${REPO:-https://github.com/$PREFIX}/$APPNAME/raw/master/version.txt)"
+  ARRAY="$(cat /usr/local/share/CasjaysDev/scripts/helpers/$PREFIX/array)"
+  LIST="$(cat /usr/local/share/CasjaysDev/scripts/helpers/$PREFIX/list)"
+  mkdir -p "$USRUPDATEDIR" "$SYSUPDATEDIR"
+}
+
+##################################################################################################
+
+fontmgr_install() {
+  system_installdirs
+  PREFIX="fontmgr"
+  REPO="${FONTMGRREPO}"
+  REPORAW="$REPO/$APPNAME/raw"
+  HOMEDIR="$SHARE/CasjaysDev/$PREFIX"
+  APPDIR="${APPDIR:-$HOMEDIR/$APPNAME}"
+  USRUPDATEDIR="$SHARE/CasjaysDev/apps/$PREFIX"
+  SYSUPDATEDIR="$SYSSHARE/CasjaysDev/apps/$PREFIX"
+  FONTDIR="${FONTDIR:-$SHARE/fonts}"
+  APPVERSION="$(curl -LSs ${REPO:-https://github.com/$PREFIX}/$APPNAME/raw/master/version.txt)"
+  ARRAY="$(cat /usr/local/share/CasjaysDev/scripts/helpers/$PREFIX/array)"
+  LIST="$(cat /usr/local/share/CasjaysDev/scripts/helpers/$PREFIX/list)"
+  mkdir -p "$USRUPDATEDIR" "$SYSUPDATEDIR" "$FONTDIR" "$HOMEDIR"
+}
+
+##################################################################################################
+
+iconmgr_install() {
+  system_installdirs
+  PREFIX="iconmgr"
+  REPO="${ICONMGRREPO}"
+  REPORAW="$REPO/$APPNAME/raw"
+  HOMEDIR="$SYSSHARE/CasjaysDev/$PREFIX"
+  APPDIR="${APPDIR:-$HOMEDIR/$APPNAME}"
+  USRUPDATEDIR="$SHARE/CasjaysDev/apps/$PREFIX"
+  SYSUPDATEDIR="$SYSSHARE/CasjaysDev/apps/$PREFIX"
+  ICONDIR="${ICONDIR:-$SHARE/icons}"
+  APPVERSION="$(curl -LSs ${REPO:-https://github.com/$PREFIX}/$APPNAME/raw/master/version.txt)"
+  ARRAY="$(cat /usr/local/share/CasjaysDev/scripts/helpers/$PREFIX/array)"
+  LIST="$(cat /usr/local/share/CasjaysDev/scripts/helpers/$PREFIX/list)"
+  mkdir -p "$USRUPDATEDIR" "$SYSUPDATEDIR" "$ICONDIR" "$HOMEDIR"
+}
+
+##################################################################################################
+
+pkmgr_install() {
+  PREFIX="pkmgr"
+  REPO="${PKMGRREPO}"
+  REPORAW="$REPO/$APPNAME/raw"
+  HOMEDIR="$SYSSHARE/CasjaysDev/$PREFIX"
+  APPDIR="${APPDIR:-$HOMEDIR/$APPNAME}"
+  USRUPDATEDIR="$SHARE/CasjaysDev/apps/$PREFIX"
+  SYSUPDATEDIR="$SYSSHARE/CasjaysDev/apps/$PREFIX"
+  REPODF="https://raw.githubusercontent.com/pkmgr/dotfiles/master"
+  APPVERSION="$(curl -LSs ${REPO:-https://github.com/$PREFIX}/$APPNAME/raw/master/version.txt)"
+  ARRAY="$(cat /usr/local/share/CasjaysDev/scripts/helpers/$PREFIX/array)"
+  LIST="$(cat /usr/local/share/CasjaysDev/scripts/helpers/$PREFIX/list)"
+  mkdir -p "$USRUPDATEDIR" "$SYSUPDATEDIR"
+}
+
+##################################################################################################
+
+systemmgr_install() {
+  system_installdirs
+  PREFIX="systemmgr"
+  REPO="${SYSTEMMGRREPO}"
+  REPORAW="$REPO/$APPNAME/raw"
+  CONF="/usr/local/etc"
+  SHARE="/usr/local/share"
+  HOMEDIR="/usr/local/etc"
+  APPDIR="${APPDIR:-$HOMEDIR/$APPNAME}"
+  USRUPDATEDIR="/usr/local/share/CasjaysDev/apps/$PREFIX"
+  SYSUPDATEDIR="/usr/local/share/CasjaysDev/apps/$PREFIX"
+  APPVERSION="$(curl -LSs ${REPO:-https://github.com/$PREFIX}/$APPNAME/raw/master/version.txt)"
+  ARRAY="$(cat /usr/local/share/CasjaysDev/scripts/helpers/$PREFIX/array)"
+  LIST="$(cat /usr/local/share/CasjaysDev/scripts/helpers/$PREFIX/list)"
+  mkdir -p "$USRUPDATEDIR" "$SYSUPDATEDIR"
+}
+
+##################################################################################################
+
+thememgr_install() {
+  system_installdirs
+  PREFIX="thememgr"
+  REPO="${THEMEMGRREPO}"
+  REPORAW="$REPO/$APPNAME/raw"
+  HOMEDIR="$SYSSHARE/CasjaysDev/$PREFIX"
+  APPDIR="${APPDIR:-$HOMEDIR/$APPNAME}"
+  USRUPDATEDIR="$SHARE/CasjaysDev/apps/$PREFIX"
+  SYSUPDATEDIR="$SYSSHARE/CasjaysDev/apps/$PREFIX"
+  THEMEDIR="${THEMEDIR:-$SHARE/themes}"
+  APPVERSION="$(curl -LSs ${REPO:-https://github.com/$PREFIX}/$APPNAME/raw/master/version.txt)"
+  ARRAY="$(cat /usr/local/share/CasjaysDev/scripts/helpers/$PREFIX/array)"
+  LIST="$(cat /usr/local/share/CasjaysDev/scripts/helpers/$PREFIX/list)"
+  mkdir -p "$USRUPDATEDIR" "$SYSUPDATEDIR"
+}
+
+##################################################################################################
+
+wallpapermgr_install() {
+  system_installdirs
+  PREFIX="wallpapermgr"
+  REPO="${WALLPAPERMGRREPO}"
+  REPORAW="$REPO/$APPNAME/raw"
+  HOMEDIR="$SYSSHARE/CasjaysDev/wallpapers"
+  APPDIR="${APPDIR:-$HOMEDIR/$APPNAME}"
+  USRUPDATEDIR="$SHARE/CasjaysDev/apps/wallpapers"
+  SYSUPDATEDIR="$SYSSHARE/CasjaysDev/apps/wallpapers"
+  WALLPAPERS="${WALLPAPERS:-$SHARE/wallpapers}"
+  APPVERSION="$(curl -LSs ${REPO:-https://github.com/$PREFIX}/$APPNAME/raw/master/version.txt)"
+  ARRAY="$(cat /usr/local/share/CasjaysDev/scripts/helpers/$PREFIX/array)"
+  LIST="$(cat /usr/local/share/CasjaysDev/scripts/helpers/$PREFIX/list)"
+  mkdir -p "$USRUPDATEDIR" "$SYSUPDATEDIR" "$WALLPAPERS"
+}
+
+##################################################################################################
+
+os_support() {
+  if [ -n "$1" ]; then
+    OSTYPE="$(echo $1 | tr '[:upper:]' '[:lower:]')"
+  else
+    OSTYPE="$(uname -s | tr '[:upper:]' '[:lower:]')"
+  fi
+  case "$OSTYPE" in
+  linux*) echo "Linux" ;;
+  mac* | darwin*) echo "MacOS" ;;
+  win* | msys* | mingw* | cygwin*) echo "Windows" ;;
+  bsd*) echo "BSD" ;;
+  solaris*) echo "Solaris" ;;
+  *) echo "Unknown OS" ;;
+  esac
+}
+
+unsupported_oses() {
+  for OSes in "$@"; do
+    if [[ "$(echo $1 | tr '[:upper:]' '[:lower:]')" =~ $(os_support) ]]; then
+      printf_red "\t\t$(os_support $OSes) is not supported\n"
+      exit
+    fi
+  done
+}
+
+##################################################################################################
+
 # end
-# vi: set expandtab ts=4 fileencoding=utf-8 filetype=sh noai :
