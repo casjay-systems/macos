@@ -172,18 +172,15 @@ if [ -z "$GIT" ] || [ -z "$CURL" ] || [ -z "$WGET" ] || [ -z "$VIM" ] || [ -z "$
   if (sudo true && sudo -ln) 2>&1 | grep -v 'may not' >/dev/null; then
     if [ -z "$BREW" ]; then
       /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-      RETVEL="$?"
-      if [ ! "$RETVEL" = 0 ]; then
-        printf "\n${RED}  *** • brew setup has failed: exitCode $RETVEL • ***${NC}\n\n"
-        exit "$?"
-      fi
-    fi
-    sudo brew install -f ${MISSING} >/dev/null 2>&1
-    RETVEL="$?"
-    if [ ! "$RETVEL" = 0 ]; then
+      # RETVEL="$?"
+      # if [ $RETVEL != 0 ]; then
       printf "\n${RED}  *** • brew setup has failed: exitCode $RETVEL • ***${NC}\n\n"
       exit "$?"
+      # fi
     fi
+    sudo brew install -f ${MISSING} >/dev/null 2>&1
+    printf "\n${RED}  *** • brew setup has failed: exitCode $RETVEL • ***${NC}\n\n"
+    exit "$?"
   else
     printf "${RED}  *** • I can't get root access You will have to manually install the missing programs • ***${NC}\n"
     printf "${RED}  *** • ${MISSING} • ***${NC}\n\n\n"
