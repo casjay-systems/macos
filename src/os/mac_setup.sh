@@ -82,9 +82,9 @@ fi
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 # Automatic linux install
-say 'Initializing the installer please wait!'
 ####################################################################################################
 clear                                                                                             #
+say 'Initializing the installer please wait!'                                                     #
 printf "\n\n\n\n\n   ${BLUE}      *** Initializing the installer please wait *** ${NC} \n\n\n\n " #
 ####################################################################################################
 if (sudo -vn && sudo -ln) 2>&1 | grep -v 'may not' >/dev/null; then
