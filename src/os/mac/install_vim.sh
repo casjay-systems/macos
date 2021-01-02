@@ -8,6 +8,9 @@ srcdir="$(cd .. && pwd)"
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 install_vim() {
+  plug_inst() {
+    bash -c "/usr/local/bin/vim -u $srcdir/config/vim/plugins.vimrc +PluginInstall +qall < /dev/null > /dev/null 2>&1"
+  }
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -19,19 +22,18 @@ install_vim() {
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   if [ ! -d "$HOME/.local/share/vim/bundle/Vundle.vim/.git" ]; then
+    rm -Rf $HOME/.local/share/vim/bundle/Vundle.vim
     echo ""
     execute \
-      "rm -Rf $HOME/.local/share/vim/bundle/Vundle.vim && \
-      git clone -q https://github.com/VundleVim/Vundle.vim.git $HOME/.local/share/vim/bundle/Vundle.vim && \
-      /usr/local/bin/vim -u $srcdir/config/vim/plugins.vimrc +PluginInstall +qall < /dev/null > /dev/null 2>&1" \
+      "git clone -q https://github.com/VundleVim/Vundle.vim.git $HOME/.local/share/vim/bundle/Vundle.vim && \
+      plug_inst" \
       "vim +PluginInstall → $HOME/.local/share/vim/bundle/"
 
   else
     echo ""
     execute \
-      "cd $HOME/.local/share/vim/bundle/Vundle.vim && \
-      git pull -q && \
-      /usr/local/bin/vim -u $srcdir/config/vim/plugins.vimrc +PluginInstall +qall < /dev/null > /dev/null 2>&1" \
+      "git -C cd $HOME/.local/share/vim/bundle/Vundle.vim pull -q && \
+      plug_inst" \
       "Updating Vundle and Plugins"
   fi
 }
