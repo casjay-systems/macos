@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 cd "$(dirname "${BASH_SOURCE[0]}")" && . "../../../utils.sh"
-  
+
 # Define taps
 TAPS="homebrew/cask-fonts "
 
@@ -21,14 +21,13 @@ for tap in $TAPS; do
   echo ""
   execute "brew tap $tap" "Setting up $tap"
 done
-echo ""
+
 for brew in $BREW; do
   echo ""
   execute "brew install -f $brew" "Setting up $brew"
 done
-echo ""
+
 for cask in $CASKS; do
   echo ""
   execute "brew install --cask -f $cask" "Setting up $cask"
 done
-echo ""
