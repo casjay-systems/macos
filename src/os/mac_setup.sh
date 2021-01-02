@@ -267,13 +267,37 @@ if [ -z "$FISH" ]; then print_in_red "\n • The fish package is not installed\n
   print_in_purple "\n • Installing fish shell and plugins completed\n"
 fi
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-# Install additional system files if root
-##
-##
+
+if [ -f "$(command -v pip 2>/dev/null) "]; then
+  if [ -z "$(command -v shodan 2>/dev/null)" ] || [ -z "$(command -v ytmdl 2>/dev/null)" ] || [ -z "$(command -v toot 2>/dev/null)" ] ||
+    [ -z "$(command -v castero 2>/dev/null)" ] || [ -z "$(command -v rainbowstream 2>/dev/null)" ]; then
+    print_in_purple "\n • Installing terminal tools\n"
+    for PIPTOOLS in git+https://github.com/sixohsix/python-irclib shodan ytmdl toot castero rainbowstream; do
+      if "(sudo -vn && sudo -ln)" 2>&1 | grep -v 'may not' >/dev/null; then
+        execute \
+          "sudo sh -c pip install $PIPTOOLS >/dev/null 2>&1" \
+          "Installing pip package: $PIPTOOLS"
+      else
+        execute \
+          "sh -c pip install --user $PIPTOOLS >/dev/null 2>&1" \
+          "Installing pip package: $PIPTOOLS"
+      fi
+    done
+    print_in_purple " • Installing terminal tools completed\n\n"
+  fi
+fi
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+# Install additional
+print_in_purple "\n • Installing additional tools\n"
+[ -f "$(command -v dfmgr 2>/dev/null)" ] && execute "dfmgr install misc"
+print_in_purple " • Installing additional tools completed\n\n"
+
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 # Go home
-cd $HOME
+cd "$HOME"
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Fix permissions again
@@ -332,11 +356,11 @@ print_in_purple "\n • Running cleanup complete\n"
 
 NEWVERSION="$(echo $(cat $dotfilesDirectory/version.txt | tail -n 1))"
 # End Install
-RESULT=$?
-printf "\n${GREEN}       *** 😃 installation of dotfiles completed 😃 *** ${NC}\n"
-printf "${GREEN}  *** 😃 You now have version number: $NEWVERSION 😃 *** ${NC}\n\n"
-printf "\n   ${RED}  *** For the configurations to take effect *** ${NC} \n "
-printf "\n   ${RED}   *** you should logoff or reboot your system *** ${NC} \n\n\n\n "
+#RESULT=$?
+printf "\n${GREEN} *** 😃 installation of dotfiles completed 😃 *** ${NC}\n"
+printf "${GREEN} *** 😃 You now have version number: "$NEWVERSION" 😃 *** ${NC}\n\n"
+printf "${RED} *** For the configurations to take effect *** ${NC} \n "
+printf "${RED} *** you should logoff or reboot your system *** ${NC} \n\n\n\n "
 ##################################################################################################
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
