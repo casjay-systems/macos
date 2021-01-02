@@ -7,9 +7,10 @@ yellow='\e[1;33m%s\e[0m\n'
 blue='\e[1;34m%s\e[0m\n'
 magenta='\e[1;35m%s\e[0m\n'
 cyan='\e[1;36m%s\e[0m\n'
+NC='\033[0m'
 
 if [[ ! "$OSTYPE" =~ ^darwin ]]; then
-  printf "\n\t\t${RED} This script is for MacOS\n\n"
+  printf "\n\t\t${RED} This script is for MacOS${NC}\n\n"
   exit 1
 fi
 
