@@ -171,15 +171,12 @@ if [ -z "$GIT" ] || [ -z "$CURL" ] || [ -z "$WGET" ] || [ -z "$VIM" ] || [ -z "$
   printf "\n${RED}  *** • Attempting to install the missing package[s] • ***${NC}\n\n"
   if (sudo true && sudo -ln) 2>&1 | grep -v 'may not' >/dev/null; then
     if [ -z "$BREW" ]; then
-      /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-      if [ $? -ne 0 ]; then
+      if ! /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"; then
         printf "\n${RED}  *** • brew setup has failed: exitCode $? • ***${NC}\n\n"
         exit "$?"
       fi
     fi
-    brew install -f ${MISSING} >/dev/null 2>&1
-    ?="$?"
-    if [ $? -ne 0 ]; then
+    if ! brew install -f ${MISSING} >/dev/null 2>&1; then
       printf "\n${RED}  *** • brew setup has failed: exitCode $? • ***${NC}\n\n"
       exit "$?"
     fi
