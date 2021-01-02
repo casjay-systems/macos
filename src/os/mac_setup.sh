@@ -54,20 +54,20 @@ if [ -z $macosdir ]; then printf "\n${RED}  *** dotfiles macos directory not spe
 #####
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-GIT=$(which git 2>/dev/null)
-CURL=$(which curl 2>/dev/null)
-WGET=$(which wget 2>/dev/null)
-VIM=$(which vim 2>/dev/null)
-TMUX=$(which tmux 2>/dev/null)
-ZSH=$(which zsh 2>/dev/null)
-FISH=$(which fish 2>/dev/null)
-SUDO=$(which sudo 2>/dev/null)
-BREW=$(which brew 2>/dev/null)
+GIT=$(command -v git 2>/dev/null)
+CURL=$(command -v curl 2>/dev/null)
+WGET=$(command -v wget 2>/dev/null)
+VIM=$(command -v vim 2>/dev/null)
+TMUX=$(command -v tmux 2>/dev/null)
+ZSH=$(command -v zsh 2>/dev/null)
+FISH=$(command -v fish 2>/dev/null)
+SUDO=$(command -v sudo 2>/dev/null)
+BREW=$(command -v brew 2>/dev/null)
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 # no sudo can't continue
-SUDU=$(which sudo 2>/dev/null)
+SUDU=$(command -v sudo 2>/dev/null)
 if ! (sudo true && sudo -ln) 2>&1 | grep -v 'may not' >/dev/null; then
   if [[ -z "$SUDU" ]] && [[ -z "$UPDATE" ]]; then
     printf "\n${GREEN} *** ${RED}•${GREEN} UPDATE=yes bash -c "$(curl -LsS https://github.com/casjay-systems/macos/raw/master/src/os/setup.sh)" ${RED}•${GREEN} ***${NC}\n"
@@ -191,7 +191,7 @@ if [ -z $UPDATE ]; then
     if [[ ! -f /usr/local/Homebrew/.srcinstall ]]; then
       printf "${GREEN}  *** • This May take awhile please be patient...${NC}\n"
       printf "${GREEN}  *** • Possibly 20+ Minutes.. So go have a nice cup of coffee!${NC}\n"
-      source $macosdir/pkgs/lists/mac-sys.sh && touch /usr/local/Homebrew/.srcinstall
+      source "$macosdir/pkgs/lists/mac-sys.sh" && touch /usr/local/Homebrew/.srcinstall
     fi
     printf "${PURPLE}\n • Done Setting up for the Mac${NC}\n\n"
   fi
@@ -228,7 +228,7 @@ $macosdir/create_symbolic_links.sh
 print_in_purple "\n • Create user files completed\n\n"
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Create and Setup git
-GIT=$(which git 2>/dev/null)
+GIT=$(command -v git 2>/dev/null)
 if [ -z "$GIT" ]; then print_in_red "\n • The git package is not installed\n\n"; else
   print_in_purple "\n • Installing GIT\n\n"
   $macosdir/install_git.sh
@@ -236,7 +236,7 @@ if [ -z "$GIT" ]; then print_in_red "\n • The git package is not installed\n\n
 fi
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Create and Setup vim
-VIM=$(which vim 2>/dev/null)
+VIM=$(command -v vim 2>/dev/null)
 if [ -z "$VIM" ]; then print_in_red "\n • The vim package is not installed\n\n"; else
   print_in_purple "\n • Installing vim with plugins\n\n"
   $macosdir/install_vim.sh
@@ -244,7 +244,7 @@ if [ -z "$VIM" ]; then print_in_red "\n • The vim package is not installed\n\n
 fi
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Create and Setup tmux
-TMUX=$(which tmux 2>/dev/null)
+TMUX=$(command -v tmux 2>/dev/null)
 if [ -z "$TMUX" ]; then print_in_red "\n • The tmux package is not installed\n\n"; else
   print_in_purple "\n • Installing tmux plugins\n\n"
   $macosdir/install_tmux.sh
@@ -252,7 +252,7 @@ if [ -z "$TMUX" ]; then print_in_red "\n • The tmux package is not installed\n
 fi
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Create and Setup zsh
-ZSH=$(which zsh 2>/dev/null)
+ZSH=$(command -v zsh 2>/dev/null)
 if [ -z "$ZSH" ]; then print_in_red "\n • The zsh package is not installed\n\n"; else
   print_in_purple "\n • Installing zsh with plugins\n\n"
   $macosdir/install_ohmyzsh.sh
@@ -260,7 +260,7 @@ if [ -z "$ZSH" ]; then print_in_red "\n • The zsh package is not installed\n\n
 fi
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Create and Setup fish
-FISH=$(which fish 2>/dev/null)
+FISH=$(command -v fish 2>/dev/null)
 if [ -z "$FISH" ]; then print_in_red "\n • The fish package is not installed\n\n"; else
   print_in_purple "\n • Installing fish shell and plugins\n\n"
   $macosdir/install_ohmyfish.sh
@@ -281,7 +281,20 @@ find "$HOME" -xtype l -delete find "$HOME" -xtype l -delete 2>/dev/null
 find "$HOME"/.gnupg "$HOME"/.ssh -type f -exec chmod 600 {} \; 2>/dev/null
 find "$HOME"/.gnupg "$HOME"/.ssh -type d -exec chmod 700 {} \; 2>/dev/null
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
 # Create env file
+GIT=$(command -v git 2>/dev/null)
+CURL=$(command -v curl 2>/dev/null)
+WGET=$(command -v wget 2>/dev/null)
+VIM=$(command -v vim 2>/dev/null)
+TMUX=$(command -v tmux 2>/dev/null)
+ZSH=$(command -v zsh 2>/dev/null)
+FISH=$(command -v fish 2>/dev/null)
+SUDO=$(command -v sudo 2>/dev/null)
+BREW=$(command -v brew 2>/dev/null)
+DISTRO="$(sw_vers -productName) $(sw_vers -productVersion)"
+CODENAME="$(sed -nE '/SOFTWARE LICENSE AGREEMENT FOR/s/([A-Za-z]+ ){5}|\\$//gp' /System/Library/CoreServices/Setup\ Assistant.app/Contents/Resources/en.lproj/OSXSoftwareLicense.rtf | awk '{print $2}')"
+
 if [ ! -d "$HOME"/.config/dotfiles ]; then mkdir -p "$HOME"/.config/dotfiles; fi
 if [ ! -f "$HOME"/.config/dotfiles/env ]; then
   echo "" >"$HOME"/.config/dotfiles/env
