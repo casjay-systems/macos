@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 echo "$(dirname "${BASH_SOURCE[0]}")"
-cd "$(dirname "${BASH_SOURCE[0]}")" && . "../../../../utils.sh"
+cd "$(dirname "${BASH_SOURCE[0]}")" && . "../../../utils.sh"
   
 # Define taps
 TAPS="homebrew/cask-fonts "
