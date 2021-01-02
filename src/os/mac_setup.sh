@@ -256,7 +256,7 @@ if [ -z "$UPDATE" ] || [ "$1" = "--force" ]; then
     if [[ ! -f /usr/local/Homebrew/.srcinstall ]] || [ "$1" = "--force" ]; then
       printf "${GREEN}  *** • This May take awhile please be patient...${NC}\n"
       printf "${GREEN}  *** • Possibly 20+ Minutes.. So go have a nice cup of coffee!${NC}\n"
-      source "$macosdir/pkgs/lists/mac-sys.sh" && touch /usr/local/Homebrew/.srcinstall
+      source "$macosdir/pkgs/lists/mac-sys.sh"
     fi
     printf "\n${PURPLE} • Done Setting up for the Mac${NC}\n\n"
   fi
@@ -403,14 +403,18 @@ if [ ! -f "$HOME"/.config/dotfiles/env ]; then
   echo "FISH="$FISH"" >>"$HOME"/.config/dotfiles/env
   echo "BREW="$BREW"" >>"$HOME"/.config/dotfiles/env
 fi
+
+if (sudo true && sudo -ln) 2>&1 | grep -v 'may not' >/dev/null; then
+  sudo touch /usr/local/Homebrew/.srcinstall
+fi
+
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 # run clean up
-#print_in_purple "\n • Running cleanup\n"
-#if (sudo true && sudo -ln) 2>&1 | grep -v 'may not' >/dev/null; then
-#
-#fi
+print_in_purple "\n • Running cleanup\n"
+# if (sudo true && sudo -ln) 2>&1 | grep -v 'may not' >/dev/null; then
 
+# fi
 print_in_purple "\n • Running cleanup complete\n"
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
