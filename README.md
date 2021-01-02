@@ -102,7 +102,7 @@ alias starwars="telnet towel.blinkenlights.nl"
 
 # Set PATH additions.
 
-PATH="$PATH:$HOME/.local/dotfiles/desktop/src/bin"
+PATH="$PATH:$HOME/.local/dotfiles/macos/src/bin"
 
 export PATH
 

@@ -17,7 +17,7 @@ choice=""
 if [ -n "$DOTFILESDIR" ]; then
   dotfilesdir="$DOTFILESDIR"
 else
-  dotfilesdir="$HOME/.local/dotfiles/desktops"
+  dotfilesdir="$HOME/.local/dotfiles/macos"
 fi
 
 if [ -f "$dotfilesdir/version.txt" ]; then
