@@ -6,35 +6,50 @@ cd "$(dirname "${BASH_SOURCE[0]}")" &&
 srcdir="$(cd .. && pwd)"
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-rm -Rf "$HOME/.config/fish/omf" >/dev/null 2>&1
-unlink -f "$HOME/.config/fish" >/dev/null 2>&1
-
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 setup_fish() {
-  echo ""
-  execute \
-    "ln -sf $srcdir/config/fish $HOME/.config/" \
-    "$srcdir/config/fish → $HOME/.config/fish"
+  unlink "$HOME/.config/fish" 2>/dev/null || rm -Rf $HOME/.config/fish 2>/dev/null
+  if [ -f "$srcdir/config/fish/install.sh" ]; then
+    execute "bash -c $srcdir/config/fish/install.sh" "Installing fish: $srcdir/config/fish/install.sh"
+  elif [ -d "$srcdir/config/fish" ]; then
+    execute \
+      "ln -sf $srcdir/config/fish ~/.config/" \
+      "$srcdir/config/fish → ~/.config/fish"
+  else
+    exit
+  fi
 }
+
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 setup_ohmyfish() {
-  echo ""
-  execute \
-    "curl -LSsq https://get.oh-my.fish > $HOME/.config/fish/omf-install && \
-    fish $HOME/.config/fish/omf-install --path=$HOME/.local/share/fish/oh-my-fish --config=$HOME/.config/fish/omf --noninteractive --yes" \
-    "Installing oh-my-fish"
-
+  if [ ! -f "$srcdir/config/fish/install.sh" ]; then
+    if [ -d "$HOME/.local/share/fish/oh-my-fish/.git" ]; then
+      execute \
+        "git -C $HOME/.local/share/fish/oh-my-fish pull -q >/dev/null 2>&1 && \
+        fish -c omf update" \
+        "Updating oh-my-fish"
+    else
+      if [ ! -d "$HOME/.local/share/omf" ]; then
+        curl -LSs https://github.com/oh-my-fish/oh-my-fish/raw/master/bin/install >"$srcdir/config/fish/omf-install"
+        execute \
+          "fish $srcdir/config/fish/omf-install --noninteractive --yes" \
+          "Installing oh-my-fish"
+      fi
+    fi
+  fi
 }
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 setup_fishplugins() {
-  echo ""
-  execute \
-    "fish $HOME/.config/fish/plugins.fish 2>/dev/null" \
-    "Installing fish plugins"
+  if [ ! -f "$srcdir/config/fish/install.sh" ]; then
+    if [ -f "$srcdir/config/fish/plugins.fish" ]; then
+      execute \
+        "fish -c $srcdir/config/fish/plugins.fish 2>/dev/null" \
+        "Installing fish plugins"
+    fi
+  fi
 }
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -42,9 +57,7 @@ setup_fishplugins() {
 main() {
 
   setup_fish
-
   setup_ohmyfish
-
   setup_fishplugins
 
 }

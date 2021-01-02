@@ -8,65 +8,54 @@ srcdir="$(cd .. && pwd)"
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 setup_tmux() {
-  rm -Rf ~/.tmux.conf
-  echo ""
-  execute \
-    "ln -sf $srcdir/config/tmux/tmux.conf ~/.tmux.conf" \
-    "$srcdir/config/tmux/tmux.conf → ~/.tmux.conf"
+  if [ -f "$srcdir/config/tmux/install.sh" ]; then
+    execute "bash -c $srcdir/config/tmux/install.sh" "Installing tmux: $srcdir/config/tmux/install.sh"
+
+  elif [ -d "$srcdir/config/tmux" ]; then
+    if [ -L ~/.tmux ]; then unlink ~/.tmux 2>/dev/null; fi
+    if [ -d ~/.tmux ]; then rm -Rf -f ~/.tmux 2>/dev/null; fi
+
+    execute \
+      "ln -sf ~/.local/dotfiles/src/config/tmux ~/.tmux" \
+      "$srcdir/config/tmux → ~/.tmux"
+
+    execute \
+      "ln -sf $srcdir/config/tmux/tmux.conf ~/.tmux.conf" \
+      "$srcdir/config/tmux/tmux.conf → ~/.tmux.conf"
+  else
+    exit
+  fi
+
 }
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 setup_tmuxplugins() {
-  if [ -d ~/.tmux/plugins/tpm ]; then
-
-    echo ""
+  if [ -d "$HOME/.local/share/tmux/tpm/tpm" ] && [ ! -f "$srcdir/config/tmux/install.sh" ]; then
     execute \
-      "cd $HOME/.local/share/tmux/plugins/tpm && \
-      git pull -q" \
+      "git -C $HOME/.local/share/tmux/tpm/tpm pull -q" \
       "Updating tmux plugin manager"
-    echo ""
+
     execute \
-      "$HOME/.local/share/tmux/plugins/tpm/scripts/install_plugins.sh 2> /dev/null" \
+      "bash $HOME/.local/share/tmux/tpm/scripts/install_plugins.sh 2> /dev/null" \
       "Updating tmux plugins"
-  else
-
-    echo ""
+  elif [ ! -f "$srcdir/config/tmux/install.sh" ]; then
     execute \
-      "rm -Rf $HOME/.local/share/tmux/plugins/tpm && \
-      git clone -q https://github.com/tmux-plugins/tpm $HOME/.local/share/tmux/plugins/tpm" \
-      "https://github.com/tmux-plugins/tpm → $HOME/.local/share/tmux/plugins/tpm"
-    echo ""
+      "rm -Rf $HOME/.local/share/tmux/tpm && \
+      git clone -q https://github.com/tmux-plugins/tpm $HOME/.local/share/tmux/tpm" \
+      "https://github.com/tmux-plugins/tpm → $HOME/.local/share/tmux/tpm"
+
     execute \
-      "$HOME/.local/share/tmux/plugins/tpm/scripts/install_plugins.sh" \
-      "Installing tmux plugins → $HOME/.local/share/tmux/plugins"
+      "bash -c $HOME/.local/share/tmux/tpm/scripts/install_plugins.sh" \
+      "Installing tmux plugins → $HOME/.local/share/tmux/tpm"
   fi
-}
-
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-create_tmux_local() {
-
-  declare -r FILE_PATH="$HOME/.config/local/tmux.local"
-
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-  if [ ! -e "$FILE_PATH" ]; then
-    printf "" >>"$FILE_PATH"
-  fi
-
-  print_result $? "$FILE_PATH"
-
 }
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 main() {
 
-  create_tmux_local
-
   setup_tmux
-
   setup_tmuxplugins
 
 }

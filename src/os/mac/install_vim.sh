@@ -8,59 +8,48 @@ srcdir="$(cd .. && pwd)"
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 install_vim() {
-  plug_inst() {
-    bash -c "/usr/local/bin/vim -u $srcdir/config/vim/plugins.vimrc +PluginInstall +qall < /dev/null > /dev/null 2>&1"
-  }
-
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-  echo ""
-  execute \
-    "ln -sf $srcdir/config/vim/vimrc ~/.vimrc" \
-    "$srcdir/config/vim/vimrc  → ~/.vimrc"
-
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-  if [ ! -d "$HOME/.local/share/vim/bundle/Vundle.vim/.git" ]; then
-    rm -Rf $HOME/.local/share/vim/bundle/Vundle.vim
-    echo ""
+  if [ -f "$srcdir/config/vim/install.sh" ]; then
+    execute "bash -c $srcdir/config/vim/install.sh" "Installing vim: $srcdir/config/vim/install.sh"
+  elif [ -d "$srcdir/config/vim" ]; then
+    rm -Rf ~/.vimrc
+    if [ -L ~/.vim ]; then unlink ~/.vim 2>/dev/null; fi
+    if [ -d ~/.vim ]; then rm -Rf -f ~/.vim 2>/dev/null; fi
     execute \
-      "git clone -q https://github.com/VundleVim/Vundle.vim.git $HOME/.local/share/vim/bundle/Vundle.vim && \
-      plug_inst" \
-      "vim +PluginInstall → $HOME/.local/share/vim/bundle/"
-
+      "ln -sf ~/.config/vim ~/.vim" \
+      "~/.config/vim/  → ~/.vim"
+    execute \
+      "ln -sf $srcdir/config/vim/vimrc ~/.vimrc" \
+      "$srcdir/config/vim/vimrc  → ~/.vimrc"
   else
-    echo ""
-    execute \
-      "git -C $HOME/.local/share/vim/bundle/Vundle.vim pull -q && \
-      plug_inst" \
-      "Updating Vundle and Plugins"
+    exit
   fi
 }
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-create_vimrc_local() {
-
-  declare -r FILE_PATH="$HOME/.config/local/vimrc.local"
-
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-  if [ ! -e "$FILE_PATH" ]; then
-    printf "" >>"$FILE_PATH"
+install_vimplugins() {
+  if [ ! -f "$srcdir/config/vim/install.sh" ]; then
+    if [ -d "$HOME/.local/share/vim/Vundle.vim/.git" ]; then
+      execute \
+        "git -C $HOME/.local/share/vim/Vundle.vim pull -q && \
+        vim +PluginInstall +qall < /dev/null > /dev/null 2>&1" \
+        "Updating Vundle and Plugins"
+    else
+      execute \
+        "rm -Rf $HOME/.local/share/vim/Vundle.vim && \
+        git clone -q https://github.com/VundleVim/Vundle.vim.git $HOME/.local/share/vim/Vundle.vim && \
+        vim +PluginInstall +qall < /dev/null > /dev/null 2>&1" \
+        "vim +PluginInstall +qall → $HOME/.local/share/vim/"
+    fi
   fi
-
-  print_result $? "$FILE_PATH"
-
 }
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 main() {
 
-  create_vimrc_local
-
   install_vim
+  install_vimplugins
 
 }
 

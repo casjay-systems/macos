@@ -8,65 +8,48 @@ srcdir="$(cd .. && pwd)"
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 install_git() {
-
-  echo ""
-  execute \
-    "ln -sf $srcdir/config/git/gitconfig ~/.gitconfig" \
-    "$srcdir/config/git/gitconfig  → ~/.gitconfig"
-
-}
-
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-install_ohmygit() {
-
-  if [ ! -d "$HOME/.local/share/git/plugins/.git" ]; then
-
-    echo ""
+  if [ -f "$srcdir/config/git/install.sh" ]; then
+    execute "bash -c $srcdir/config/git/install.sh" "Installing GIT: $srcdir/config/git/install.sh"
+  elif [ -d "$srcdir/config/git " ]; then
     execute \
-      "rm -Rf $HOME/.local/share/git/plugins && \
-      git clone https://github.com/arialdomartini/oh-my-git.git $HOME/.local/share/git/plugins" \
-      "cloning oh-my-git → $HOME/.local/share/git/plugins"
-
+      "ln -sf $srcdir/config/git/gitconfig ~/.gitconfig" \
+      "$srcdir/config/git/gitconfig  → ~/.gitconfig"
   else
-    echo ""
-    execute \
-      "cd $HOME/.local/share/git/plugins && \
-      git pull -q" \
-      "Updating oh-my-git"
-
+    exit
   fi
-  isInFile=$(cat ~/.config/local/bash.local | grep -c "oh-my-git")
-  if [ $isInFile -eq 0 ]; then
-
-    declare -r CONFIGS="
+}
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-# OH-MY-GIT
 
-[ -f \"\$HOME/.config/git/plugins/prompt.sh\" ] \\
-    && source \"\$HOME/.config/git/plugins/prompt.sh\"
+install_ohmygit() {
+  if [ ! -f "$srcdir/config/git/install.sh" ]; then
+    if [ ! -d "$HOME/.local/share/git/oh-my-git/.git" ]; then
+      execute \
+        "rm -Rf $HOME/.local/share/git/oh-my-git && \
+      git clone https://github.com/arialdomartini/oh-my-git $HOME/.local/share/git/oh-my-git" \
+        "cloning oh-my-git → $HOME/.local/share/git/oh-my-git"
+    else
+      execute \
+        "git -C $HOME/.local/share/git/oh-my-git pull -q" \
+        "Updating oh-my-git"
+    fi
+  fi
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  if [ -f "$HOME/.config/local/bash.local" ]; then
+    isInFile=$(cat "$HOME/.config/local/bash.local" | grep -c "oh-my-git")
+    if [ $isInFile -eq 0 ]; then
+
+      declare -r CONFIGS="
+# OH-MY-GIT
+[ -f \"\$HOME/.local/share/git/oh-my-git/prompt.sh\" ] \\
+    && source \"\$HOME/.local/share/git/oh-my-git/prompt.sh\"
 "
 
-    echo ""
-    execute \
-      "printf '%s' '$CONFIGS' >> ~/.config/local/bash.local" \
-      "Enabling oh-my-git in ~/.config/local/bash.local"
-  fi
-
-}
-
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-create_gitconfig_local() {
-
-  declare -r FILE_PATH="$HOME/.config/local/gitconfig.local"
-
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-  if [ ! -e "$FILE_PATH" ]; then
-    printf "" >>"$FILE_PATH"
-
-    print_result $? "$FILE_PATH"
-
+      execute \
+        "printf '%s' '$CONFIGS' >> ~/.config/local/bash.local" \
+        "Enabling oh-my-git in ~/.config/local/bash.local"
+    fi
   fi
 }
 
@@ -74,10 +57,7 @@ create_gitconfig_local() {
 
 main() {
 
-  create_gitconfig_local
-
   install_git
-
   install_ohmygit
 
 }

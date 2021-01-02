@@ -201,8 +201,8 @@ printf "${GREEN}  *** • Installing version $CURDOTFVERSION • ***${NC}\n"
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Setup the dotfiles Directory
 
+printf "\n${PURPLE} • Setting up the git repo - $dotfilesDirectory${NC}\n"
 if [ -d $dotfilesDirectory/.git ]; then
-  printf "\n${PURPLE} • Updating the git repo - $dotfilesDirectory${NC}\n"
   cd "$srcdir/os" && source "utils.sh"
 
   echo ""
@@ -217,8 +217,7 @@ if [ -d $dotfilesDirectory/.git ]; then
 
 else
 
-  printf "\n${PURPLE} • Cloning the git repo - $dotfilesDirectory${NC}\n"
-  rm -Rf $dotfilesDirectory
+  rm -Rf "$dotfilesDirectory"
   git clone --depth=1 -q --recursive https://github.com/casjay-systems/macos.git $dotfilesDirectory >/dev/null 2>&1
   printf "\n${GREEN}   [✔] clone https://github.com/casjay-systems/macos.git  → $dotfilesDirectory \n"
   NEWVERSION="$(echo $(cat $dotfilesDirectory/version.txt | tail -n 1))"
