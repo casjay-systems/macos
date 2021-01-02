@@ -1,0 +1,5 @@
+*.log
+pid
+state
+tag_cache
+sticker.sql

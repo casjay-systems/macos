@@ -123,7 +123,7 @@ printf_read() { printf_color "\t\t$1" 5; }
 printf_success() { printf_color "\t\t[ ✔ ] $1\n" 2; }
 printf_error() { printf_color "\t\t[ ✖ ] $1 $2\n" 1; }
 printf_warning() { printf_color "\t\t[ ❗ ] $1\n" 3; }
-printf_question() { printf_color "\t\t[ ❓ ] $1 - [y/N] [❓] " 6; }
+printf_question() { printf_color "\t\t[ ❓ ] $1 [❓] " 6; }
 printf_error_stream() { while read -r line; do printf_error "↳ ERROR: $line"; done; }
 printf_execute_success() { printf_color "\t\t[ ✔ ] $1 [ ✔ ] \n" 2; }
 printf_execute_error() { printf_color "\t\t[ ✖ ] $1 $2 [ ✖ ] \n" 1; }
@@ -135,5 +135,4 @@ printf_execute_error_stream() { while read -r line; do printf_execute_error "↳
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-###END
-#/* vim: set expandtab ts=4 noai
+#END

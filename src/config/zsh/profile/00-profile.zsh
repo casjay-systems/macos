@@ -5,9 +5,8 @@
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 # remove .sudo if exists
-if [[ -f "$HOME/.sudo" ]]; then
-      rm -Rf  "$HOME/.sudo"
-    fi
-fi  
+if [ -f "$HOME/.sudo" ]; then
+  rm -Rf "$HOME/.sudo"
+fi
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

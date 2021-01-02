@@ -1,19 +1,18 @@
 #!/usr/bin/env zsh
-#zsh config
 
+#zsh config
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# allow insecure directories and files
 ZSH_DISABLE_COMPFIX="true"
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
 # ensure exports is loaded
 source "$HOME/.config/zsh/profile/00-exports.zsh"
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # include .profile if it exists
-if [ -z "$SRCPROFILERC" ]; then
-    if [ -f "$HOME/.profile" ]; then
-        source "$HOME/.profile"
-    fi
+if [ -f "$HOME/.profile" ]; then
+  source "$HOME/.profile"
 fi
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -23,14 +22,17 @@ path=("$HOME/.local/bin" $path)
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-# Add user functions to $fpath
-fpath=("$HOME/.config/zsh/functions" $fpath)
-
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
 # Enable completion (this needs to be done before sourcing plugins)
 autoload -Uz compinit && compinit
 
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+# Add user functions to $fpath
+fpath=("$HOME/.config/zsh/functions" $fpath)
+
+for f in "$HOME/.config/zsh/functions/"*.zsh ; do
+  source $f 2>/dev/null
+done
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -81,13 +83,6 @@ zstyle ':completion:*' menu select
 # zsh-autosuggestions
 ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20
 ZSH_AUTOSUGGEST_USE_ASYNC=1
-
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-# History settings
-HISTFILE="$HOME/.config/zsh/zhistory"
-HISTSIZE=10000
-SAVEHIST=10000
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -167,9 +162,16 @@ fi
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
+# Source users file
+if [[ -f "$HOME/.config/local/zsh.servers.local" ]]; then
+    source "$HOME/.config/local/zsh.server.local" 2>/dev/null
+fi
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
 # Source system specific
-if [[ -f "$HOME/.config/local/zsh."$(hostname -s)".local" ]]; then
-    source "$HOME/.config/local/zsh."$(hostname -s)".local" 2>/dev/null
+if [[ -f "$HOME/.config/local/zsh."$(hostname)".local" ]]; then
+    source "$HOME/.config/local/zsh."$(hostname)".local" 2>/dev/null
 fi
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

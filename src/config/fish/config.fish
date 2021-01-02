@@ -145,15 +145,16 @@ set -g theme_project_dir_length 0
 set -g theme_newline_cursor yes
 set -g theme_newline_prompt ' ><((°>)) 🐧 '
 
-# direnv
-eval (direnv hook fish)
-
 # sxhkd fix
 set -U SXHKD_SHELL sh
 
 # local {{{
 if test -f "$HOME/.config/local/fish.local"
     . "$HOME/.config/local/fish.local"
+end
+
+if test -f "$HOME/.config/local/fish.servers.local"
+    . "$HOME/.config/local/fish.servers.local"
 end
 
 if test -f "$HOME/.config/local/fish.(hostname -s).local"

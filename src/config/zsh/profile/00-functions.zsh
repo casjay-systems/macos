@@ -1,422 +1,281 @@
 #!/usr/bin/env zsh
-# functions
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-# Define colors
-__colors() {
-  PURPLE='\033[0;35m'
-  BLUE='\033[0;34m'
-  RED='\033[0;31m'
-  GREEN='\033[32m'
-  NC='\033[0m'
+# @Author      : Jason
+# @Contact     : casjaysdev@casjay.net
+# @File        : 00.bash
+# @Created     : Mon, Dec 23, 2019, 14:13 EST
+# @License     : WTFPL
+# @Copyright   : Copyright (c) CasjaysDev
+# @Description : functions for bash login
+#
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+NC="$(tput sgr0 2>/dev/null)"
+RESET="$(tput sgr0 2>/dev/null)"
+BLACK="\033[0;30m"    # Black
+RED="\033[0;31m"      # Red
+GREEN="\033[0;32m"    # Green
+YELLOW="\033[0;33m"   # Yellow
+BLUE="\033[0;34m"     # Blue
+PURPLE="\033[0;35m"   # Purple
+CYAN="\033[0;36m"     # Cyan
+WHITE="\033[0;37m"    # White
+ORANGE="\033[0;33m"   # Orange
+LIGHTRED='\033[1;31m' # Light Red
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+printf_color() { printf "%b" "$(tput setaf "$2" 2>/dev/null)" "$1" "$(tput sgr0 2>/dev/null)"; }
+printf_normal() { printf_color "\t\t$1\n" "$2"; }
+printf_green() { printf_color "\t\t$1\n" 2; }
+printf_red() { printf_color "\t\t$1\n" 1; }
+printf_purple() { printf_color "\t\t$1\n" 5; }
+printf_yellow() { printf_color "\t\t$1\n" 3; }
+printf_blue() { printf_color "\t\t$1\n" 4; }
+printf_cyan() { printf_color "\t\t$1\n" 6; }
+printf_info() { printf_color "\t\t[ ℹ️ ] $1\n" 3; }
+printf_help() { printf_color "\t\t$1\n" 1; }
+printf_read() { printf_color "\t\t$1" 5; }
+printf_success() { printf_color "\t\t[ ✔ ] $1\n" 2; }
+printf_error() { printf_color "\t\t[ ✖ ] $1 $2\n" 1; }
+printf_warning() { printf_color "\t\t[ ❗ ] $1\n" 3; }
+printf_question() { printf_color "\t\t[ ❓ ] $1 [❓] " 6; }
+printf_error_stream() { while read -r line; do printf_error "↳ ERROR: $line"; done; }
+printf_execute_success() { printf_color "\t\t[ ✔ ] $1 [ ✔ ] \n" 2; }
+printf_execute_error() { printf_color "\t\t[ ✖ ] $1 $2 [ ✖ ] \n" 1; }
+printf_execute_error_stream() { while read -r line; do printf_execute_error "↳ ERROR: $line"; done; }
+
+printf_execute_result() {
+  if [ "$1" -eq 0 ]; then printf_execute_success "$2"; else printf_execute_error "$2"; fi
+  return "$1"
 }
-__colors
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-precmd() {
-  window_title="\e]0;$USER@$(hostname -s):${PWD}\a"
-  echo -ne "$window_title"
+printf_exit() {
+  printf_color "\t\t$1\n" 1
+  return 1
 }
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-zsh_wifi_signal() {
-  local signal=$(nmcli device wifi | grep yes | awk '{print $8}')
-  local color='%F{yellow}'
-  [[ $signal -gt 75 ]] && color='%F{green}'
-  [[ $signal -lt 50 ]] && color='%F{red}'
-  echo -n "%{$color%}\uf230  $signal%{%f%}" # \uf230 is 
+__tput() { tput $* 2>/dev/null; }
+__whiletrue() { while true; do
+  "$@"
+  sleep 60
+done; }
+
+cmd_exists() {
+  unalias "$1" >/dev/null 2>&1
+  command -v "$1" >/dev/null 2>&1
 }
+
+rm_rf() { devnull rm -Rf "$@"; }
+cp_rf() { if [ -e "$1" ]; then devnull cp -Rfa "$@"; fi; }
+mv_f() { if [ -e "$1" ]; then devnull mv -f "$@"; fi; }
+ln_rm() { devnull find "$HOME" -xtype l -delete; }
+ln_sf() {
+  devnull ln -sf "$@"
+  ln_rm
+}
+
+devnull() { "$@" >/dev/null 2>&1; }
+devnull1() { "$@" 1>/dev/null; }
+devnull2() { "$@" 2>/dev/null; }
+alias_function() { eval "${1}() $(declare -f "${2}" | sed 1d)"; }
+set_trap() { trap -p "$1" | grep "$2" &>/dev/null || trap '$2' "$1"; }
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-# Create data URI from a file.
-datauri() {
+returnexitcode() {
+  local RETVAL="$?"
+  if [ "$RETVAL" -eq 0 ]; then BG_EXIT="${BG_GREEN}"; else BG_EXIT="${BG_RED}"; fi
+}
 
-  local mimeType=""
-
-  if [ -f "$1" ]; then
-    mimeType=$(file -b --mime-type "$1")
-    #                └─ do not prepend the filename to the output
-
-    if [[ $mimeType == text/* ]]; then
-      mimeType="$mimeType;charset=utf-8"
-    fi
-
-    printf "data:%s;base64,%s" \
-      "$mimeType" \
-      "$(openssl base64 -in "$1" | tr -d "\n")"
+getexitcode() {
+  local RETVAL="$?"
+  local ERROR="Failed"
+  local SUCCES="$1"
+  EXIT="$RETVAL"
+  if [ "$RETVAL" -eq 0 ]; then
+    printf_success "$SUCCES"
+    return 0
   else
-    printf "%s is not a file.\n" "$1"
+    printf_error "$ERROR"
+    return 1
   fi
-
+  returnexitcode
 }
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-# Delete files that match a certain pattern from the current directory.
+answer_is_yes() { [[ "$REPLY" =~ ^[Yy]$ ]] && return 0 || return 1; }
 
-#delete-files() {
-#    local q="${1:-*.DS_Store}"
-#    find . -type f -name "$q" -ls -delete
-#}
+ask() {
+  printf_question "$1"
+  read -r
+}
+
+ask_for_confirmation() {
+  printf_question "$1"
+  read -r -n 1
+  printf ""
+}
+
+get_answer() { printf "%s" "$REPLY"; }
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-# Get gzip information (gzipped file size + reduction size).
+# use grc if it's installed or execute the command direct
 
-gz() {
+if ! cmd_exists grc; then
+  if [[ USEGRC = "yes" ]]; then
+    grc() {
+      if [[ -f "$(command -v grc)" ]]; then
+        #grc --colour=auto
+        $(command -v grc) --colour=on "$@"
+      else
+        "$@"
+      fi
+    }
+  fi
+fi
 
-  declare -i gzippedSize=0
-  declare -i originalSize=0
+#
 
-  if [ -f "$1" ]; then
-    if [ -s "$1" ]; then
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-      originalSize=$(wc -c <"$1")
-      printf "\n original size:   %12s\n" "$(hrfs "$originalSize")"
+#pastebin.com || Usage: 'command | pastebin.com or pastebin.com filename'
 
-      gzippedSize=$(gzip -c "$1" | wc -c)
-      printf " gzipped size:    %12s\n" "$(hrfs "$gzippedSize")"
-
-      printf " ─────────────────────────────\n"
-      printf " reduction:       %12s [%s%%]\n\n" \
-        "$(hrfs $((originalSize - gzippedSize)))" \
-        "$(printf "%s" "$originalSize $gzippedSize" |
-          awk '{ printf "%.1f", 100 - $2 * 100 / $1 }' |
-          sed -e "s/0*$//;s/\.$//")"
-      #              └─ remove tailing zeros
-
+if ! cmd_exists pastebin.com; then
+  pastebin.com() {
+    [ "$1" = "--help" ] && printf_help "Usage: 'command | pastebin.com or pastebin.com filename'"
+    if [ ! -d "$HOME"/.local/bin ]; then mkdir "$HOME"/.local/bin; fi
+    if [ -f "$(command -v pastebin.com 2>/dev/null)" ]; then
+      command -v pastebin.com "$@"
     else
-      printf "\"%s\" is empty.\n" "$1"
+      curl -LSs "https://github.com/dfmgr/installer/raw/master/bin/pastebin.com" -o "$HOME/.local/bin/pastebin.com"
+      chmod 755 "$HOME"/.local/bin/pastebin.com
+      "$HOME"/.local/bin/pastebin.com "$@"
     fi
-  else
-    printf "\"%s\" is not a file.\n" "$1"
-  fi
-
-}
-
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-# Human readable file size
-# (because `du -h` doesn't cut it for me).
-
-hrfs() {
-
-  printf "%s" "$1" |
-    awk '{
-            i = 1;
-            split("B KB MB GB TB PB EB ZB YB WTFB", v);
-            value = $1;
-
-            # confirm that the input is a number
-            if ( value + .0 == value ) {
-
-                while ( value >= 1024 ) {
-                    value/=1024;
-                    i++;
-                }
-
-                if ( value == int(value) ) {
-                    printf "%d %s", value, v[i]
-                } else {
-                    printf "%.1f %s", value, v[i]
-                }
-
-            }
-        }' |
-    sed -e ":l" \
-      -e "s/\([0-9]\)\([0-9]\{3\}\)/\1,\2/; t l"
-  #    └─ add thousands separator
-  #       (changes "1023.2 KB" to "1,023.2 KB")
-}
-
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-# Create new directories and enter the first one.
-
-mkd() {
-  if [ -n "$*" ]; then
-
-    mkdir -p "$@"
-    #      └─ make parent directories if needed
-
-    cd "$@" ||
-      exit 1
-
-  fi
-}
-
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-# Process phone images.
-
-ppi() {
-  command -v "convert" &>/dev/null ||
-    exit 0
-
-  declare query="${1:-*.jpg}"
-  declare geometry="${2:-50%}"
-
-  for i in "$query"; do
-
-    if [[ "$(echo ${i##*.} | tr '[:upper:]' '[:lower:]')" != "png" ]]; then
-      imgName="${i%.*}.png"
-    else
-      imgName="_${i%.*}.png"
-    fi
-
-    convert "$i" \
-      -colorspace RGB \
-      +sigmoidal-contrast 11.6933 \
-      -define filter:filter=Sinc \
-      -define filter:window=Jinc \
-      -define filter:lobes=3 \
-      -sigmoidal-contrast 11.6933 \
-      -colorspace sRGB \
-      -background transparent \
-      -gravity center \
-      -resize "$geometry" \
-      +append \
-      "$imgName" &&
-      printf "* %s (%s)\n" \
-        "$imgName" \
-        "$geometry"
-
-  done
-}
-
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-# Search history.
-
-qh() {
-  #           ┌─ enable colors for pipe
-  #           │  ("--color=auto" enables colors only if
-  #           │  the output is in the terminal)
-  grep --color=always "$*" "$HISTFILE" | less -RX
-  # display ANSI color escape sequences in raw form ─┘│
-  #       don't clear the screen after quitting less ─┘
-}
-
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-# Search for text within the current directory.
-
-qt() {
-  grep -ir --color=always "$*" --exclude-dir=".git" --exclude-dir="node_modules" . | less -RX
-  #     │└─ search all files under each directory, recursively
-  #     └─ ignore case
-}
-
-# # ex - archive extractor
-# # usage: ex <file>
-ex() {
-  if [ -f $1 ]; then
-    case $1 in
-    *.tar.bz2) tar xjf $1 ;;
-    *.tar.gz) tar xzf $1 ;;
-    *.bz2) bunzip2 $1 ;;
-    *.rar) unrar x $1 ;;
-    *.gz) gunzip $1 ;;
-    *.tar) tar xf $1 ;;
-    *.tbz2) tar xjf $1 ;;
-    *.tgz) tar xzf $1 ;;
-    *.zip) unzip $1 ;;
-    *.Z) uncompress $1 ;;
-    *.7z) 7z x $1 ;;
-    *) echo "'$1' cannot be extracted via ex()" ;;
-    esac
-  else
-    echo "'$1' is not a valid file"
-  fi
-}
-
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-#Git Functions
-gitreinit() {
-  echo -e "$RED
-         \tThis is an extreme measure....
-         \tMake sure you do a git pull before doing this.
-	     \tPress Control C to cancel...$NC" && sleep 10 &&
-    rm -Rf .git &&
-    git init &&
-    git add . &&
-    git commit -S -m "Initial Commit"
-}
-
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-gitcommit() {
-  git add . &&
-    git commit -S &&
-    git push -f
-}
-
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-gitup() {
-  git pull -q &&
-    echo -e "\t$GREEN\nCommiting Changes $NC" &&
-    git add . &&
-    git commit -S &&
-    git push -f
-}
-
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-gitpu() {
-  echo -e "\t$PURPLE\nRunning git pull$NC" &&
-    git pull
-}
-
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-#Git add github remote
-gitremoteaddgh() {
-  git remote add origin https://github.com/$1
-}
-
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-#Git remove github remote
-gitremoteremgh() {
-  git remote rm https://github.com/$1
-}
-
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-#Git add gitlab remote
-gitremoteaddgl() {
-  git remote add origin https://gitlab.com/$1
-}
-
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-#Git remove gitlab remote
-gitremoteremgl() {
-  git remote rm https://gitlab.com/$1
-}
-
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-#Git add private remote
-gitremoteaddpr() {
-  git remote add origin https://git.casjay.in/$1
-}
-
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-#Git remove private remote
-gitremoterempr() {
-  git remote rm https://git.casjay.in/$1
-}
-
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-#Fun functions
-rr() {
-  curl -LSs https://raw.githubusercontent.com/keroserene/rickrollrc/master/roll.sh | bash
-}
-
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-wttrin() {
-  curl -LSs "http://wttr.in/$1?AFu$2" | grep -v "Location" && echo -e "\n\n"
-}
-
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-wttrin2() {
-  curl -LSs "http://v2.wttr.in/$1?AFu$2" | grep -v "Location" && echo -e "\n\n"
-}
-
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-tweet() {
-  twitter set "$1"
-}
-
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-mastodon() {
-  toot post "$1"
-}
-
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-social() {
-  tweet "$1"
-  mastodon "$1"
-}
-
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-# Update
-dotfiles() {
-  UPDATE=yes bash -c "$(curl -LsS https://raw.githubusercontent.com/casjay-dotfiles/minimal/master/install.sh)"
-}
-
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-# netstat functions
-netstatl() {
-  sudo netstat -taupln | grep "$@"
-}
-
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-netstatg() {
-  sudo netstat "-$1" | grep "$2"
-}
-
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-scratchpad() {
-  find ~/.local/share/editors/scratchpads/ -type f -mtime +7 -name '*' -exec rm -Rf {} \; >/dev/null 2>&1
-  local TMUX=""
-  local pid="$$"
-  local date="$(date +"%m-%d-%Y-%H-%M")"
-  tmux has-session -t scratchpad >/dev/null
-  if [ $? != 0 ]; then
-    mkdir -p "$HOME/.local/share/editors/scratchpads"
-    rm -Rf "$HOME/.local/share/editors/scratchpads/*"
-    echo -e "$date\n" >"$HOME/.local/share/editors/scratchpads/$pid"
-    tmux -f /dev/null new -s scratchpad vim "$HOME/.local/share/editors/scratchpads/$pid" >/dev/null 2>&1
-  else
-    tmux attach -t scratchpad >/dev/null 2>&1
-  fi
-}
+  }
+fi
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 # generate random strings
-random-string() {
-  cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w ${1:-64} | head -n 1
+
+if ! cmd_exists random-string; then
+  random-string() {
+    cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w ${1:-64} | head -n 1
+  }
+fi
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+if ! cmd_exists mkpasswd; then
+  mkpasswd() {
+    cat /dev/urandom | tr -dc [:print:] | tr -d '[:space:]\042\047\134' | fold -w ${1:-64} | head -n 1
+  }
+fi
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+# the fuck
+
+fuck() {
+  TF_CMD=$(
+    TF_ALIAS=fuck \
+      PYTHONIOENCODING=utf-8 \
+      TF_SHELL_ALIASES=$(alias)
+    thefuck $(fc -ln -1)
+  ) &&
+    eval $TF_CMD && history -s $TF_CMD
 }
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-mkpasswd() {
-  cat /dev/urandom | tr -dc [:print:] | tr -d '[:space:]\042\047\134' | fold -w ${1:-64} | head -n 1
+# Set OS TYPE
+
+detectos() {
+  OS="$(uname)"
+  case $OS in
+  'Linux')
+    OS='Linux'
+    ;;
+  'FreeBSD')
+    OS='FreeBSD'
+    ;;
+  'WindowsNT')
+    OS='Windows'
+    ;;
+  'Darwin')
+    OS='Mac'
+    ;;
+  'SunOS')
+    OS='Solaris'
+    ;;
+  'AIX') ;;
+  *) ;;
+  esac
 }
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-#Tempature conversion
-celsius2f() {
-  tf=$(echo "scale=2;((9/5) * $1) + 32" | bc)
-  echo $tf
+#Set OS Detection
+
+detectostype() {
+  arch=$(uname -m)
+  kernel=$(uname -r)
+  if [ -n "$(command -v lsb_release)" ]; then
+    distroname=$(lsb_release -s -d)
+  elif [ -f "/etc/os-release" ]; then
+    distroname=$(grep PRETTY_NAME /etc/os-release | sed 's/PRETTY_NAME=//g' | tr -d '="')
+  elif [ -f "/etc/debian_version" ]; then
+    distroname="Debian $(cat /etc/debian_version)"
+  elif [ -f "/etc/redhat-release" ]; then
+    distroname=$(cat /etc/redhat-release)
+  else
+    distroname="$(uname -s) $(uname -r)"
+  fi
+
+  #Various Arch Distros
+  if [[ "$distroname" =~ "ArcoLinux" ]] || [[ "$distroname" =~ "Arch" ]] || [[ "$distroname" =~ "BlackArch" ]]; then
+    DISTRO=Arch
+  #Raspberry pi
+  elif [[ "$distroname" =~ "Raspbian" ]]; then
+    DISTRO=Raspbian
+  #Various RedHat Distros
+  elif [[ "$distroname" =~ "Scientific" ]] || [[ "$distroname" =~ "RedHat" ]] || [[ "$distroname" =~ "CentOS" ]] || [[ "$distroname" =~ "Casjay" ]]; then
+    DISTRO=RHEL
+  #Various Debian Distros
+  elif [[ "$distroname" =~ "Kali" ]] || [[ "$distroname" =~ "Parrot" ]] || [[ "$distroname" =~ "Debian" ]]; then
+    DISTRO=Debian
+    if [[ "$distroname" =~ "Debian" ]]; then
+      CODENAME=$(lsb_release -a 2>/dev/null | grep Code | sed 's#Codename:##g' | awk '{print $1}')
+    fi
+    if [[ "$distroname" =~ "Kali" ]]; then
+      CODENAME=kali
+    fi
+    if [[ "$distroname" =~ "Parrot" ]]; then
+      CODENAME=parrot
+    fi
+  elif [[ "$distroname" =~ "Ubuntu" ]] || [[ "$distroname" =~ "Mint" ]] || [[ "$distroname" =~ "Elementary" ]] || [[ "$distroname" =~ "KDE neon" ]]; then
+    DISTRO=Ubuntu
+    CODENAME=$(lsb_release -a 2>/dev/null | grep Code | sed 's#Codename:##g' | awk '{print $1}')
+  elif [[ "$distroname" =~ "Fedora" ]]; then
+    DISTRO=Fedora
+  fi
+
+  if [ -f /etc/os-release ]; then
+    DISTROID="$(grep ID_LIKE /etc/os-release | sed 's/^.*=//')"
+  fi
+
 }
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# - -- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-f2celcius() {
-  tc=$(echo "scale=2;(5/9)*($1-32)" | bc)
-  echo $tc
-}
+detectos
+detectostype
+unset -f detectos detectostype
 
-###END
-unset __colors
+# - -- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

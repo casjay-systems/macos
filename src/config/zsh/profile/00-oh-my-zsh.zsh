@@ -1,4 +1,5 @@
-#
+#!/usr/bin/env zsh
+
 if [[ ! -f "$HOME/.local/share/zsh/oh-my-zsh/oh-my-zsh.sh" ]]; then
   echo "Installing oh-my-sh plugin and themes"
   rm -Rf "$HOME/.local/share/zsh/oh-my-zsh"
@@ -15,6 +16,9 @@ Darwin)
   ;;
 Linux)
   readonly PS_SYMBOL=" 🐧 "
+  ;;
+msys* | Win* | MINGW* | CYGWIN*)
+  readonly PS_SYMBOL=" 😥 "
   ;;
 *)
   readonly PS_SYMBOL=" 👽 "

@@ -1,12 +1,12 @@
-pane	0	1	:bash	1	:*	1	:~	1	bash	:
-pane	0	2	:bash	0	:-	1	:~	1	bash	:
-pane	0	3	:bash	0	:	1	:~	1	bash	:
-pane	0	4	:bash	0	:	1	:~	1	bash	:
-pane	0	5	:bash	0	:	1	:~	1	bash	:
-pane	0	6	:bash	0	:	1	:~	1	bash	:
-pane	0	7	:bash	0	:	1	:~	1	bash	:
-pane	0	8	:bash	0	:	1	:~	1	bash	:
-pane	0	9	:bash	0	:	1	:~	1	bash	:
+pane	0	1	:Main	1	:*	1	:~	1	bash	:
+pane	0	2	:DEV 	0	:-	1	:~	1	bash	:
+pane	0	3	:DEV	0	:	1	:~	1	bash	:
+pane	0	4	:SYS	0	:	1	:~	1	bash	:
+pane	0	5	:WWW	0	:	1	:~	1	bash	:
+pane	0	6	:WWW	0	:	1	:~	1	bash	:
+pane	0	7	:VIRT	0	:	1	:~	1	bash	:
+pane	0	8	:Chat	0	:	1	:~	1	bash	:
+pane	0	9	:Media	0	:	1	:~	1	bash	:
 window	0	1	1	:*	bbde,239x62,0,0,1
 window	0	2	0	:-	bbdf,239x62,0,0,2
 window	0	3	0	:	bbe0,239x62,0,0,3

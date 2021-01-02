@@ -1,4 +1,8 @@
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+[init]
+	defaultBranch = master
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 [core]
   abbrev = 12
   attributesfile = ~/.config/git/gitattributes
@@ -68,6 +72,10 @@
   recurseSubmodules = on-demand
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+[pull]
+  rebase = false
+  
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 [user]
   useConfigOnly = true
 
@@ -91,5 +99,4 @@
   path = ~/.config/local/gitconfig.local
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-[pull]
-  rebase = false
+#end

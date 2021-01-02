@@ -16,8 +16,25 @@ l   = log --pretty=custom                   # Show custom log.
 lc  = shortlog --email --numbered --summary # List contributors.
 p   = push
 r   = rebase
-s   = status
 w   = instaweb --httpd=webrick              # Start web-based visualizer.
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+s = "!f(){ git status; };f"
+
+#s = "!f() { \
+#  if [ $(git status | grep clean >/dev/null 2>&1) ]; then \
+#    echo -e \"\033[0;31m\t\tThere are changes pending\n\033[0m\" \
+#  else \
+#    echo -e \"\033[0;32m\t\tThere is nothing to commit\n\033[0m\" \
+#  fi \
+#; }; f"
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+new = "!f(){ git init && git symbolic-ref HEAD refs/heads/main; };f"
+update = "!f(){ git checkout master; git branch -m master main; git fetch; git branch --unset-upstream; git branch -u origin/main; };f"
+master2main = "!f(){ git branch -m master main; git checkout main; git push -u origin main; git push origin --delete master; };f"
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -36,7 +53,8 @@ smsa = "!f() { git submodule foreach 'git fetch origin --tags; git checkout mast
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # emojify git log
 
-emj = "!f() { git log --oneline --color | emojify | less -r;  }; f"
+emj = "!f() { git log --color | emojify ;  }; f"
+log = "!f() { git log --graph --abbrev-commit --decorate --date=relative --format=format:'%C(red)%h%C(r) —— %C(bold blue)%an%C(r): %C(white)%s%C(r) %C(dim white) %C(bold green)(%ar)%C(r) %C(bold yellow)%d%C(r)' --all ;} f"
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Find commits by source code.
@@ -80,37 +98,37 @@ credit-co-author = "!f() { if [ -n \"$1\" ] && [ -n \"$2\" ]; then GIT_EDITOR=\"
 lrb = "!f() { remote="${1:-origin}"; git ls-remote --heads "$remote"; }; f"
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-# Clone repo from github.
+# github repos (Requires my scripts to be installed).
 
-ghc = "!f() { gitadmin ghc "$1" ; }; f"
-ghr = "!f() { gitadmin ghc "$1" ; }; f"
-ghm = "!f() { gitadmin ghc "$1" ; }; f"
-
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-# Clone repo from gitlab.
-
-glc = "!f() { gitadmin glc "$1" ; }; f"
-glr = "!f() { gitadmin glc "$1" ; }; f"
-glm = "!f() { gitadmin glc "$1" ; }; f"
+ghm = "!f() { gitadmin github init "$1" ; }; f"
+ghc = "!f() { gitadmin github clone "$1" ; }; f"
+ghr = "!f() { gitadmin github remote "$1" ; }; f"
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-# Clone repo from a private git.
+# gitlab repos (Requires my scripts to be installed).
 
-gpc = "!f() { gitadmin gpc "$1" ; }; f"
-gpr = "!f() { gitadmin gpc "$1" ; }; f"
-glm = "!f() { gitadmin gpc "$1" ; }; f"
+glm = "!f() { gitadmin gitlab init "$1" ; }; f"
+glc = "!f() { gitadmin gitlab clone "$1" ; }; f"
+glr = "!f() { gitadmin gitlab remote "$1" ; }; f"
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-# Create new site from theme.
+# private repos (Requires my scripts to be installed).
+
+glm = "!f() { gitadmin private init "$1" ; }; f"
+gpc = "!f() { gitadmin private clone "$1" ; }; f"
+gpr = "!f() { gitadmin private remote "$1" ; }; f"
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# Create new site from theme (Requires my scripts to be installed).
 
 newsite = "!f() { gitadmin newsite "$1" ; }; f"
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-# generate gitignore
+# generate gitignore (Requires my scripts to be installed).
 
-gi = "!f() { IFS=","; curl -L -s "https://www.gitignore.io/api/$*" | tee .gitignore ; }; f"
-ignore = "!f() { IFS=","; curl -L -s "https://www.gitignore.io/api/$*" | tee .gitignore ; }; f"
+gi = "!f() { gitignore "$@" ; }; f"
+ignore = "!f() { gitignore "$@" ; }; f"
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Merge GitHub pull request on top of the current branch or,
@@ -131,9 +149,9 @@ mpr = "!f() { \
 }; f"
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-# Setup a new repo and add files to it
+# Setup a new repo and add files to it (Requires my scripts to be installed).
 
-setup = !"f() { gitadmin setup ; }; f"
+setup = !"f() { gitadmin setup "$@" ; }; f"
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # chart: show a summary chart of activity per author.

@@ -1,62 +1,62 @@
 # CD Aliases
-alias ..="cd .." #cd fix
-alias ...="cd ../.." #cd fix
-alias ....="cd ../../.." #cd fix
-alias cd..="cd .." #cd fix
+alias ..="cd .."                                #cd fix
+alias ...="cd ../.."                            #cd fix
+alias ....="cd ../../.."                        #cd fix
+alias cd..="cd .."                              #cd fix
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 # System Aliases
-alias q="exit" #vim
-alias :q="exit" #vim
-alias :q!="exit" #vim
-alias c="clear" #clear screen
-alias e="/usr/bin/vim --" #
-alias g="git" #git
-alias ll="ls -l" #ls list
-alias la="ls -a" #ls all
-alias m="man" #man page
-alias map="xargs -n1" #map
-alias n="npm" #npm
-alias t="tmux" #tmux
-alias tailf="tail -f" #tail follow
-alias ipconfig="ifconfig" #windows fix
-alias systemctl="sudo systemctl" #always sudo systemctl
-alias mount='mount -l' #mount lists
-alias h='history' #show history
-alias j='jobs -l' #list background jobs
-alias now='date +"%T"' #time now
-alias nowtime=now #alias for now
-alias nowdate='date +"%m-%d-%Y"' #todays date
-alias wget='wget -c' #wget continue
-alias df='df -H' #
-alias du='du -ch' #disk usuage
-alias docker='sudo docker' #start docker with sudo
-alias dockerrun='sudo docker run --rm --network host -it $1' #run temporary
-alias setver='date +"%m%d%Y%H%M-git"' #my versioning to console
-alias setverfile='date +"%m%d%Y%H%M-git" > version.txt' #my versioning to file
-alias dotfilesskel="cp -Rfa /etc/skel/. "$HOME"/ 2>/dev/null" #Update from /etc/skel
-alias ssh="ssh -X" #ssh with display
-alias userlist="cut -d: -f1 /etc/passwd" #list system users
-alias mutt="neomutt" #neomutt email
+alias q="exit"                                  #vim
+alias :q="exit"                                 #vim
+alias :q!="exit"                                #vim
+alias c="clear"                                 #clear screen
+alias e="/usr/bin/vim --"                       #
+alias g="git"                                   #git
+alias ll="ls -l"                                #ls list
+alias la="ls -a"                                #ls all
+alias m="man"                                   #man page
+alias map="xargs -n1"                           #map
+alias n="npm"                                   #npm
+alias t="tmux"                                  #tmux
+alias tailf="tail -f"                           #tail follow
+alias ipconfig="ifconfig"                       #windows fix
+alias systemctl="sudo systemctl"                #always sudo systemctl
+alias mount='mount -l'                          #mount lists
+alias h='history'                               #show history
+alias j='jobs -l'                               #list background jobs
+alias now='date +"%T"'                          #time now
+alias nowtime=now                               #alias for now
+alias nowdate='date +"%m-%d-%Y"'                #todays date
+alias wget='wget -c'                            #wget continue
+alias df='df -H'                                #
+alias du='du -ch'                               #disk usuage
+alias docker='sudo docker'                      #start docker with sudo
+alias dockerrun='sudo docker run --rm --network host -it $1'    #run temporary
+alias setver='date +"%m%d%Y%H%M-git"'                           #my versioning to console
+alias setverfile='date +"%m%d%Y%H%M-git" > version.txt'         #my versioning to file
+alias dotfilesskel="cp -Rfa /etc/skel/. "$HOME"/ 2>/dev/null"   #Update from /etc/skel
+alias ssh="ssh -X"                              #ssh with display
+alias userlist="cut -d: -f1 /etc/passwd"        #list system users
+alias mutt="neomutt"                            #neomutt email
 alias lynx="lynx -cfg=$HOME/.config/lynx/lynx.cfg -lss=$HOME/.config/lynx/lynx.lss"
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 #Set vim as default
-alias vi="/usr/local/bin/vim" #vim
-alias vim="/usr/local/bin/vim" #vim
-alias svi="sudo /usr/local/bin/vim" #start vim with sudo
-alias vis="/usr/local/bin/vim +set si" #
+alias vi="/usr/bin/vim"                        #vim
+alias vim="/usr/bin/vim"                       #vim
+alias svi="sudo /usr/bin/vim"                  #start vim with sudo
+alias vis="/usr/bin/vim +set si"               #
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 #Set neovim
-alias nvim="/usr/local/bin/nvim -u $HOME/.config/neovim/init.vim"
+alias nvim="/usr/bin/nvim -u $HOME/.config/neovim/init.vim"
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Lock screen.
-alias afk="gnome-screensaver-command --lock" #lock screen
+alias afk="gnome-screensaver-command --lock"    #lock screen
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -79,7 +79,7 @@ alias ytstream="ytstream "
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 # Empty trash.
-alias empty-trash="rm -rf ~/.local/share/Trash/files/*" #Delete old files
+alias empty-trash="rm -rf ~/.local/share/Trash/files/*"  #Delete old files
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -106,4 +106,13 @@ alias adb="sudo adb"
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
+#Fun alias
+alias tw="rainbowstream -iot"
+alias twitter="twitter"
+alias mylatlong="mylocation | grep -E 'LAT|LON'"
+alias emj="emojis"
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
 # vi: ts=4 noai
+
