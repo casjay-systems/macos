@@ -165,7 +165,8 @@ if [ -z "$GIT" ] || [ -z "$CURL" ] || [ -z "$WGET" ] || [ -z "$VIM" ] || [ -z "$
   printf "\n${RED}  *** • Attempting to install the missing package[s]• ***${NC}\n\n"
   if (sudo true && sudo -ln) 2>&1 | grep -v 'may not' >/dev/null; then
     if [ -z "$BREW" ]; then
-      bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+      sudo xcode-select --install
+      sudo bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
     fi
     sudo brew install -f ${MISSING} >/dev/null 2>&1 >/dev/null 2>&1
   else
