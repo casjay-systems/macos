@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-echo "$(dirname "${BASH_SOURCE[0]}")"
+
 cd "$(dirname "${BASH_SOURCE[0]}")" && . "../../../utils.sh"
   
 # Define taps
@@ -18,13 +18,13 @@ CASKS+="authy darktable nextcloud brackets iterm2 terminology vlc postman lastpa
 
 # install
 for tap in $TAPS; do
-  execute "brew tap $tap" "Setting up $tap"
+  execute "brew tap $tap" "Setting up $tap" && echo ""
 done
 
 for brew in $BREW; do
-  execute "brew install -f $brew" "Setting up $brew"
+  execute "brew install -f $brew" "Setting up $brew" && echo ""
 done
 
 for cask in $CASKS; do
-  execute "brew install --cask -f $cask" "Setting up $cask"  
+  execute "brew install --cask -f $cask" "Setting up $cask" && echo ""
 done
