@@ -113,6 +113,7 @@ install_plugins() {
 }
 
 install_settings() {
+  mkdir -p "$HOME/Library/Application Support/Code/User"
   declare -r FILE_PATH="$HOME/Library/Application Support/Code/User/settings.json"
   declare -r CONFIGS="
 {
@@ -300,13 +301,16 @@ install_settings() {
 }
 "
   #
-  isInFile=$(cat "$FILE_PATH" | grep -c "shellcheck.exclude")
-  if [ $isInFile -eq 0 ]; then
+  if [ -f "$FILE_PATH" ]; then
+    isInFile=$(cat "$FILE_PATH" | grep -c "shellcheck.exclude")
+    if [ $isInFile -eq 0 ]; then
 
-    execute \
-      "printf '%s' '$CONFIGS' >$FILE_PATH" \
-      "settings.json → $FILE_PATH"
+      execute \
+        "printf '%s' '$CONFIGS' >$FILE_PATH" \
+        "settings.json → $FILE_PATH"
+    fi
   fi
+
 }
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
