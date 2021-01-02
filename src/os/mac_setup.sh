@@ -1,8 +1,19 @@
 #!/usr/bin/env bash
 
+export dotfilesDirectory="$HOME/.local/dotfiles/desktops"
+export srcdir="$dotfilesDirectory/src"
+export macosdir="$srcdir/os/mac"
+
 export HOMEBREW_INSTALL_BADGE="☕️ 🐸"
 export HOMEBREW_CASK_OPTS="--appdir=/Applications"
 export PATH="/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin:$PATH"
+
+##### for when I'm forgetful
+if [ -z $dotfilesDirectory ]; then printf "\n${RED}  *** dotfiles directory not specified ***${NC}\n"; fi
+if [ -z $srcdir ]; then printf "\n${RED}  *** dotfiles src directory not specified ***${NC}\n"; fi
+if [ -z $macosdir ]; then printf "\n${RED}  *** dotfiles macos directory not specified ***${NC}\n"; fi
+#####
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 # Define colors
 PURPLE='\033[0;35m'
@@ -84,19 +95,6 @@ while [[ ${temp_cnt} -gt 0 ]]; do
   ((temp_cnt--))
 done
 printf "${NC}\n\n"
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-# Dependency check
-
-dotfilesDirectory="$HOME/.local/dotfiles/desktops"
-srcdir="$dotfilesDirectory/src"
-macosdir="$srcdir/os/mac"
-
-##### for when I'm forgetful
-if [ -z $dotfilesDirectory ]; then printf "\n${RED}  *** dotfiles directory not specified ***${NC}\n"; fi
-if [ -z $srcdir ]; then printf "\n${RED}  *** dotfiles src directory not specified ***${NC}\n"; fi
-if [ -z $macosdir ]; then printf "\n${RED}  *** dotfiles macos directory not specified ***${NC}\n"; fi
-#####
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 GIT=$(command -v git 2>/dev/null)
