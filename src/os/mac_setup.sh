@@ -313,7 +313,7 @@ if [ -z "$FISH" ]; then print_in_red "\n • The fish package is not installed\n
 fi
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-if [ -f "$(command -v pip 2>/dev/null) "]; then
+if [ -f "$(command -v pip 2>/dev/null) " ]; then
   if [ -z "$(command -v shodan 2>/dev/null)" ] || [ -z "$(command -v ytmdl 2>/dev/null)" ] || [ -z "$(command -v toot 2>/dev/null)" ] ||
     [ -z "$(command -v castero 2>/dev/null)" ] || [ -z "$(command -v rainbowstream 2>/dev/null)" ]; then
     print_in_purple "\n • Installing terminal tools\n"
