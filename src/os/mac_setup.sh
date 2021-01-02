@@ -43,6 +43,12 @@ GREEN='\033[32m'
 NC='\033[0m'
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
+if [[ ! "$OSTYPE" =~ ^darwin ]]; then
+  printf "\n\t\t${RED} This script is for MacOS\n\n"
+  exit 1
+fi
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
 # Grab the OS detection script if it doesn't exist script
 
 if [ -f "$srcdir/os/osdetect.sh" ] && [ -f "$srcdir/os/utils.sh" ]; then

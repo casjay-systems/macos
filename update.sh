@@ -8,6 +8,11 @@ blue='\e[1;34m%s\e[0m\n'
 magenta='\e[1;35m%s\e[0m\n'
 cyan='\e[1;36m%s\e[0m\n'
 
+if [[ ! "$OSTYPE" =~ ^darwin ]]; then
+  printf "\n\t\t${RED} This script is for MacOS\n\n"
+  exit 1
+fi
+
 #clear vars
 NEWVERSION=""
 OLDVERSION=""
