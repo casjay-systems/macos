@@ -18,16 +18,13 @@ CASKS+="authy darktable nextcloud brackets iterm2 terminology vlc postman lastpa
 
 # install
 for tap in $TAPS; do
-  echo ""
   execute "brew tap $tap" "Setting up $tap"
 done
 
 for brew in $BREW; do
-  echo ""
   execute "brew install -f $brew" "Setting up $brew"
 done
 
 for cask in $CASKS; do
-  echo ""
   execute "brew install --cask -f $cask" "Setting up $cask"
 done

@@ -11,7 +11,6 @@ customizedir="$(cd ../../customize && pwd)"
 
 create_user_shortcuts() {
 
-  echo ""
   execute \
     "ln -sf $(command -v gdircolors) ~/.local/bin/dircolors" \
     "Creating dircolors"
@@ -27,7 +26,6 @@ create_fonts() {
     mv -f ~/Library/Fonts ~/Library/Fonts.old
   fi
 
-  echo ""
   execute \
     "ln -sf $customizedir/fonts ~/Library/Fonts" \
     "$customizedir/fonts → ~/Library/Fonts"

@@ -110,6 +110,34 @@ backup_confsymlinks() {
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
+backup_librarysymlinks() {
+
+  local i=""
+  local sourceFile=""
+  local targetFile=""
+  local skipQuestions=true
+
+  skip_questions "$@" &&
+    skipQuestions=true
+
+  for i in "${LIBRARYFILES_TO_SYMLINK[@]}"; do
+    sourceFile="$srcdir/Library⁩/$i"
+    targetFile="$HOME/Library⁩/$i"
+    nameFile="$(printf "%s" "$i" | sed "s/.*\/\(.*\)/\1/g")"
+
+    if [ -f $targetFile ] || [ -d $targetFile ] && [ ! -L $targetFile ]; then
+      echo ""
+      execute \
+        "rsync -aq $targetFile/. $backups/Library⁩/$nameFile >/dev/null 2>&1 || true" \
+        "Backing up $targetFile → $backups/Library⁩/$nameFile"
+    fi
+
+  done
+
+}
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
 create_symlinks() {
   print_in_purple "\n • Create file symlinks\n"
   local i=""
@@ -163,14 +191,51 @@ create_confsymlinks() {
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
+create_librarysymlinks() {
+
+  local i=""
+  local sourceFile=""
+  local targetFile=""
+  local skipQuestions=true
+
+  skip_questions "$@" &&
+    skipQuestions=true
+
+  for i in "${LIBRARYFILES_TO_SYMLINK[@]}"; do
+    sourceFile="$srcdir/Library/$i"
+    targetFile="$HOME/Library/$i"
+    mkdir -p ${targetFile%/*}
+    rm -Rf $targetFile
+
+    if [ ! -e "$targetFile" ]; then
+
+      echo ""
+      execute \
+        "ln -sf $sourceFile $targetFile" \
+        "$targetFile → $sourceFile"
+
+    elif [ "$(readlink "$targetFile")" == "$sourceFile" ]; then
+      print_success "$targetFile → $sourceFile"
+
+    else
+      print_error "$targetFile → $sourceFile"
+
+    fi
+
+  done
+
+}
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 main() {
 
   backup_symlinks "$@"
   backup_confsymlinks "$@"
+  backup_librarysymlinks "$@"
   create_symlinks "$@"
   create_confsymlinks "$@"
-
+  create_librarysymlinks "$@"
 }
 
 main "$@"
-unset main backups
+unset main

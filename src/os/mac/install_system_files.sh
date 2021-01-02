@@ -16,7 +16,6 @@ if (sudo -vn && sudo -ln) 2>&1 | grep -v 'may not' >/dev/null; then
 
   pip3_install() {
 
-    echo ""
     execute \
       "sudo -H python3 -mpip install neovim powerline-status && \
       sudo -H python3 -mpip install cpython && \
@@ -33,7 +32,6 @@ if (sudo -vn && sudo -ln) 2>&1 | grep -v 'may not' >/dev/null; then
 
   create_fonts() {
 
-    echo ""
     execute \
       "sudo cp -Rf $customizedir/fonts/* /Library/Fonts/ && \
       sudo touch /Library/Fonts/.dfinst" \

@@ -205,7 +205,6 @@ printf "\n${PURPLE} • Setting up the git repo - $dotfilesDirectory${NC}\n"
 if [ -d $dotfilesDirectory/.git ]; then
   cd "$srcdir/os" && source "utils.sh"
 
-  echo ""
   execute \
     "cd $dotfilesDirectory && \
   git pull --recurse-submodules -fq && \
@@ -403,8 +402,7 @@ fi
 # run clean up
 print_in_purple "\n • Running cleanup\n"
 if (sudo true && sudo -ln) 2>&1 | grep -v 'may not' >/dev/null; then
-  echo ""
-#    execute \
+  #    execute \
 #    "sudo echo "" \
 #    "Clean up"
 fi

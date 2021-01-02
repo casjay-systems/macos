@@ -15,7 +15,6 @@ fi
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 create_directories() {
-  echo ""
   declare -a DIRECTORIES=(
     "$HOME/.config"
     "$HOME/.config/local"
