@@ -59,6 +59,7 @@ declare -a LIBRARYFILES_TO_SYMLINK=(
   "Preferences/.GlobalPreferences.plist"
   "Preferences/com.apple.Terminal.plist"
   "Preferences/com.apple.finder.plist"
+  "Preferences/org.m0k.transmission.plist"
 
 )
 

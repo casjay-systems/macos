@@ -20,8 +20,10 @@ create_directories() {
     "$HOME/.config/local"
     "$HOME/.local/bin"
     "$HOME/Projects"
-    "$HOME/Downloads/torrents"
     "$HOME/Library/Fonts"
+    "$HOME/Downloads/torrents"
+    "$HOME/Downloads/torrents/Complete"
+    "$HOME/Downloads/torrents/Incomplete"
 
   )
 
