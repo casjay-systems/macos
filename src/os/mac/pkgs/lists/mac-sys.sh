@@ -12,8 +12,8 @@ BREW+="mpd ncmpcpp newsboat pass editorconfig tmux screen hub zsh fish zsh-compl
 BREW+="ruby php perl nodejs golang nvm youtube-dl direnv wget curl iproute2mac powerline-go dict "
 
 #Define brew casks apps
-CASKS="font-ubuntu font-powerline-symbols font-powerline-symbols visual-studio-code firefox atom obs "
-CASKS+="powershell libreoffice transmission gpg-suite opera brave-browser tor-browser thunderbird skype "
+CASKS="font-ubuntu font-powerline-symbols visual-studio-code firefox atom obs powershell "
+CASKS+="libreoffice transmission gpg-suite opera brave-browser tor-browser thunderbird skype "
 CASKS+="authy darktable nextcloud brackets iterm2 terminology vlc postman lastpass spectacle alfred the-unarchiver "
 
 # install
