@@ -126,7 +126,6 @@ backup_librarysymlinks() {
     nameFile="$(printf "%s" "$i" | sed "s/.*\/\(.*\)/\1/g")"
 
     if [ -f $targetFile ] || [ -d $targetFile ] && [ ! -L $targetFile ]; then
-      echo ""
       execute \
         "rsync -aq $targetFile/. $backups/Library⁩/$nameFile >/dev/null 2>&1 || true" \
         "Backing up $targetFile → $backups/Library⁩/$nameFile"
@@ -209,7 +208,6 @@ create_librarysymlinks() {
 
     if [ ! -e "$targetFile" ]; then
 
-      echo ""
       execute \
         "ln -sf $sourceFile $targetFile" \
         "$targetFile → $sourceFile"
