@@ -189,11 +189,9 @@ if [ -z $UPDATE ]; then
     # MacOS setup
     printf "\n${PURPLE} • Setting up for MacOS $get_os_version ${NC}\n\n"
     if [[ ! -f /usr/local/Homebrew/.srcinstall ]]; then
-      echo ""
-      execute \
-        "$macosdir/pkgs/lists/mac-sys.sh 2> /dev/null &&
-        sudo touch /usr/local/Homebrew/.srcinstall" \
-        "Installing Packages..... This May take awhile please be patient... Possibly 20+ Minutes"
+      printf "This May take awhile please be patient..."
+      printf "Possibly 20+ Minutes"
+      source $macosdir/pkgs/lists/mac-sys.sh && touch /usr/local/Homebrew/.srcinstall
     fi
     printf "${PURPLE}\n • Done Setting up for the Mac${NC}\n\n"
   fi
