@@ -91,9 +91,9 @@ if (sudo -vn && sudo -ln) 2>&1 | grep -v 'may not' >/dev/null; then
   printf "\n${RED}  • Getting root privileges •${NC}\n" &&
     ask_for_sudo
   if [ "$?" -eq 0 ]; then
-    printf "${GREEN}  • Received root privileges •${NC}\n\n"
+    printf "${GREEN}  • Received root privileges •${NC}\n"
   else
-    printf "${GREEN}  • Can not get access to sudo •${NC}\n\n"
+    printf "${GREEN}  • Can not get access to sudo •${NC}\n"
     exit 1
   fi
 else
