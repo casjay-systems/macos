@@ -168,12 +168,20 @@ if [[ ! "$BREW" ]]; then MISSING="$MISSING brew"; fi
 if [ -z "$GIT" ] || [ -z "$CURL" ] || [ -z "$WGET" ] || [ -z "$VIM" ] || [ -z "$TMUX" ] || [ -z "$ZSH" ] || [ -z "$FISH" ] || [ -z "$SUDO" ] || [ -z "$BREW" ]; then
   printf "\n${RED}  *** • The following are needed: • ***${NC}\n"
   printf "\n${RED}  *** • ${MISSING} • ***${NC}\n"
-  printf "\n${RED}  *** • Attempting to install the missing package[s]• ***${NC}\n\n"
+  printf "\n${RED}  *** • Attempting to install the missing package[s] • ***${NC}\n\n"
   if (sudo true && sudo -ln) 2>&1 | grep -v 'may not' >/dev/null; then
     if [ -z "$BREW" ]; then
-      /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" || exit "$?"
+      /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+      if [ "$?" -ne 0 ]; then
+        printf "\n${RED}  *** • brew setup has failed• ***${NC}\n\n"
+        exit "$?"
+      fi
     fi
-    sudo brew install -f ${MISSING} >/dev/null 2>&1 >/dev/null 2>&1 || exit "$?"
+    sudo brew install -f ${MISSING} >/dev/null 2>&1 >/dev/null 2>&1
+    if [ "$?" -ne 0 ]; then
+      printf "\n${RED}  *** • brew setup has failed• ***${NC}\n\n"
+      exit "$?"
+    fi
   else
     printf "${RED}  *** • I can't get root access You will have to manually install the missing programs • ***${NC}\n"
     printf "${RED}  *** • ${MISSING} • ***${NC}\n\n\n"
