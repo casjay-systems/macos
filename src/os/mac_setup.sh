@@ -149,7 +149,7 @@ if [ -d $dotfilesDirectory/.git ]; then
     "cd $dotfilesDirectory && \
   git pull --recurse-submodules -fq && \
   cd "$HOME"" \
-    "Updating dotfiles"
+    "Updating $dotfilesDirectory"
   NEWVERSION="$(echo $(cat $dotfilesDirectory/version.txt | tail -n 1))"
   REVER="$(cd $dotfilesDirectory && git rev-parse --short HEAD)"
   printf "${GREEN}   [✔] Updated to $NEWVERSION - revision: $REVER${NC}\n\n"
