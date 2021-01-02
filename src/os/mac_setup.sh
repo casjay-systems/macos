@@ -44,7 +44,7 @@ NC='\033[0m'
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 if [[ ! "$OSTYPE" =~ ^darwin ]]; then
-  printf "\n\t\t${RED} This script is for MacOS${NC}\n\n"
+  printf "\n\t\t${RED} This script is for MacOS ${NC}\n\n"
   exit 1
 fi
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
