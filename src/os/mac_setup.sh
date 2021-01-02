@@ -388,7 +388,7 @@ if [ ! -f "$HOME"/.config/dotfiles/env ]; then
   echo "UPDATE="yes"" >>"$HOME"/.config/dotfiles/env
   echo "dotfilesDirectory="$dotfilesDirectory"" >>"$HOME"/.config/dotfiles/env
   echo "srcdir="$dotfilesDirectory/src"" >>"$HOME"/.config/dotfiles/env
-  echo "macosdir="$srcdir/os/macos"" >>"$HOME"/.config/dotfiles/env
+  echo "macosdir="$srcdir/os/mac"" >>"$HOME"/.config/dotfiles/env
   echo "INSTALLEDVER="$NEWVERSION"" >>"$HOME"/.config/dotfiles/env
   echo "DISTRO="$DISTRO"" >>"$HOME"/.config/dotfiles/env
   echo "CODENAME="$CODENAME"" >>"$HOME"/.config/dotfiles/env
