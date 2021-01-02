@@ -173,13 +173,13 @@ if [ -z "$GIT" ] || [ -z "$CURL" ] || [ -z "$WGET" ] || [ -z "$VIM" ] || [ -z "$
     if [ -z "$BREW" ]; then
       /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
       if [ "$?" -ne 0 ]; then
-        printf "\n${RED}  *** • brew setup has failed• ***${NC}\n\n"
+        printf "\n${RED}  *** • brew setup has failed • ***${NC}\n\n"
         exit "$?"
       fi
     fi
     sudo brew install -f ${MISSING} >/dev/null 2>&1
     if [ "$?" -ne 0 ]; then
-      printf "\n${RED}  *** • brew setup has failed• ***${NC}\n\n"
+      printf "\n${RED}  *** • brew setup has failed • ***${NC}\n\n"
       exit "$?"
     fi
   else
