@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 brew tap homebrew/cask-fonts
-brew install -f git fortune cowsay neofetch coreutils fish bash zsh bash-completion@2 rsync
+brew install -f git svn fortune cowsay neofetch coreutils fish bash zsh bash-completion@2 rsync
 brew install -f mpd ncmpcpp newsboat pass editorconfig tmux screen hub zsh fish zsh-completions
 brew install -f ruby php perl nodejs golang nvm youtube-dl direnv wget curl iproute2mac powerline-go
 brew install -f nano neovim macvim emacs thefuck fnm
