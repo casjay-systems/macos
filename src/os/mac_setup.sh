@@ -195,7 +195,7 @@ fi
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Set version from git
 
-CURDOTFVERSION="$(echo $(curl -Lsq https://github.com/casjay-systems/macos/raw/master/version.txt | grep -v "#" | tail -n 1))"
+CURDOTFVERSION="$(echo $(curl -Lsq https://github.com/casjay-systems/macos/raw/master/version.txt | grep -v "#" | head -n 1))"
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Print distro info
