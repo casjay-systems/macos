@@ -12,8 +12,41 @@ GREEN='\033[32m'
 NC='\033[0m'
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-if [ -f "$HOME"/.config/dotfiles/env ]; then
-  source "$HOME"/.config/dotfiles/env
+# Grab the OS detection script if it doesn't exist script
+
+if [ -f "$srcdir/os/osdetect.sh" ] && [ -f "$srcdir/os/utils.sh" ]; then
+  source "$srcdir/os/utils.sh"
+  source "$srcdir/os/osdetect.sh"
+else
+  curl -Lsq "https://$GITREPO/raw/master/src/os/utils.sh" -o /tmp/utils.sh
+  curl -Lsq "https://$GITREPO/raw/master/src/os/osdetect.sh" -o /tmp/osdetect.sh
+  if [ -f "/tmp/osdetect.sh" ] && [ -f "/tmp/utils.sh" ]; then
+    source /tmp/utils.sh
+    source /tmp/osdetect.sh
+    rm -Rf /tmp/utils.sh /tmp/osdetect.sh
+  else
+    clear
+    printf "\n\n\n\n${BLUE}Could not source the files needed${NC}\n\n\n\n"
+    exit 1
+  fi
+fi
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+if [[ "$(python3 -V 2>/dev/null)" =~ "Python 3" ]]; then
+  PYTHONVER="python3"
+  PIP="pip3"
+  export PATH="${PATH}:$(python3 -c 'import site; print(site.USER_BASE)')/bin"
+elif [[ "$(python2 -V 2>/dev/null)" =~ "Python 2" ]]; then
+  PYTHONVER="python"
+  PIP="pip"
+  export PATH="${PATH}:$(python -c 'import site; print(site.USER_BASE)')/bin"
+fi
+
+##################################################################################################
+
+if [ -f "$HOME/.config/dotfiles/env" ]; then
+  source "$HOME/.config/dotfiles/env"
 fi
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -23,7 +56,19 @@ fi
 clear                                                                                             #
 printf "\n\n\n\n\n   ${BLUE}      *** Initializing the installer please wait *** ${NC} \n\n\n\n " #
 ####################################################################################################
-
+if (sudo -vn && sudo -ln) 2>&1 | grep -v 'may not' >/dev/null; then
+  printf "\n${RED}  • Getting root privileges •${NC}\n" &&
+    ask_for_sudo
+  if [ "$?" -eq 0 ]; then
+    printf "${GREEN}  • Received root privileges •${NC}\n\n"
+  else
+    printf "${GREEN}  • Can not get access to sudo •${NC}\n\n"
+    exit 1
+  fi
+else
+  printf "${GREEN}  • Can not get access to sudo •${NC}\n\n"
+  exit 1
+fi
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 # Welcome message
