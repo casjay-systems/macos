@@ -402,6 +402,12 @@ fi
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
+# homebrew settings
+export HOMEBREW_INSTALL_BADGE="☕️ 🐸"
+export HOMEBREW_CASK_OPTS="--appdir=/Applications"
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
 # cursor
 
 echo -e -n "\x1b[\x35 q"
