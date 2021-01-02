@@ -43,7 +43,7 @@ That's it! :sparkles:
 The setup process will:
 
 * Download the dotfiles on your computer (by default it will
-  suggest `~/.local/dotfiles`)
+  suggest `~/.local/dotfiles/macos`)
 * Create some additional [directories][directories]
 * [Symlink][symlink] the
   [`git`](tree/master/src/git),
