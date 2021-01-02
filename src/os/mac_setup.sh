@@ -26,7 +26,7 @@ export macosdir="$srcdir/os/mac"
 
 export HOMEBREW_INSTALL_BADGE="☕️ 🐸"
 export HOMEBREW_CASK_OPTS="--appdir=/Applications"
-export SUDO_PROMPT="$(printf "\033[1;36m")           • [sudo]$(printf "\033[0m") password for %p: "
+export SUDO_PROMPT="$(printf "\033[1;36m")  • [sudo]$(printf "\033[0m") password for %p: "
 
 ##### for when I'm forgetful
 if [ -z $dotfilesDirectory ]; then printf "\n${RED}  *** dotfiles directory not specified ***${NC}\n"; fi
@@ -165,7 +165,7 @@ if [ -z "$GIT" ] || [ -z "$CURL" ] || [ -z "$WGET" ] || [ -z "$VIM" ] || [ -z "$
   printf "\n${RED}  *** • Attempting to install the missing package[s]• ***${NC}\n\n"
   if (sudo true && sudo -ln) 2>&1 | grep -v 'may not' >/dev/null; then
     if [ -z "$BREW" ]; then
-      sudo bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+      bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
     fi
     sudo brew install -f ${MISSING} >/dev/null 2>&1 >/dev/null 2>&1
   else
