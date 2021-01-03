@@ -10,7 +10,7 @@ language: shell
 
 install:
   - bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
-  - bash -c "$(curl -LsS https://github.com/casjay-systems/macos/raw/master/install.sh)"
+  - bash -c "$HOME/.local/dotfiles/macos/src/os/mac_setup.sh --force"
 
 notifications:
   email:

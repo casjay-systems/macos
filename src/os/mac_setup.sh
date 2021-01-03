@@ -168,7 +168,7 @@ if [ -z "$GIT" ] || [ -z "$CURL" ] || [ -z "$WGET" ] || [ -z "$VIM" ] || [ -z "$
   printf "\n${RED}   *** • The following are needed: • ***${NC}\n"
   printf "${RED}   *** • ${MISSING} • ***${NC}\n"
   if (sudo true && sudo -ln) 2>&1 | grep -v 'may not' >/dev/null; then
-    execute "brew install -f ${MISSING}" "Attempting to install the missing package[s]"
+    execute "brew install -f $MISSING" "Attempting to install the missing package[s]"
   else
     printf "${RED}   *** • I can't get root access You will have to manually install the missing programs • ***${NC}\n"
     printf "${RED}   *** • ${MISSING} • ***${NC}\n\n\n"
