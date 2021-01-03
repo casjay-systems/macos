@@ -35,7 +35,7 @@ brew_packages() {
 
 main() {
 
-  create_directories
+  brew_packages
 
 }
 
