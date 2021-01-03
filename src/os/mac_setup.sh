@@ -29,9 +29,9 @@ export HOMEBREW_CASK_OPTS="--appdir=/Applications"
 export SUDO_PROMPT="$(printf "\033[1;36m")  • [sudo]$(printf "\033[0m") password for %p: "
 
 ##### for when I'm forgetful
-if [ -z $dotfilesDirectory ]; then printf "\n${RED}  *** dotfiles directory not specified ***${NC}\n"; fi
-if [ -z $srcdir ]; then printf "\n${RED}  *** dotfiles src directory not specified ***${NC}\n"; fi
-if [ -z $macosdir ]; then printf "\n${RED}  *** dotfiles macos directory not specified ***${NC}\n"; fi
+if [ -z $dotfilesDirectory ]; then printf "\n${RED}   *** dotfiles directory not specified ***${NC}\n"; fi
+if [ -z $srcdir ]; then printf "\n${RED}   *** dotfiles src directory not specified ***${NC}\n"; fi
+if [ -z $macosdir ]; then printf "\n${RED}   *** dotfiles macos directory not specified ***${NC}\n"; fi
 #####
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -44,7 +44,7 @@ NC='\033[0m'
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 if [[ ! "$OSTYPE" =~ ^darwin ]]; then
-  printf "\n\t\t${RED} This script is for MacOS ${NC}\n\n"
+  printf "\n\t\t${RED}   This script is for MacOS ${NC}\n\n"
   exit 1
 fi
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -63,7 +63,7 @@ else
     rm -Rf /tmp/utils.sh /tmp/osdetect.sh
   else
     clear
-    printf "\n\n\n\n${BLUE}Could not source the files needed${NC}\n\n\n\n"
+    printf "\n\n\n\n${BLUE}   Could not source the files needed ${NC}\n\n\n\n"
     exit 1
   fi
 fi
@@ -89,21 +89,21 @@ fi
 
 # Automatic linux install
 ####################################################################################################
-clear                                                                                             #
-printf "\n\n\n\n\n   ${BLUE}      *** Initializing the installer please wait *** ${NC} \n\n\n\n " #
+clear                                                                                       #
+printf "\n\n\n\n\n${BLUE}   *** Initializing the installer please wait *** ${NC} \n\n\n\n " #
 #say 'Initializing the installer please wait!'                                                     #
 ####################################################################################################
 if (sudo -vn && sudo -ln) 2>&1 | grep -v 'may not' >/dev/null; then
-  printf "\n${RED}  • Getting root privileges •${NC}\n" &&
+  printf "\n${RED}   • Getting root privileges •${NC}\n" &&
     ask_for_sudo
   if [ "$?" -eq 0 ]; then
-    printf "${GREEN}  • Received root privileges •${NC}\n"
+    printf "${GREEN}   • Received root privileges •${NC}\n"
   else
-    printf "${GREEN}  • Can not get access to sudo •${NC}\n"
+    printf "${GREEN}   • Can not get access to sudo •${NC}\n"
     exit 1
   fi
 else
-  printf "${GREEN}  • Can not get access to sudo •${NC}\n\n"
+  printf "${GREEN}   • Can not get access to sudo •${NC}\n\n"
   exit 1
 fi
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -112,14 +112,42 @@ fi
 
 wait_time=10 # seconds
 temp_cnt=${wait_time}
-printf "\n\n\n\n\n${GREEN}         *** ${RED}•${GREEN} Welcome to my dotfiles Installer for MacOS ${RED}•${GREEN} ***${NC}\n"
+printf "\n\n\n\n\n${GREEN}   *** ${RED}•${GREEN} Welcome to my dotfiles Installer for MacOS ${RED}•${GREEN} ***${NC}\n"
 while [[ ${temp_cnt} -gt 0 ]]; do
-  printf "\r  ${GREEN}*** ${RED}•${GREEN} You have %2d second(s) remaining to hit Ctrl+C to cancel ${RED}•${GREEN} ***" ${temp_cnt}
+  printf "\r${GREEN}   *** ${RED}•${GREEN} You have %2d second(s) remaining to hit Ctrl+C to cancel ${RED}•${GREEN} ***" ${temp_cnt}
   sleep 1
   ((temp_cnt--))
 done
 printf "${NC}\n\n"
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+if [ ! -f "$(command -v brew)" ]; then
+  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+fi
+
+# no sudo can't continue
+SUDU=$(command -v sudo 2>/dev/null)
+if ! (sudo true && sudo -ln) 2>&1 | grep -v 'may not' >/dev/null; then
+  if [[ -z "$SUDU" ]] && [[ -z "$UPDATE" ]]; then
+    printf "\n${GREEN}   *** ${RED}•${GREEN} UPDATE=yes bash -c "$(curl -LsS https://github.com/casjay-systems/macos/raw/master/src/os/setup.sh)" ${RED}•${GREEN} ***${NC}\n"
+    printf "\n${GREEN}   *** ${RED}•${GREEN} to install just the dotfiles ${RED}•${GREEN} ***${NC}\n"
+    printf "\n${RED}   *** ${RED}•${GREEN} No sudo or root privileges ${RED}•${GREEN} ***${NC}\n\n"
+    exit
+  fi
+fi
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+if [ -z "$UPDATE" ]; then
+  if ! (sudo true && sudo -ln) 2>&1 | grep -v 'may not' >/dev/null; then
+    printf "
+  ${RED}\n   • Please run one of the following commands as root:${NC}
+  ${GREEN}   You can just do${RED} su -c $srcdir/os/mac/pkgs/lists/mac-sys.sh${NC}\n${RED}then come back to this installer ${NC}\n\n"
+    exit
+  fi
+fi
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+# Lets check for git, curl, wget
 
 GIT=$(command -v git 2>/dev/null)
 CURL=$(command -v curl 2>/dev/null)
@@ -131,38 +159,6 @@ FISH=$(command -v fish 2>/dev/null)
 SUDO=$(command -v sudo 2>/dev/null)
 BREW=$(command -v brew 2>/dev/null)
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-if [ ! -f "$(command -v brew)" ]; then
-  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-fi
-if [ ! -f "$(command -v brew)" ]; then
-  printf "${RED}  *** • Failed to install brew • ***${NC}\n"
-  printf "${BLUE}  *** • /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" • ***${NC}\n\n\n"
-  exit 1
-fi
-
-# no sudo can't continue
-SUDU=$(command -v sudo 2>/dev/null)
-if ! (sudo true && sudo -ln) 2>&1 | grep -v 'may not' >/dev/null; then
-  if [[ -z "$SUDU" ]] && [[ -z "$UPDATE" ]]; then
-    printf "\n${GREEN} *** ${RED}•${GREEN} UPDATE=yes bash -c "$(curl -LsS https://github.com/casjay-systems/macos/raw/master/src/os/setup.sh)" ${RED}•${GREEN} ***${NC}\n"
-    printf "\n${GREEN}  *** ${RED}•${GREEN} to install just the dotfiles ${RED}•${GREEN} ***${NC}\n"
-    printf "\n${RED}  *** ${RED}•${GREEN} No sudo or root privileges ${RED}•${GREEN} ***${NC}\n\n"
-    exit
-  fi
-fi
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-if [ -z "$UPDATE" ]; then
-  if ! (sudo true && sudo -ln) 2>&1 | grep -v 'may not' >/dev/null; then
-    printf "
-  ${RED}\n • Please run one of the following commands as root:${NC}
-  ${GREEN}You can just do${RED} su -c $srcdir/os/mac/pkgs/lists/mac-sys.sh${NC}\n${RED}then come back to this installer ${NC}\n\n"
-    exit
-  fi
-fi
-
-# Lets check for git, curl, wget
 unset MISSING
 if [[ ! "$GIT" ]]; then MISSING="$MISSING git"; fi
 if [[ ! "$CURL" ]]; then MISSING="$MISSING curl"; fi
@@ -174,14 +170,20 @@ if [[ ! "$FISH" ]]; then MISSING="$MISSING fish"; fi
 if [[ ! "$SUDO" ]]; then MISSING="$MISSING sudo"; fi
 if [[ ! "$BREW" ]]; then MISSING="$MISSING brew"; fi
 
-if [ -z "$GIT" ] || [ -z "$CURL" ] || [ -z "$WGET" ] || [ -z "$VIM" ] || [ -z "$TMUX" ] || [ -z "$ZSH" ] || [ -z "$FISH" ] || [ -z "$SUDO" ] || [ -z "$BREW" ]; then
-  printf "\n${RED}  *** • The following are needed: • ***${NC}\n"
-  printf "${RED}  *** • ${MISSING} • ***${NC}\n"
+if [ -z "$BREW" ]; then
+  printf "${RED}   *** • Failed to install brew • ***${NC}\n"
+  printf "${BLUE}   *** • /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" • ***${NC}\n\n\n"
+  exit 1
+fi
+
+if [ -z "$GIT" ] || [ -z "$CURL" ] || [ -z "$WGET" ] || [ -z "$VIM" ] || [ -z "$TMUX" ] || [ -z "$ZSH" ] || [ -z "$FISH" ] || [ -z "$SUDO" ]; then
+  printf "\n${RED}   *** • The following are needed: • ***${NC}\n"
+  printf "${RED}   *** • ${MISSING} • ***${NC}\n"
   if (sudo true && sudo -ln) 2>&1 | grep -v 'may not' >/dev/null; then
     execute "brew install -f ${MISSING}" "Attempting to install the missing package[s]"
   else
-    printf "${RED}  *** • I can't get root access You will have to manually install the missing programs • ***${NC}\n"
-    printf "${RED}  *** • ${MISSING} • ***${NC}\n\n\n"
+    printf "${RED}   *** • I can't get root access You will have to manually install the missing programs • ***${NC}\n"
+    printf "${RED}   *** • ${MISSING} • ***${NC}\n\n\n"
     exit
   fi
 fi
@@ -205,9 +207,9 @@ CURDOTFVERSION="$(echo $(curl -Lsq https://github.com/casjay-systems/macos/raw/m
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Print distro info
 
-printf "\n\n${PURPLE}  *** • Your Distro is a Mac and is based on BSD • ***${NC}\n"
-printf "${GREEN}  *** • git, curl, wget, vim, tmux, zsh, fish, sudo are present • ***${NC}\n"
-printf "${GREEN}  *** • Installing version $CURDOTFVERSION • ***${NC}\n"
+printf "\n\n${PURPLE}   *** • Your Distro is a Mac and is based on BSD • ***${NC}\n"
+printf "${GREEN}   *** • git, curl, wget, vim, tmux, zsh, fish, sudo are present • ***${NC}\n"
+printf "${GREEN}   *** • Installing version $CURDOTFVERSION • ***${NC}\n"
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Setup the dotfiles Directory
@@ -249,9 +251,9 @@ find "$HOME"/.gnupg "$HOME"/.ssh -type d -exec chmod 700 {} \; 2>/dev/null
 # Check for then get root permissions
 if [ -z "$UPDATE" ] || [ "$1" = "--force" ]; then
   if (sudo true && sudo -ln) 2>&1 | grep -v 'may not' >/dev/null; then
-    printf "\n${RED} • Getting root privileges${NC}\n"
+    printf "\n${RED}   • Getting root privileges${NC}\n"
     ask_for_sudo
-    printf "${GREEN} • Received root privileges${NC}\n\n"
+    printf "${GREEN}   • Received root privileges${NC}\n\n"
 
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     # Install Packages
@@ -259,97 +261,97 @@ if [ -z "$UPDATE" ] || [ "$1" = "--force" ]; then
     # MacOS setup
     printf "\n${PURPLE} • Setting up for MacOS $get_os_version ${NC}\n"
     if [[ ! -f /usr/local/Homebrew/.srcinstall ]] || [ "$1" = "--force" ]; then
-      printf "${GREEN}  *** • This May take awhile please be patient...${NC}\n"
-      printf "${GREEN}  *** • Possibly 20+ Minutes.. So go have a nice cup of coffee!${NC}\n"
+      printf "${GREEN}   *** • This May take awhile please be patient...${NC}\n"
+      printf "${GREEN}   *** • Possibly 20+ Minutes.. So go have a nice cup of coffee!${NC}\n"
       source "$macosdir/pkgs/lists/mac-sys.sh"
     fi
-    printf "\n${PURPLE} • Done Setting up for the Mac${NC}\n\n"
+    printf "\n${PURPLE}   • Done Setting up for the Mac${NC}\n\n"
   fi
 fi
 ###################################################################
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Install additional system files if root
 if (sudo true && sudo -ln) 2>&1 | grep -v 'may not' >/dev/null; then
-  print_in_purple "\n • Installing system files\n"
+  print_in_purple "\n   • Installing system files\n"
   sudo $macosdir/install_system_files.sh
-  print_in_purple " • Installing system files completed\n\n"
+  print_in_purple "   • Installing system files completed\n\n"
 fi
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Create user themes/fonts/icons or install to system if root
-print_in_purple "\n • Installing Customizations\n"
+print_in_purple "\n   • Installing Customizations\n"
 $macosdir/install_customizations.sh
-print_in_purple " • Installing Customizations completed\n\n"
+print_in_purple "   • Installing Customizations completed\n\n"
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Create user directories
-print_in_purple "\n • Creating directories\n"
+print_in_purple "\n   • Creating directories\n"
 $macosdir/create_directories.sh
-print_in_purple " • Creating directories completed\n\n"
+print_in_purple "   • Creating directories completed\n\n"
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Create user .local files
-print_in_purple "\n • Create local config files\n"
+print_in_purple "\n   • Create local config files\n"
 $macosdir/create_local_config_files.sh
-print_in_purple " • Create local config files completed\n\n"
+print_in_purple "   • Create local config files completed\n\n"
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Create user dotfile symlinks
-print_in_purple "\n • Create user files\n"
+print_in_purple "\n   • Create user files\n"
 $macosdir/create_symbolic_links.sh
-print_in_purple " • Create user files completed\n"
+print_in_purple "   • Create user files completed\n"
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Create and Setup git
 GIT=$(command -v git 2>/dev/null)
 if [ -z "$GIT" ]; then print_in_red "\n • The git package is not installed\n\n"; else
-  print_in_purple "\n • Installing GIT\n"
+  print_in_purple "\n   • Installing GIT\n"
   $macosdir/install_git.sh
-  print_in_purple " • Installing GIT completed\n\n"
+  print_in_purple "   • Installing GIT completed\n\n"
 fi
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Create and Setup vim
 VIM=$(command -v vim 2>/dev/null)
 if [ -z "$VIM" ]; then print_in_red "\n • The vim package is not installed\n\n"; else
-  print_in_purple "\n • Installing vim with plugins\n"
+  print_in_purple "\n   • Installing vim with plugins\n"
   $macosdir/install_vim.sh
-  print_in_purple " • Installing vim with plugins completed\n\n"
+  print_in_purple "   • Installing vim with plugins completed\n\n"
 fi
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Create and Setup tmux
 TMUX=$(command -v tmux 2>/dev/null)
 if [ -z "$TMUX" ]; then print_in_red "\n • The tmux package is not installed\n\n"; else
-  print_in_purple "\n • Installing tmux plugins\n"
+  print_in_purple "\n   • Installing tmux plugins\n"
   $macosdir/install_tmux.sh
-  print_in_purple " • Installing tmux plugins completed\n\n"
+  print_in_purple "   • Installing tmux plugins completed\n\n"
 fi
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Create and Setup zsh
 ZSH=$(command -v zsh 2>/dev/null)
 if [ -z "$ZSH" ]; then print_in_red "\n • The zsh package is not installed\n\n"; else
-  print_in_purple "\n • Installing zsh with plugins\n"
+  print_in_purple "\n   • Installing zsh with plugins\n"
   $macosdir/install_ohmyzsh.sh
-  print_in_purple " • Installing zsh with plugins completed\n\n"
+  print_in_purple "   • Installing zsh with plugins completed\n\n"
 fi
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Create and Setup fish
 FISH=$(command -v fish 2>/dev/null)
 if [ -z "$FISH" ]; then print_in_red "\n • The fish package is not installed\n\n"; else
-  print_in_purple "\n • Installing fish shell and plugins\n"
+  print_in_purple "\n   • Installing fish shell and plugins\n"
   $macosdir/install_ohmyfish.sh
-  print_in_purple " • Installing fish shell and plugins completed\n"
+  print_in_purple "   • Installing fish shell and plugins completed\n"
 fi
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Create and Setup Visual Studio code
 CODE=$(command -v code 2>/dev/null)
 if [ -z "$CODE" ]; then print_in_red "\n • The Visual Studio code package is not installed\n\n"; else
-  print_in_purple "\n • Installing Visual Studio code and plugins\n"
+  print_in_purple "\n   • Installing Visual Studio code and plugins\n"
   $macosdir/install_vscode.sh
-  print_in_purple " • Installing Visual Studio code shell and plugins completed\n"
+  print_in_purple "   • Installing Visual Studio code shell and plugins completed\n"
 fi
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 if [ -f "$(command -v $PIP 2>/dev/null) " ]; then
   if [ -z "$(command -v shodan 2>/dev/null)" ] || [ -z "$(command -v ytmdl 2>/dev/null)" ] || [ -z "$(command -v toot 2>/dev/null)" ] ||
     [ -z "$(command -v castero 2>/dev/null)" ] || [ -z "$(command -v rainbowstream 2>/dev/null)" ]; then
-    print_in_purple "\n • Installing terminal tools\n"
+    print_in_purple "\n   • Installing terminal tools\n"
     for PIPTOOLS in git+https://github.com/sixohsix/python-irclib shodan ytmdl toot castero rainbowstream; do
       if "(sudo -vn && sudo -ln)" 2>&1 | grep -v 'may not' >/dev/null; then
         execute \
@@ -361,16 +363,16 @@ if [ -f "$(command -v $PIP 2>/dev/null) " ]; then
           "Installing pip package: $PIPTOOLS"
       fi
     done
-    print_in_purple " • Installing terminal tools completed\n\n"
+    print_in_purple "   • Installing terminal tools completed\n\n"
   fi
 fi
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 # Install additional
-print_in_purple "\n • Installing additional tools\n"
+print_in_purple "\n   • Installing additional tools\n"
 [ -f "$(command -v dfmgr 2>/dev/null)" ] && execute "dfmgr install misc"
-print_in_purple " • Installing additional tools completed\n\n"
+print_in_purple "   • Installing additional tools completed\n\n"
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -420,11 +422,11 @@ fi
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 # run clean up
-print_in_purple "\n • Running cleanup\n"
+print_in_purple "\n   • Running cleanup\n"
 # if (sudo true && sudo -ln) 2>&1 | grep -v 'may not' >/dev/null; then
 
 # fi
-print_in_purple "\n • Running cleanup complete\n"
+print_in_purple "\n   • Running cleanup complete\n"
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -438,10 +440,10 @@ fi
 NEWVERSION="$(echo $(cat $dotfilesDirectory/version.txt | tail -n 1))"
 # End Install
 #RESULT=$?
-printf "\n${GREEN} *** 😃 installation of dotfiles completed 😃 *** ${NC}\n"
-printf "${GREEN} *** 😃 You now have version number: "$NEWVERSION" 😃 *** ${NC}\n\n"
-printf "${RED} *** For the configurations to take effect *** ${NC} \n "
-printf "${RED} *** you should logoff or reboot your system *** ${NC} \n\n\n\n "
+printf "\n${GREEN}   *** 😃 installation of dotfiles completed 😃 *** ${NC}\n"
+printf "${GREEN}   *** 😃 You now have version number: "$NEWVERSION" 😃 *** ${NC}\n\n"
+printf "${RED}   *** For the configurations to take effect *** ${NC} \n "
+printf "${RED}   *** you should logoff or reboot your system *** ${NC} \n\n\n\n "
 ##################################################################################################
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
