@@ -27,6 +27,7 @@ export macosdir="$srcdir/os/mac"
 export HOMEBREW_INSTALL_BADGE="☕️ 🐸"
 export HOMEBREW_CASK_OPTS="--appdir=/Applications"
 export SUDO_PROMPT="$(printf "\033[1;36m")  • [sudo]$(printf "\033[0m") password for %p: "
+export NONINTERACTIVE=1
 
 ##### for when I'm forgetful
 if [ -z $dotfilesDirectory ]; then printf "\n${RED}   *** dotfiles directory not specified ***${NC}\n"; fi
@@ -110,7 +111,7 @@ printf "${NC}\n\n"
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 if [ ! -f "$(command -v brew)" ]; then
-  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
 fi
 
 # no sudo can't continue
@@ -239,9 +240,6 @@ find "$HOME"/.gnupg "$HOME"/.ssh -type d -exec chmod 700 {} \; 2>/dev/null
 # Check for then get root permissions
 if [ -z "$UPDATE" ] || [ "$1" = "--force" ]; then
   if (sudo true && sudo -ln) 2>&1 | grep -v 'may not' >/dev/null; then
-    printf "\n${RED}   • Getting root privileges${NC}\n"
-    ask_for_sudo
-    printf "${GREEN}   • Received root privileges${NC}\n\n"
 
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     # Install Packages
@@ -251,7 +249,7 @@ if [ -z "$UPDATE" ] || [ "$1" = "--force" ]; then
     if [[ ! -f /usr/local/Homebrew/.srcinstall ]] || [ "$1" = "--force" ]; then
       printf "${GREEN}   *** • This May take awhile please be patient...${NC}\n"
       printf "${GREEN}   *** • Possibly 20+ Minutes.. So go have a nice cup of coffee!${NC}\n"
-      source "$macosdir/pkgs/lists/mac-sys.sh"
+      "$macosdir/pkgs/lists/mac-sys.sh"
     fi
     printf "\n${PURPLE}   • Done Setting up for the Mac${NC}\n\n"
   fi
