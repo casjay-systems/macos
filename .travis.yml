@@ -15,8 +15,10 @@ sudo: true
 osx_image: xcode12.1
 language: shell
 
+before_install:
+    - echo | /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+
 install:
-  - echo | /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
   - bash -c "./src/os/mac_setup.sh"
 
 notifications:

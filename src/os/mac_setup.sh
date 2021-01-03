@@ -205,7 +205,7 @@ printf "${GREEN}   *** • Installing version $CURDOTFVERSION • ***${NC}\n"
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Setup the dotfiles Directory
 
-printf "\n${PURPLE} • Setting up the git repo${NC}\n"
+printf "\n${PURPLE}   • Setting up the git repo${NC}\n"
 if [ -d $dotfilesDirectory/.git ]; then
   cd "$srcdir/os" && source "utils.sh"
 
@@ -227,7 +227,7 @@ else
   printf "${GREEN}   [✔] downloaded version $NEWVERSION - revision: $REVER${NC}\n"
   cd "$srcdir/os" && source "utils.sh"
 fi
-printf "${PURPLE} • Setting up the git repo completed${NC}\n\n"
+printf "${PURPLE}   • Setting up the git repo completed${NC}\n\n"
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Make Directories and fix permissions
