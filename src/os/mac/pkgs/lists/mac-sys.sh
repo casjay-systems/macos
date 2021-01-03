@@ -17,14 +17,8 @@ CASKS+="libreoffice transmission gpg-suite opera brave-browser tor-browser thund
 CASKS+="authy darktable nextcloud brackets iterm2 terminology vlc postman lastpass spectacle alfred the-unarchiver "
 
 # install
-for tap in $TAPS; do
-  execute "brew tap $tap" "Setting up $tap"
-done
+execute "brew tap $TAPS" "Setting up taps"
 
-for brew in $BREW; do
-  execute "brew install -f $brew" "Setting up $brew"
-done
+execute "brew install -f $BREW" "Setting up brew packages"
 
-for cask in $CASKS; do
-  execute "brew install --cask -f $cask" "Setting up $cask"
-done
+execute "brew install --cask -f $CASKS" "Setting up brew casks"
