@@ -5,8 +5,8 @@
 
 env:
   global:
-  - NONINTERACTIVE=1
-  - HOMEBREW_NO_AUTO_UPDATE=true
+  - NONINTERACTIVE="1"
+  - HOMEBREW_NO_AUTO_UPDATE="true"
   - HOMEBREW_INSTALL_BADGE="☕️ 🐸"
   - HOMEBREW_CASK_OPTS="--appdir=/Applications"
 
@@ -20,8 +20,7 @@ before_install:
   - brew update -f && brew upgrade -f
 
 install:
-  - brew install -f vim tmux
-#  - bash -c "./src/os/mac_setup.sh --force"
+  - bash -c "./src/os/mac_setup.sh --force"
 
 notifications:
   email:
