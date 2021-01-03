@@ -246,7 +246,7 @@ if [ -z "$UPDATE" ] || [ "$1" = "--force" ]; then
   if (sudo true && sudo -ln) 2>&1 | grep -v 'may not' >/dev/null; then
     printf "\n${RED} • Getting root privileges${NC}\n"
     ask_for_sudo
-    printf "\n${GREEN} • Received root privileges${NC}\n\n"
+    printf "${GREEN} • Received root privileges${NC}\n\n"
 
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     # Install Packages
