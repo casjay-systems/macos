@@ -15,11 +15,16 @@ sudo: true
 osx_image: xcode12.1
 language: shell
 
+addons:
+  homebrew:
+    update: true
+
 before_install:
-    - echo | /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+  - echo | /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
 
 install:
-  - bash -c "./src/os/mac_setup.sh"
+  - brew install -f vim tmux
+#  - bash -c "./src/os/mac_setup.sh --force"
 
 notifications:
   email:
