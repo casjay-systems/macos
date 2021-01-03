@@ -171,7 +171,7 @@ if [[ ! "$BREW" ]]; then MISSING="$MISSING brew"; fi
 
 if [ -z "$GIT" ] || [ -z "$CURL" ] || [ -z "$WGET" ] || [ -z "$VIM" ] || [ -z "$TMUX" ] || [ -z "$ZSH" ] || [ -z "$FISH" ] || [ -z "$SUDO" ] || [ -z "$BREW" ]; then
   printf "\n${RED}  *** • The following are needed: • ***${NC}\n"
-  printf "\n${RED}  *** • ${MISSING} • ***${NC}\n"
+  printf "${RED}  *** • ${MISSING} • ***${NC}\n"
   if (sudo true && sudo -ln) 2>&1 | grep -v 'may not' >/dev/null; then
     execute "brew install -f ${MISSING}" "Attempting to install the missing package[s]"
   else
