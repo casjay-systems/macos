@@ -9,43 +9,52 @@ srcdir="$(cd ../../.. && pwd)"
 
 brew_tap_packages() {
   # Define taps
-  local TAPS="homebrew/cask-fonts"
+  declare -a TAPS=(
+    #"homebrew/cask"
+    #"homebrew/cask-fonts"
+  )
 
   # install
-  for tap in ${TAPS}; do
-    execute "brew tap ${tap}" "Setting ${tap}       "
-    tput cuu1
-    tput el
-  done
+  if [ -n "$TAPS" ]; then
+    for tap in "${TAPS[@]}"; do
+      execute "brew tap ${tap}" "Setting up ${tap}       "
+      tput cuu1
+      tput el
+    done
+    unset TAPS
+  fi
 }
 
 brew_app_packages() {
   # Define brew apps
-  local BREWS="git svn fortune cowsay neofetch coreutils fish bash zsh bash-completion@2 rsync "
+  local BREWS+="font-ubuntu font-powerline-symbols font-fira-code font-hack-nerd-font "
+  local BREWS="git svn fortune cowsay neofetch coreutils fish bash zsh bash-completion@2 rsync typora "
   local BREWS+="nano neovim macvim emacs thefuck fnm byobu nethogs iftop iperf jq dialog links html2text "
   local BREWS+="mpd ncmpcpp newsboat pass editorconfig tmux screen hub zsh fish zsh-completions speedtest-cli "
   local BREWS+="ruby php perl node golang nvm youtube-dl direnv wget curl iproute2mac powerline-go dict "
 
   # install
-  for brew in ${BREWS}; do
+  for brew in "${BREWS[@]}"; do
     execute "brew install -f ${brew}" "Setting up ${brew}       "
     tput cuu1
     tput el
   done
+  unset BREWS
 }
 
 brew_casks_packages() {
   #Define brew casks apps
-  local CASKS="font-ubuntu font-powerline-symbols visual-studio-code firefox atom obs powershell "
+  local CASKS="visual-studio-code firefox atom obs powershell "
   local CASKS+="libreoffice transmission gpg-suite opera brave-browser tor-browser thunderbird skype "
-  local CASKS+="authy darktable nextcloud brackets iterm2 terminology vlc postman lastpass spectacle alfred the-unarchiver "
+  local CASKS+="authy darktable nextcloud brackets iterm2 terminology vlc insomnia lastpass spectacle alfred the-unarchiver "
 
   # install
-  for cask in ${CASKS}; do
+  for cask in "${CASKS[@]}"; do
     execute "brew install --cask -f ${cask}" "Setting up ${cask}       "
     tput cuu1
     tput el
   done
+  unset CASKS
 }
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

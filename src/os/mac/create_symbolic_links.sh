@@ -97,7 +97,7 @@ backup_confsymlinks() {
 
   skip_questions "$@" && skipQuestions=true
 
-  for i in "${CONFFILES_TO_SYMLINK[@]}"; do
+  for i in "${CONFFOLDERS_TO_SYMLINK[@]}"; do
     sourceFile="$srcdir/config/$i"
     targetFile="$HOME/.config/$i"
     nameFile="$(printf "%s" "$i" | sed "s/.*\/\(.*\)/\1/g")"
@@ -177,7 +177,7 @@ create_confsymlinks() {
   local skipQuestions=true
   skip_questions "$@" && skipQuestions=true
 
-  for i in "${CONFFILES_TO_SYMLINK[@]}"; do
+  for i in "${CONFFOLDERS_TO_SYMLINK[@]}"; do
     sourceFile="$srcdir/config/$i"
     targetFile="$HOME/.config/$i"
     unlink -f $targetFile 2>/dev/null
