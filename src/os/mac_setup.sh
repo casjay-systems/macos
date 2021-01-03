@@ -70,18 +70,6 @@ fi
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-if [[ "$(python3 -V 2>/dev/null)" =~ "Python 3" ]]; then
-  PYTHONVER="python3"
-  PIP="pip3"
-  export PATH="${PATH}:$(python3 -c 'import site; print(site.USER_BASE)')/bin"
-elif [[ "$(python2 -V 2>/dev/null)" =~ "Python 2" ]]; then
-  PYTHONVER="python"
-  PIP="pip"
-  export PATH="${PATH}:$(python -c 'import site; print(site.USER_BASE)')/bin"
-fi
-
-##################################################################################################
-
 if [ -f "$HOME/.config/dotfiles/env" ]; then
   source "$HOME/.config/dotfiles/env"
 fi
@@ -348,7 +336,8 @@ if [ -z "$CODE" ]; then print_in_red "\n • The Visual Studio code package is n
 fi
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-if [ -f "$(command -v $PIP 2>/dev/null) " ]; then
+if [ -f "$(command -v pip3 2>/dev/null) " ]; then
+  PIP="python3 -mpip install"
   if [ -z "$(command -v shodan 2>/dev/null)" ] || [ -z "$(command -v ytmdl 2>/dev/null)" ] || [ -z "$(command -v toot 2>/dev/null)" ] ||
     [ -z "$(command -v castero 2>/dev/null)" ] || [ -z "$(command -v rainbowstream 2>/dev/null)" ]; then
     print_in_purple "\n   • Installing terminal tools\n"
