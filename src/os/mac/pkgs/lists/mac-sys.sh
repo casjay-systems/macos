@@ -8,6 +8,10 @@ srcdir="$(cd ../../.. && pwd)"
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 brew_tap_packages() {
+  installcmd() {
+    execute "brew tap ${tap}" "Setting up ${tap}       "
+  }
+
   # Define taps
   declare -a TAPS=(
     #"homebrew/cask"
@@ -17,15 +21,17 @@ brew_tap_packages() {
   # install
   if [ -n "$TAPS" ]; then
     for tap in ${TAPS}; do
-      execute "brew tap ${tap}" "Setting up ${tap}       "
-      tput cuu1
-      tput el
+      execute "installcmd ${tap}" "Setting up taps       "
     done
     unset TAPS
   fi
 }
 
 brew_app_packages() {
+  installcmd() {
+    execute "brew install -f ${brew}" "Setting up ${brew}       "
+  }
+
   # Define brew apps
   local BREWS+="font-ubuntu font-powerline-symbols font-fira-code font-hack-nerd-font "
   local BREWS="git svn fortune cowsay neofetch coreutils fish bash zsh bash-completion@2 rsync typora "
@@ -35,14 +41,16 @@ brew_app_packages() {
 
   # install
   for brew in ${BREWS[@]}; do
-    execute "brew install -f ${brew}" "Setting up ${brew}       "
-    tput cuu1
-    tput el
+    execute "installcmd ${brew}" "Setting up apps       "
   done
   unset BREWS
 }
 
 brew_casks_packages() {
+  installcmd() {
+    execute "brew install --cask -f ${cask}" "Setting up ${cask}       "
+  }
+
   #Define brew casks apps
   local CASKS="visual-studio-code firefox atom obs powershell "
   local CASKS+="libreoffice transmission gpg-suite opera brave-browser tor-browser thunderbird skype "
@@ -50,9 +58,7 @@ brew_casks_packages() {
 
   # install
   for cask in ${CASKS[@]}; do
-    execute "brew install --cask -f ${cask}" "Setting up ${cask}       "
-    tput cuu1
-    tput el
+    execute "installcmd ${cask}" "Setting up casks       "
   done
   unset CASKS
 }
