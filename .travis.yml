@@ -3,11 +3,6 @@
 # .travis.yml
 # https://docs.travis-ci.com
 
-os: osx
-sudo: true
-osx_image: xcode12.2
-language: shell
-
 env:
   global:
   - NONINTERACTIVE=1
@@ -15,13 +10,14 @@ env:
   - HOMEBREW_INSTALL_BADGE="☕️ 🐸"
   - HOMEBREW_CASK_OPTS="--appdir=/Applications"
 
-addons:
-  homebrew:
-    update: true
+os: osx
+sudo: true
+osx_image: xcode12.1
+language: shell
 
 install:
   - echo | /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
-  - bash -c "./src/os/mac_setup.sh --force"
+  - bash -c "./src/os/mac_setup.sh"
 
 notifications:
   email:
