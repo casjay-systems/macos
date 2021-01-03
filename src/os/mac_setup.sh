@@ -254,7 +254,13 @@ if [ -z "$UPDATE" ] || [ "$1" = "--force" ]; then
     printf "\n${PURPLE}   • Done Setting up for the Mac${NC}\n\n"
   fi
 fi
+
 ###################################################################
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# Create user directories
+print_in_purple "\n   • Creating directories\n"
+$macosdir/create_directories.sh
+print_in_purple "   • Creating directories completed\n\n"
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Install additional system files if root
 if (sudo true && sudo -ln) 2>&1 | grep -v 'may not' >/dev/null; then
@@ -262,18 +268,11 @@ if (sudo true && sudo -ln) 2>&1 | grep -v 'may not' >/dev/null; then
   sudo $macosdir/install_system_files.sh
   print_in_purple "   • Installing system files completed\n\n"
 fi
-
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Create user themes/fonts/icons or install to system if root
 print_in_purple "\n   • Installing Customizations\n"
 $macosdir/install_customizations.sh
 print_in_purple "   • Installing Customizations completed\n\n"
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-# Create user directories
-print_in_purple "\n   • Creating directories\n"
-$macosdir/create_directories.sh
-print_in_purple "   • Creating directories completed\n\n"
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Create user .local files
 print_in_purple "\n   • Create local config files\n"
