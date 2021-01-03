@@ -136,6 +136,11 @@ BREW=$(command -v brew 2>/dev/null)
 if [ ! -f "$(command -v brew)" ]; then
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 fi
+if [ ! -f "$(command -v brew)" ]; then
+  printf "${RED}  *** • Failed to install brew • ***${NC}\n"
+  printf "${BLUE}  *** • /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" • ***${NC}\n\n\n"
+  exit 1
+fi
 
 # no sudo can't continue
 SUDU=$(command -v sudo 2>/dev/null)
