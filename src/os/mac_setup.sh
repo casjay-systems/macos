@@ -24,10 +24,12 @@ export dotfilesDirectory="$DOTFILES"
 export srcdir="$dotfilesDirectory/src"
 export macosdir="$srcdir/os/mac"
 
+export NONINTERACTIVE=1
+export HOMEBREW_NO_AUTO_UPDATE=true
 export HOMEBREW_INSTALL_BADGE="☕️ 🐸"
 export HOMEBREW_CASK_OPTS="--appdir=/Applications"
+
 export SUDO_PROMPT="$(printf "\033[1;36m")  • [sudo]$(printf "\033[0m") password for %p: "
-export NONINTERACTIVE=1
 
 ##### for when I'm forgetful
 if [ -z $dotfilesDirectory ]; then printf "\n${RED}   *** dotfiles directory not specified ***${NC}\n"; fi
@@ -103,7 +105,7 @@ wait_time=10 # seconds
 temp_cnt=${wait_time}
 printf "\n\n\n\n\n${GREEN}   *** ${RED}•${GREEN} Welcome to my dotfiles Installer for MacOS ${RED}•${GREEN} ***${NC}\n"
 while [[ ${temp_cnt} -gt 0 ]]; do
-  printf "\r${GREEN}   *** ${RED}•${GREEN} You have %2d second(s) remaining to hit Ctrl+C to cancel ${RED}•${GREEN} ***" ${temp_cnt}
+  printf "\r${GREEN}   *** ${RED}•${GREEN} You have %2d second(s) remaining: Press Ctrl+C to cancel ${RED}•${GREEN} ***" ${temp_cnt}
   sleep 1
   ((temp_cnt--))
 done
@@ -111,7 +113,7 @@ printf "${NC}\n\n"
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 if [ ! -f "$(command -v brew)" ]; then
-  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+  echo | /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
 fi
 
 # no sudo can't continue

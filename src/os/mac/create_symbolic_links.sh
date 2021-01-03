@@ -25,6 +25,7 @@ declare -a FILES_TO_SYMLINK=(
   "shell/inputrc"
   "shell/profile"
   "shell/screenrc"
+  "shell/wgetrc"
 
 )
 

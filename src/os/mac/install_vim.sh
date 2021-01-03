@@ -32,7 +32,7 @@ install_vimplugins() {
     if [ -d "$HOME/.local/share/vim/Vundle.vim/.git" ]; then
       execute \
         "git -C $HOME/.local/share/vim/Vundle.vim pull -q && \
-        vim +PluginInstall +qall < /dev/null > /dev/null 2>&1" \
+        /usr/local/bin/vim -u $srcdir/config/vim/plugins.vimrc +PluginInstall +qall < /dev/null > /dev/null 2>&1" \
         "Updating Vundle and Plugins"
     else
       rm -Rf $HOME/.local/share/vim/Vundle.vim

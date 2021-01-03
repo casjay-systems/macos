@@ -10,7 +10,7 @@ srcdir="$(cd ../../.. && pwd)"
 brew_packages() {
 
   # Define taps
-  TAPS="homebrew/cask-fonts "
+  TAPS="homebrew/cask-fonts"
 
   # Define brew apps
   BREW="git svn fortune cowsay neofetch coreutils fish bash zsh bash-completion@2 rsync "
