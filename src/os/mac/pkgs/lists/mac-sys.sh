@@ -16,7 +16,7 @@ brew_tap_packages() {
 
   # install
   if [ -n "$TAPS" ]; then
-    for tap in "${TAPS[@]}"; do
+    for tap in ${TAPS}; do
       execute "brew tap ${tap}" "Setting up ${tap}       "
       tput cuu1
       tput el
@@ -34,7 +34,7 @@ brew_app_packages() {
   local BREWS+="ruby php perl node golang nvm youtube-dl direnv wget curl iproute2mac powerline-go dict "
 
   # install
-  for brew in "${BREWS[@]}"; do
+  for brew in ${BREWS[@]}; do
     execute "brew install -f ${brew}" "Setting up ${brew}       "
     tput cuu1
     tput el
@@ -49,7 +49,7 @@ brew_casks_packages() {
   local CASKS+="authy darktable nextcloud brackets iterm2 terminology vlc insomnia lastpass spectacle alfred the-unarchiver "
 
   # install
-  for cask in "${CASKS[@]}"; do
+  for cask in ${CASKS[@]}; do
     execute "brew install --cask -f ${cask}" "Setting up ${cask}       "
     tput cuu1
     tput el

@@ -10,16 +10,17 @@ language: shell
 
 env:
   global:
-  - export NONINTERACTIVE=1
-  - export HOMEBREW_NO_AUTO_UPDATE=true
-  - export HOMEBREW_INSTALL_BADGE="☕️ 🐸"
-  - export HOMEBREW_CASK_OPTS="--appdir=/Applications"
+  - NONINTERACTIVE=1
+  - HOMEBREW_NO_AUTO_UPDATE=true
+  - HOMEBREW_INSTALL_BADGE="☕️ 🐸"
+  - HOMEBREW_CASK_OPTS="--appdir=/Applications"
 
 addons:
   homebrew:
     update: true
 
 install:
+  - echo | /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
   - bash -c "./src/os/mac_setup.sh --force"
 
 notifications:
