@@ -1,6 +1,7 @@
 #!/usr/bin/env zsh
 
 #zsh config
+
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # allow insecure directories and files
 ZSH_DISABLE_COMPFIX="true"
@@ -22,8 +23,14 @@ path=("$HOME/.local/bin" $path)
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
+# enable brew.sh completions
+if type brew &>/dev/null; then
+  FPATH=$(brew --prefix)/share/zsh-completions:$FPATH
+fi
+
+
 # Enable completion (this needs to be done before sourcing plugins)
-autoload -Uz compinit && compinit
+autoload -Uz compinit compinit
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
