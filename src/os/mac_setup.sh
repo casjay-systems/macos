@@ -362,6 +362,7 @@ print_in_purple "\n   • Installing additional tools\n"
 if [ -f "$(command -v dfmgr 2>/dev/null)" ]; then
   execute "dfmgr install misc"
 fi
+sed -i 's#MYMACDOTFILES#$srcdir/bin#g' "$srcdir/shell/profile"
 
 print_in_purple "   • Installing additional tools completed\n\n"
 

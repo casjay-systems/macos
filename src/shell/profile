@@ -611,7 +611,7 @@ if [[ "$OSTYPE" =~ ^darwin ]]; then
   export HOMEBREW_NO_AUTO_UPDATE=true
   export HOMEBREW_INSTALL_BADGE="☕️ 🐸"
   export HOMEBREW_CASK_OPTS="--appdir=/Applications"
-  export PATH="/usr/local/bin:$HOME/.local/bin:$PATH:/usr/local/sbin:/usr/bin:/sbin"
+  export PATH="/usr/local/bin:MYMACDOTFILES:$HOME/.local/bin:$PATH:/usr/local/sbin:/usr/bin:/sbin"
 fi
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
