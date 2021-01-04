@@ -253,7 +253,8 @@ if [ -z "$UPDATE" ] || [ "$1" = "--force" ]; then
     printf "\n${PURPLE} • Setting up for MacOS $get_os_version ${NC}\n"
     if [[ ! -f /usr/local/Homebrew/.srcinstall ]] || [ "$1" = "--force" ]; then
       printf "${GREEN}   *** • This May take awhile please be patient...${NC}\n"
-      printf "${GREEN}   *** • Possibly 20+ Minutes.. So go have a nice cup of coffee!${NC}\n"
+      printf "${GREEN}   *** • Possibly 20+ Minutes.. ${NC}\n"
+      printf "${GREEN}   *** • So go have a nice cup of coffee!${NC}\n"
       "$macosdir/pkgs/lists/mac-sys.sh"
     fi
     printf "\n${PURPLE}   • Done Setting up for the Mac${NC}\n\n"
