@@ -39,6 +39,7 @@ brew_app_packages() {
   # Define brew apps
   if [ -n "$TRAVIS" ]; then
     local BREWS="git svn fortune "
+    local BREWS+="macvim tmux"
   else
     local BREWS="font-ubuntu font-powerline-symbols font-fira-code font-hack-nerd-font "
     local BREWS+="git svn fortune cowsay neofetch coreutils fish bash zsh bash-completion@2 rsync typora "
