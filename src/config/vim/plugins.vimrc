@@ -42,6 +42,7 @@ endif
 if ! filereadable(expand('~/.local/share/vim/bundle/Vundle.vim/.gitignore'))
     echo "Downloading Vundle to manage plugins..."
     silent !git clone -q "https://github.com/VundleVim/Vundle.vim" ~/.local/share/vim/bundle/Vundle.vim
+    silent !vim +PluginInstall +qall
 endif
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
