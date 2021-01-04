@@ -97,6 +97,7 @@ declare -a PLUGINS_TO_INSTALL=(
   "yzhang.markdown-all-in-one"
   "ZainChen.json"
 )
+
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 install_code() {
@@ -117,9 +118,9 @@ install_plugins() {
 
 install_settings() {
   mkdir -p "$HOME/Library/Application Support/Code/User"
-  declare -r FILE_PATH="$HOME/Library/Application Support/Code/User/settings.json"
-  declare -r CONFIGS="
-{
+  declare FILE_PATH="$HOME/Library/Application Support/Code/User/settings.json"
+  cat <<EOF >"$FILE_PATH"
+  {
   "sync.gist": "",
   "bracketPairColorizer.colorMode": "Independent",
   "editor.cursorSmoothCaretAnimation": true,
@@ -302,7 +303,7 @@ install_settings() {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   }
 }
-"
+EOF
   #
   if [ -f "$FILE_PATH" ]; then
     isInFile=$(cat "$FILE_PATH" | grep -c "shellcheck.exclude")

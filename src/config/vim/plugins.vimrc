@@ -42,7 +42,6 @@ endif
 if ! filereadable(expand('~/.local/share/vim/bundle/Vundle.vim/.gitignore'))
     echo "Downloading Vundle to manage plugins..."
     silent !git clone -q "https://github.com/VundleVim/Vundle.vim" ~/.local/share/vim/bundle/Vundle.vim
-    silent !vim +PluginInstall +qall
 endif
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -106,7 +105,7 @@ Plugin 'vimwiki/vimwiki'                    "
 Plugin 'wolfgangmehner/vim-support'         "
 Plugin 'xolox/vim-misc'                     "
 Plugin 'Xuyuanp/nerdtree-git-plugin'        "
-Plugin 'lifepillar/vim-colortemplate'       " color template
+Plugin 'lifepillar/vim-colortemplate'       "color template
 Plugin 'MarcWeber/vim-addon-mw-utils'       "interpret a file by function
 Plugin 'dbeniamine/cheat.sh-vim'            "access cheat.sh sheets
 Plugin 'honza/vim-snippets'	                "snippets
@@ -134,4 +133,3 @@ endif
     Plugin 'garbas/vim-snipmate'
     Plugin 'tomtom/tlib_vim' "required for snipmate
 call vundle#end()
-

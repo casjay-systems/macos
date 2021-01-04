@@ -67,6 +67,7 @@ declare -a LIBRARYFILES_TO_SYMLINK=(
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 backup_symlinks() {
+  print_in_purple "\n   • Backup user files\n"
   local i=""
   local sourceFile=""
   local targetFile=""
@@ -90,6 +91,7 @@ backup_symlinks() {
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 backup_confsymlinks() {
+  print_in_purple "\n   • Backup config files\n"
   local i=""
   local sourceFile=""
   local targetFile=""
@@ -102,10 +104,10 @@ backup_confsymlinks() {
     targetFile="$HOME/.config/$i"
     nameFile="$(printf "%s" "$i" | sed "s/.*\/\(.*\)/\1/g")"
 
-    if [ -f $targetFile ] || [ -d $targetFile ] && [ ! -L $targetFile ] && [ ! -f $srcdir/config/$i/install.sh ] && [ -e "$sourceFile" ]; then
+    if [ -f "$targetFile" ] || [ -d "$targetFile" ] && [ ! -L "$targetFile" ] && [ ! -f "$srcdir/config/$i/install.sh" ] && [ -e "$sourceFile" ]; then
       execute \
-        "mv -f $targetFile $backups/configs/$nameFile" \
-        "Backing up $targetFile → $backups/configs/$nameFile"
+        "mv -f $targetFile $backups/home/config/$nameFile" \
+        "Backing up $targetFile → $backups/home/config/$nameFile"
     fi
   done
 }
@@ -113,7 +115,7 @@ backup_confsymlinks() {
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 backup_librarysymlinks() {
-
+  print_in_purple "\n   • Backup library files\n"
   local i=""
   local sourceFile=""
   local targetFile=""
@@ -127,10 +129,10 @@ backup_librarysymlinks() {
     targetFile="$HOME/Library⁩/$i"
     nameFile="$(printf "%s" "$i" | sed "s/.*\/\(.*\)/\1/g")"
 
-    if [ -f $targetFile ] || [ -d $targetFile ] && [ ! -L $targetFile ]; then
+    if [ -f "$targetFile" ] || [ -d "$targetFile" ] && [ ! -L "$targetFile" ]; then
       execute \
-        "rsync -aq $targetFile/. $backups/Library⁩/$nameFile >/dev/null 2>&1 || true" \
-        "Backing up $targetFile → $backups/Library⁩/$nameFile"
+        "rsync -aq $targetFile/. $backups/home/Library⁩/$nameFile >/dev/null 2>&1 || true" \
+        "Backing up $targetFile → $backups/home/Library⁩/$nameFile"
     fi
 
   done
@@ -140,7 +142,7 @@ backup_librarysymlinks() {
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 create_symlinks() {
-  print_in_purple "\n • Create file symlinks\n"
+  print_in_purple "\n   • Create file symlinks\n"
   local i=""
   local sourceFile=""
   local targetFile=""
@@ -151,8 +153,8 @@ create_symlinks() {
     sourceFile="$srcdir/$i"
     targetFile="$HOME/.$(printf "%s" "$i" | sed "s/.*\/\(.*\)/\1/g")"
     if [ -e "$sourceFile" ]; then
-      unlink -f $targetFile 2>/dev/null
-      rm -Rf $targetFile 2>/dev/null
+      unlink -f "$targetFile" 2>/dev/null
+      rm -Rf "$targetFile" 2>/dev/null
       execute \
         "ln -fs $sourceFile $targetFile" \
         "$targetFile → $sourceFile"
@@ -163,14 +165,7 @@ create_symlinks() {
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 create_confsymlinks() {
-  setup() {
-    ln -fs $sourceFile $targetFile
-    if [ -f "$targetFile/install.sh" ]; then
-      "$targetFile/install.sh"
-    fi
-  }
-
-  print_in_purple "\n • Create config symlinks\n"
+  print_in_purple "\n   • Create config symlinks\n"
   local i=""
   local sourceFile=""
   local targetFile=""
@@ -180,8 +175,8 @@ create_confsymlinks() {
   for i in "${CONFFOLDERS_TO_SYMLINK[@]}"; do
     sourceFile="$srcdir/config/$i"
     targetFile="$HOME/.config/$i"
-    unlink -f $targetFile 2>/dev/null
-    rm -Rf $targetFile 2>/dev/null
+    unlink -f "$targetFile" 2>/dev/null
+    rm -Rf "$targetFile" 2>/dev/null
     if [ -e "$sourceFile" ]; then
       execute \
         "setup" \
@@ -193,37 +188,33 @@ create_confsymlinks() {
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 create_librarysymlinks() {
+  if [[ "$OSTYPE" =~ ^darwin ]]; then
+    print_in_purple "\n   • Create library symlinks\n"
+    local i=""
+    local sourceFile=""
+    local targetFile=""
+    local skipQuestions=true
 
-  local i=""
-  local sourceFile=""
-  local targetFile=""
-  local skipQuestions=true
+    skip_questions "$@" &&
+      skipQuestions=true
 
-  skip_questions "$@" &&
-    skipQuestions=true
+    for i in "${LIBRARYFILES_TO_SYMLINK[@]}"; do
+      sourceFile="$srcdir/Library/$i"
+      targetFile="$HOME/Library/$i"
+      mkdir -p ${targetFile%/*}
+      rm -Rf $targetFile
 
-  for i in "${LIBRARYFILES_TO_SYMLINK[@]}"; do
-    sourceFile="$srcdir/Library/$i"
-    targetFile="$HOME/Library/$i"
-    mkdir -p ${targetFile%/*}
-    rm -Rf $targetFile
-
-    if [ ! -e "$targetFile" ]; then
-
-      execute \
-        "ln -sf $sourceFile $targetFile" \
-        "$targetFile → $sourceFile"
-
-    elif [ "$(readlink "$targetFile")" == "$sourceFile" ]; then
-      print_success "$targetFile → $sourceFile"
-
-    else
-      print_error "$targetFile → $sourceFile"
-
-    fi
-
-  done
-
+      if [ ! -e "$targetFile" ]; then
+        execute \
+          "ln -sf $sourceFile $targetFile" \
+          "$targetFile → $sourceFile"
+      elif [ "$(readlink "$targetFile")" == "$sourceFile" ]; then
+        print_success "$targetFile → $sourceFile"
+      else
+        print_error "$targetFile → $sourceFile"
+      fi
+    done
+  fi
 }
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
