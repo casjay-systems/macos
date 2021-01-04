@@ -108,16 +108,17 @@ install_code() {
 
 install_plugins() {
   setup() {
+    local ARRAY="$@"
     local i=""
-    for i in "${PLUGINS_TO_INSTALL[@]}"; do
-      code --install-extension --force "$i"
+    for i in "${ARRAY[@]}"; do
+      code --install-extension "$i" --force
     done
   }
-  execute "setup" "Installing plugins"
+  execute "setup $PLUGINS_TO_INSTALL" "Installing plugins"
 }
 
 install_settings() {
-  mkdir -p "$HOME/Library/Application Support/Code/User"
+  mkdir -p "$HOME/Library/Application Support/Code/User/settings"
   declare FILE_PATH="$HOME/Library/Application Support/Code/User/settings.json"
   cat <<EOF >"$FILE_PATH"
   {

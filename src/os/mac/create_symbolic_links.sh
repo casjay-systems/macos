@@ -67,7 +67,6 @@ declare -a LIBRARYFILES_TO_SYMLINK=(
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 backup_symlinks() {
-  print_in_purple "\n   • Backup user files\n"
   local i=""
   local sourceFile=""
   local targetFile=""
@@ -91,7 +90,6 @@ backup_symlinks() {
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 backup_confsymlinks() {
-  print_in_purple "\n   • Backup config files\n"
   local i=""
   local sourceFile=""
   local targetFile=""
@@ -115,7 +113,6 @@ backup_confsymlinks() {
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 backup_librarysymlinks() {
-  print_in_purple "\n   • Backup library files\n"
   local i=""
   local sourceFile=""
   local targetFile=""
@@ -142,6 +139,11 @@ backup_librarysymlinks() {
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 create_symlinks() {
+  setup() {
+    unlink "$targetFile" 2>/dev/null || rm -Rf "$targetFile" 2>/dev/null
+    ln -sf "$sourceFile" "$targetFile"
+  }
+
   print_in_purple "\n   • Create file symlinks\n"
   local i=""
   local sourceFile=""
@@ -153,8 +155,6 @@ create_symlinks() {
     sourceFile="$srcdir/$i"
     targetFile="$HOME/.$(printf "%s" "$i" | sed "s/.*\/\(.*\)/\1/g")"
     if [ -e "$sourceFile" ]; then
-      unlink -f "$targetFile" 2>/dev/null
-      rm -Rf "$targetFile" 2>/dev/null
       execute \
         "ln -fs $sourceFile $targetFile" \
         "$targetFile → $sourceFile"
@@ -165,6 +165,11 @@ create_symlinks() {
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 create_confsymlinks() {
+  setup() {
+    unlink "$targetFile" 2>/dev/null || rm -Rf "$targetFile" 2>/dev/null
+    ln -sf "$sourceFile" "$targetFile"
+  }
+
   print_in_purple "\n   • Create config symlinks\n"
   local i=""
   local sourceFile=""
@@ -175,8 +180,6 @@ create_confsymlinks() {
   for i in "${CONFFOLDERS_TO_SYMLINK[@]}"; do
     sourceFile="$srcdir/config/$i"
     targetFile="$HOME/.config/$i"
-    unlink -f "$targetFile" 2>/dev/null
-    rm -Rf "$targetFile" 2>/dev/null
     if [ -e "$sourceFile" ]; then
       execute \
         "setup" \
@@ -202,7 +205,7 @@ create_librarysymlinks() {
       sourceFile="$srcdir/Library/$i"
       targetFile="$HOME/Library/$i"
       mkdir -p ${targetFile%/*}
-      rm -Rf $targetFile
+      rm -Rf "$targetFile"
 
       if [ ! -e "$targetFile" ]; then
         execute \
