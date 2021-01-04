@@ -12,7 +12,7 @@ customizedir="$(cd ../../customize && pwd)"
 create_user_shortcuts() {
 
   execute \
-    "ln -sf $(command -v gdircolors) ~/.local/bin/dircolors" \
+    "ln -sf $(command -v gdircolors) "$HOME"/.local/bin/dircolors" \
     "Creating dircolors"
 
 }
@@ -21,18 +21,19 @@ create_user_shortcuts() {
 
 create_fonts() {
 
-  if [ -L ~/.local/share/fonts ]; then unlink ~/Library/Fonts; fi
-  if [ -d ~/.local/share/fonts ] && [ ! -L ~/Library/Fonts ]; then
-    mv -f ~/Library/Fonts ~/Library/Fonts.old
+  if [ -L "$HOME"/.local/share/fonts ]; then unlink "$HOME"/Library/Fonts; fi
+  if [ -d "$HOME"/.local/share/fonts ] && [ ! -L "$HOME"/Library/Fonts ]; then
+    rsync -ahq "$HOME"/Library/Fonts "$HOME"/Library/Fonts.old 2>/dev/null &&
+      rm -Rf "$HOME"/Library/Fonts
   fi
 
   execute \
-    "ln -sf $customizedir/fonts ~/Library/Fonts" \
+    "ln -sf $customizedir/fonts "$HOME"/Library/Fonts" \
     "$customizedir/fonts → ~/Library/Fonts"
 
-  if [ -d ~/.local/share/fonts.old ]; then
-    rsync -ahq ~/.Library/Fonts/* ~/Library/Fonts/ 2>/dev/null
-    rm -Rf ~/Library/Fonts.old/
+  if [ -d "$HOME"/.local/share/fonts.old ]; then
+    rsync -ahq "$HOME"/.Library/Fonts.old/* "$HOME"/Library/Fonts/ 2>/dev/null
+    rm -Rf "$HOME"/Library/Fonts.old/ 2>/dev/null
   fi
 
 }

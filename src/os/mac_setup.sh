@@ -162,7 +162,7 @@ if [[ ! "$ZSH" ]]; then MISSING="$MISSING zsh"; fi
 if [[ ! "$FISH" ]]; then MISSING="$MISSING fish"; fi
 if [[ ! "$SUDO" ]]; then MISSING="$MISSING sudo"; fi
 if [[ ! "$BREW" ]]; then MISSING="$MISSING brew"; fi
-if [[ ! "$JQ" ]]; then MISSING="$MISSING brew"; fi
+if [[ ! "$JQ" ]]; then MISSING="$MISSING jq"; fi
 
 if [ -z "$BREW" ]; then
   printf "${RED}   *** • Failed to install brew • ***${NC}\n"
@@ -417,9 +417,9 @@ fi
 
 # run clean up
 print_in_purple "\n   • Running cleanup\n"
-# if (sudo true && sudo -ln) 2>&1 | grep -v 'may not' >/dev/null; then
-
-# fi
+if (sudo true && sudo -ln) 2>&1 | grep -v 'may not' >/dev/null; then
+  execute "brew cleanup"
+fi
 print_in_purple "\n   • Running cleanup complete\n"
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
