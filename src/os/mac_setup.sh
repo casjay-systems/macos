@@ -149,6 +149,7 @@ ZSH=$(command -v zsh 2>/dev/null)
 FISH=$(command -v fish 2>/dev/null)
 SUDO=$(command -v sudo 2>/dev/null)
 BREW=$(command -v brew 2>/dev/null)
+JQ=$(command -v jq 2>/dev/null)
 
 unset MISSING
 if [[ ! "$GIT" ]]; then MISSING="$MISSING git"; fi
@@ -160,6 +161,7 @@ if [[ ! "$ZSH" ]]; then MISSING="$MISSING zsh"; fi
 if [[ ! "$FISH" ]]; then MISSING="$MISSING fish"; fi
 if [[ ! "$SUDO" ]]; then MISSING="$MISSING sudo"; fi
 if [[ ! "$BREW" ]]; then MISSING="$MISSING brew"; fi
+if [[ ! "$JQ" ]]; then MISSING="$MISSING brew"; fi
 
 if [ -z "$BREW" ]; then
   printf "${RED}   *** • Failed to install brew • ***${NC}\n"
@@ -167,7 +169,7 @@ if [ -z "$BREW" ]; then
   exit 1
 fi
 
-if [ -z "$GIT" ] || [ -z "$CURL" ] || [ -z "$WGET" ] || [ -z "$VIM" ] || [ -z "$TMUX" ] || [ -z "$ZSH" ] || [ -z "$FISH" ] || [ -z "$SUDO" ]; then
+if [ -z "$GIT" ] || [ -z "$CURL" ] || [ -z "$WGET" ] || [ -z "$VIM" ] || [ -z "$TMUX" ] || [ -z "$ZSH" ] || [ -z "$FISH" ] || [ -z "$SUDO" ] || [ -z "$JQ" ]; then
   printf "\n${RED}   *** • The following are needed: • ***${NC}\n"
   printf "${RED}   *** • ${MISSING} • ***${NC}\n"
   if (sudo true && sudo -ln) 2>&1 | grep -v 'may not' >/dev/null; then
@@ -362,7 +364,6 @@ print_in_purple "\n   • Installing additional tools\n"
 if [ -f "$(command -v dfmgr 2>/dev/null)" ]; then
   execute "dfmgr install misc"
 fi
-sed -i 's#MYMACDOTFILES#$srcdir/bin#g' "$srcdir/shell/profile"
 
 print_in_purple "   • Installing additional tools completed\n\n"
 
