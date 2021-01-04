@@ -9,7 +9,7 @@ srcdir="$(cd ../../.. && pwd)"
 
 brew_tap_packages() {
   installcmd() {
-    for tap in ${@}; do
+    for tap in "${@}"; do
       execute "brew tap ${tap}" "Setting up ${tap}       "
     done
   }
@@ -27,9 +27,11 @@ brew_tap_packages() {
   fi
 }
 
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
 brew_app_packages() {
   installcmd() {
-    for brew in ${@}; do
+    for brew in "${@}"; do
       execute "brew install -f ${brew}" "Setting up ${brew}       "
     done
   }
@@ -45,15 +47,17 @@ brew_app_packages() {
     local BREWS+="ruby php perl node golang nvm youtube-dl direnv wget curl iproute2mac powerline-go dict "
   fi
   # install
-  if [ -n "$CASKS" ]; then
+  if [ -n "$BREWS" ]; then
     execute "installcmd ${BREWS}" "Setting up apps       "
   fi
   unset BREWS
 }
 
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
 brew_casks_packages() {
   installcmd() {
-    for cask in ${@}; do
+    for cask in "${@}"; do
       execute "brew install --cask -f ${cask}" "Setting up ${cask}       "
     done
   }
