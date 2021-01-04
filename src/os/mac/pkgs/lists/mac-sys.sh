@@ -9,9 +9,11 @@ srcdir="$(cd ../../.. && pwd)"
 
 brew_tap_packages() {
   installcmd() {
-    for tap in "${@}"; do
+    declare -a LISTARRAY=$*
+    for tap in ${LISTARRAY[*]}; do
       execute "brew tap ${tap}" "Setting up ${tap}       "
     done
+    unset LISTARRAY
   }
 
   # Define taps
@@ -31,9 +33,11 @@ brew_tap_packages() {
 
 brew_app_packages() {
   installcmd() {
-    for brew in "${@}"; do
+    declare -a LISTARRAY=$*
+    for brew in ${LISTARRAY[*]}; do
       execute "brew install -f ${brew}" "Setting up ${brew}       "
     done
+    unset LISTARRAY
   }
 
   # Define brew apps
@@ -57,9 +61,11 @@ brew_app_packages() {
 
 brew_casks_packages() {
   installcmd() {
-    for cask in "${@}"; do
+    declare -a LISTARRAY=$*
+    for cask in ${LISTARRAY[*]}; do
       execute "brew install --cask -f ${cask}" "Setting up ${cask}       "
     done
+    unset LISTARRAY
   }
 
   #Define brew casks apps

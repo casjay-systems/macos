@@ -322,6 +322,7 @@ main() {
 
   install_code
   install_plugins
+  install_settings
 
 }
 

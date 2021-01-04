@@ -46,7 +46,7 @@ setup_fishplugins() {
     if [ -f "$srcdir/config/fish/plugins.fish" ]; then
       execute \
         "fish -c $srcdir/config/fish/plugins.fish 2>/dev/null" \
-        "Installing fish plugins"
+        "Installing oh-my-fish plugins"
     fi
   fi
 }

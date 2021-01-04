@@ -19,7 +19,7 @@ install_vim() {
       "~/.config/vim/  → ~/.vim"
     execute \
       "ln -sf $srcdir/config/vim/vimrc ~/.vimrc" \
-      "$srcdir/config/vim/vimrc  → ~/.vimrc"
+      "$srcdir/config/vim/vimrc → ~/.vimrc"
   else
     exit
   fi
@@ -39,7 +39,7 @@ install_vimplugins() {
       execute \
         "git clone -q https://github.com/VundleVim/Vundle.vim.git $HOME/.local/share/vim/Vundle.vim && \
         /usr/local/bin/vim -u $srcdir/config/vim/plugins.vimrc +PluginInstall +qall < /dev/null > /dev/null 2>&1" \
-        "vim +PluginInstall +qall → $HOME/.local/share/vim/"
+        "vim +PluginInstall +qall → ~/.local/share/vim/Vundle.vim"
     fi
   fi
 }
