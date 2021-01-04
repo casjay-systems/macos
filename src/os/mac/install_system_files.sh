@@ -113,6 +113,12 @@ if (sudo -vn && sudo -ln) 2>&1 | grep -v 'may not' >/dev/null; then
     print_result $? "$FILE_PATH"
   }
 
+  change_shell() {
+    if cat "/etc/shells" | grep -v "/usr/local/bin/bash" >/dev/null; then
+      echo "/usr/local/bin/bash" | sudo tee -a /etc/shells >/dev/null
+    fi
+  }
+
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 fi
@@ -120,18 +126,13 @@ fi
 main() {
 
   sudo chmod -f 755 /etc/sudoers.d
-
   pip3_install
-
   create_motd
-
   create_issue
-
   create_sudo
-
   create_user
-
   create_fonts
+  change_shell
 
 }
 

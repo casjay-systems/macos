@@ -86,7 +86,7 @@ printf "\n\n\n\n\n${BLUE}   *** Initializing the installer please wait *** ${NC}
 ####################################################################################################
 if (sudo -vn && sudo -ln) 2>&1 | grep -v 'may not' >/dev/null; then
   printf "\n${RED}   • Getting root privileges •${NC}\n" &&
-    ask_for_sudo
+    ask_for_sudo && SUDO_USER="true"
   if [ "$?" -eq 0 ]; then
     printf "${GREEN}   • Received root privileges •${NC}\n"
   else
@@ -359,7 +359,10 @@ fi
 
 # Install additional
 print_in_purple "\n   • Installing additional tools\n"
-[ -f "$(command -v dfmgr 2>/dev/null)" ] && execute "dfmgr install misc"
+if [ -f "$(command -v dfmgr 2>/dev/null)" ]; then
+  execute "dfmgr install misc"
+fi
+
 print_in_purple "   • Installing additional tools completed\n\n"
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
