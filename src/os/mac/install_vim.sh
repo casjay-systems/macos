@@ -28,6 +28,10 @@ install_vim() {
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 install_vimplugins() {
+  [ -f "/usr/local/bin/vim" ] || {
+    printf "\n${RED}   *** macvim is not installed *** ${NC}\n\n"
+    exit 1
+  }
   if [ ! -f "$srcdir/config/vim/install.sh" ]; then
     if [ -d "$HOME/.local/share/vim/bundle/Vundle.vim/.git" ]; then
       execute \
