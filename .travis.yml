@@ -20,7 +20,7 @@ before_install:
   - brew update -f && brew upgrade -f
 
 install:
-  - bash -c "./src/os/mac_setup.sh --force"
+  - bash -c "./src/os/mac_setup.sh"
 
 notifications:
   email:
