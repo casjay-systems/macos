@@ -67,7 +67,7 @@ brew_casks_packages() {
   if [ -n "$TRAVIS" ]; then
     local CASKS="visual-studio-code "
   else
-    local CASKS="visual-studio-code firefox atom obs obs-ndi powershell code-notes robo-3t musicbrainz-picard "
+    local CASKS="visual-studio-code firefox atom obs powershell code-notes robo-3t musicbrainz-picard "
     local CASKS+="libreoffice transmission gpg-suite opera brave-browser tor-browser thunderbird skype lastpass pgadmin4 "
     local CASKS+="authy darktable nextcloud brackets iterm2 terminology vlc insomnia lastpass spectacle alfred the-unarchiver "
   fi
