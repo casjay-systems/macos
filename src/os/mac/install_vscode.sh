@@ -109,6 +109,7 @@ install_code() {
 install_plugins() {
   local i=""
   for i in "${PLUGINS_TO_INSTALL[@]}"; do
+    local name="$(echo $i | sed 's/^[^.]*.//g')"
     execute "code --install-extension $i --force" "Installing $i"
   done
 }
