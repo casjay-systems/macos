@@ -16,7 +16,7 @@ osx_image: xcode12.1
 language: shell
 
 before_install:
-  - echo | /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)" >/dev/null
+  - echo | /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
   - brew update -f >/dev/null && brew upgrade -f >/dev/null
 
 install:
