@@ -40,7 +40,7 @@ setup_omyzsh() {
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 setup_plugins() {
-  if [ -f "$srcdir/config/zsh/install.sh" ]; then
+  if [ ! -f "$srcdir/config/zsh/install.sh" ]; then
     if [ -d "$HOME/.local/share/zsh/oh-my-zsh/custom/plugins/zsh-syntax-highlighting/.git" ]; then
       execute \
         "git -C $HOME/.local/share/zsh/oh-my-zsh/custom/plugins/zsh-syntax-highlighting" \
