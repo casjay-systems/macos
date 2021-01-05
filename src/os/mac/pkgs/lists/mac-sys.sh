@@ -39,11 +39,11 @@ brew_app_packages() {
   # Define brew apps
   if [ -n "$TRAVIS" ]; then
     local BREWS="git svn fortune "
-    local BREWS+="macvim tmux"
+    local BREWS+="macvim tmux "
   else
     local BREWS="font-ubuntu font-powerline-symbols font-fira-code font-hack-nerd-font "
     local BREWS+="git svn fortune cowsay neofetch coreutils fish bash zsh bash-completion@2 rsync typora "
-    local BREWS+="nano neovim macvim emacs thefuck fnm byobu nethogs iftop iperf jq dialog links html2text "
+    local BREWS+="nano neovim vim emacs thefuck fnm byobu nethogs iftop iperf jq dialog links html2text "
     local BREWS+="mpd ncmpcpp newsboat pass editorconfig tmux screen hub zsh fish zsh-completions speedtest-cli "
     local BREWS+="ruby php perl node golang nvm youtube-dl direnv wget curl iproute2mac powerline-go dict "
   fi
@@ -68,7 +68,7 @@ brew_casks_packages() {
     local CASKS="visual-studio-code "
   else
     local CASKS="visual-studio-code firefox atom obs powershell "
-    local CASKS+="libreoffice transmission gpg-suite opera brave-browser tor-browser thunderbird skype "
+    local CASKS+="libreoffice transmission gpg-suite opera brave-browser tor-browser thunderbird skype lastpass "
     local CASKS+="authy darktable nextcloud brackets iterm2 terminology vlc insomnia lastpass spectacle alfred the-unarchiver "
   fi
 
