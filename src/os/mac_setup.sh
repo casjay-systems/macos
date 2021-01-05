@@ -114,7 +114,7 @@ printf "${NC}\n\n"
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 if [ ! -f "$(command -v brew)" ]; then
-  echo | /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+  execute "echo | /bin/bash -c $(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)" "Installing brew"
 fi
 
 # no sudo can't continue
@@ -130,9 +130,8 @@ fi
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 if [ -z "$UPDATE" ]; then
   if ! (sudo true && sudo -ln) 2>&1 | grep -v 'may not' >/dev/null; then
-    printf "
-  ${RED}\n   • Please run one of the following commands as root:${NC}
-  ${GREEN}   You can just do${RED} su -c $srcdir/os/mac/pkgs/lists/mac-sys.sh${NC}\n${RED}then come back to this installer ${NC}\n\n"
+    printf "${RED}\n   • Please run one of the following commands as root:${NC}\n"
+    printf "${GREEN}   You can just do${RED} su -c $srcdir/os/mac/pkgs/lists/mac-sys.sh${NC}\n${RED}then come back to this installer ${NC}\n\n"
     exit
   fi
 fi
