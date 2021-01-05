@@ -17,7 +17,7 @@ language: shell
 
 before_install:
   - echo | /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
-  - brew update -f && brew upgrade -f
+  - brew update -f >/dev/null && brew upgrade -f >/dev/null
 
 install:
   - bash -c "./src/os/mac_setup.sh"
