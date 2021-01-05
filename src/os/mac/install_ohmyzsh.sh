@@ -43,11 +43,11 @@ setup_plugins() {
   if [ ! -f "$srcdir/config/zsh/install.sh" ]; then
     if [ -d "$HOME/.local/share/zsh/oh-my-zsh/custom/plugins/zsh-syntax-highlighting/.git" ]; then
       execute \
-        "git -C $HOME/.local/share/zsh/oh-my-zsh/custom/plugins/zsh-syntax-highlighting" \
+        "git -C $HOME/.local/share/zsh/oh-my-zsh/custom/plugins/zsh-syntax-highlighting pull -q" \
         "Updating zsh-syntax-highlighting"
     else
       execute \
-        "git clone https://github.com/zsh-users/zsh-syntax-highlighting $HOME/.local/share/zsh/oh-my-zsh/custom/plugins/zsh-syntax-highlighting" \
+        "git clone -q https://github.com/zsh-users/zsh-syntax-highlighting $HOME/.local/share/zsh/oh-my-zsh/custom/plugins/zsh-syntax-highlighting" \
         "Installing zsh-syntax-highlighting"
     fi
 
