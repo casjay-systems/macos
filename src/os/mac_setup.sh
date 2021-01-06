@@ -23,7 +23,7 @@ DOTFILES="$HOME/.local/dotfiles/macos"
 export dotfilesDirectory="$DOTFILES"
 export srcdir="$dotfilesDirectory/src"
 export macosdir="$srcdir/os/mac"
-export backupsdir="$HOME/.local/backups/dotfiles"
+export backupsdir="$HOME/.local/backups/dotfiles/macos"
 
 export NONINTERACTIVE=1
 export HOMEBREW_NO_AUTO_UPDATE=true
