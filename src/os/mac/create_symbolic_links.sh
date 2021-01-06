@@ -5,7 +5,7 @@ cd "$(dirname "${BASH_SOURCE[0]}")" &&
 
 srcdir="$(cd .. && pwd)"
 
-backups="${backupsdir:-$HOME/.local/backups/dotfiles}"
+backups="${backupsdir:-$HOME/.local/backups/dotfiles/desktop}"
 mkdir -p "$backups"/{configs,home}
 
 if [ ! -f "$HOME/.ncmpcpp/config" ]; then
