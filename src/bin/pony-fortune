@@ -1,3 +1,0 @@
-#!/usr/bin/env bash
-
-while true; do clear && fortune | ponysay && sleep 120; done

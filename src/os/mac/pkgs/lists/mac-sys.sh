@@ -1,41 +1,34 @@
 #!/usr/bin/env bash
 
-cd "$(dirname "${BASH_SOURCE[0]}")" &&
-  . "../../../utils.sh"
-
+cd "$(dirname "${BASH_SOURCE[0]}")" && . "../../../utils.sh"
 srcdir="$(cd ../../.. && pwd)"
-
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
 brew_tap_packages() {
   installcmd() {
+    __am_i_online || return
     for tap in "${@}"; do
       execute "brew tap ${tap}" "Setting up ${tap}       "
     done
   }
-
   # Define taps
   declare -a TAPS=(
     #"homebrew/cask"
     #"homebrew/cask-fonts"
   )
-
   # install
-  if [ -n "$TAPS" ]; then
-    execute "installcmd ${TAPS}" "Setting up taps       "
+  if [ -n "${TAPS[*]}" ]; then
+    execute "installcmd ${TAPS[*]}" "Setting up taps       "
     unset TAPS
   fi
 }
-
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
 brew_app_packages() {
   installcmd() {
+    __am_i_online || return
     for brew in "${@}"; do
-      execute "brew install -f ${brew}" "Setting up ${brew}       "
+      execute "brew install -f $brew" "Setting up $brew       "
     done
   }
-
   # Define brew apps
   if [ -n "$TRAVIS" ]; then
     local BREWS="git svn fortune "
@@ -49,20 +42,18 @@ brew_app_packages() {
   fi
   # install
   if [ -n "$BREWS" ]; then
-    execute "installcmd ${BREWS}" "Setting up apps       "
+    execute "installcmd $BREWS" "Setting up apps       "
   fi
   unset BREWS
 }
-
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
 brew_casks_packages() {
   installcmd() {
+    __am_i_online || return
     for cask in "${@}"; do
-      execute "brew install --cask -f ${cask}" "Setting up ${cask}       "
+      execute "brew install --cask -f $cask" "Setting up $cask       "
     done
   }
-
   #Define brew casks apps
   if [ -n "$TRAVIS" ]; then
     local CASKS="visual-studio-code "
@@ -71,22 +62,20 @@ brew_casks_packages() {
     local CASKS+="libreoffice transmission gpg-suite opera brave-browser tor-browser thunderbird skype lastpass pgadmin4 "
     local CASKS+="authy darktable nextcloud brackets iterm2 terminology vlc insomnia lastpass spectacle alfred the-unarchiver "
   fi
-
   # install
   if [ -n "$CASKS" ]; then
-    execute "installcmd ${CASKS}" "Setting up casks       "
+    execute "installcmd $CASKS" "Setting up casks       "
   fi
   unset CASKS
 }
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
 main() {
-
   brew_tap_packages
   brew_app_packages
   brew_casks_packages
-
 }
-
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 main
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# end

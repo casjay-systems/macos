@@ -1,13 +1,11 @@
 #!/usr/bin/env bash
 
-cd "$(dirname "${BASH_SOURCE[0]}")" &&
-  . "../utils.sh"
-
+cd "$(dirname "${BASH_SOURCE[0]}")" && . "../utils.sh"
 srcdir="$(cd .. && pwd)"
-
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
 setup_fish() {
+  __cmd_exists dfmgr && dfmgr install fish && return
+  [ -d "$srcdir/config/fish" ] || return
   unlink "$HOME/.config/fish" 2>/dev/null || rm -Rf "$HOME/.config/fish" 2>/dev/null
   if [ -f "$srcdir/config/fish/install.sh" ]; then
     execute "bash -c $srcdir/config/fish/install.sh" "Installing fish: $srcdir/config/fish/install.sh"
@@ -19,18 +17,15 @@ setup_fish() {
     exit
   fi
 }
-
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
 setup_ohmyfish() {
+  [ -d "$srcdir/config/fish" ] || return
   if [ ! -f "$srcdir/config/fish/install.sh" ]; then
     if [ -d "$HOME/.local/share/fish/oh-my-fish/.git" ]; then
-      execute \
-        "fish -c omf update" \
-        "Updating oh-my-fish"
+      execute "fish -c omf update" "Updating oh-my-fish"
     else
       if [ ! -d "$HOME/.local/share/omf" ]; then
-        curl -LSs https://github.com/oh-my-fish/oh-my-fish/raw/master/bin/install >"$srcdir/config/fish/omf-install"
+        __curl https://github.com/oh-my-fish/oh-my-fish/raw/master/bin/install >"$srcdir/config/fish/omf-install"
         execute \
           "fish $srcdir/config/fish/omf-install --noninteractive --yes" \
           "Installing oh-my-fish"
@@ -38,10 +33,9 @@ setup_ohmyfish() {
     fi
   fi
 }
-
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
 setup_fishplugins() {
+  [ -d "$srcdir/config/fish" ] || return
   if [ ! -f "$srcdir/config/fish/install.sh" ]; then
     if [ -f "$srcdir/config/fish/plugins.fish" ]; then
       execute \
@@ -50,17 +44,13 @@ setup_fishplugins() {
     fi
   fi
 }
-
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
 main() {
-
   setup_fish
   setup_ohmyfish
   setup_fishplugins
-
 }
-
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
 main
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# end

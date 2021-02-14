@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 
-cd "$(dirname "${BASH_SOURCE[0]}")" &&
-  . "../utils.sh"
+cd "$(dirname "${BASH_SOURCE[0]}")" && . "../utils.sh"
 
 srcdir="$(cd .. && pwd)"
 
@@ -99,23 +98,22 @@ declare -a PLUGINS_TO_INSTALL=(
 )
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
 install_code() {
   execute "brew install --cask -f visual-studio-code" "Install Visual Studio code"
 }
-
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
 install_plugins() {
   installcmd() {
     local i=""
-    local name="$(echo $i | sed 's/^[^.]*.//g')"
+    local name=""
     for i in "${@}"; do
-      execute "code --install-extension $i --force" "Setting up ${name}"
+      name="$(echo $i | sed 's/^[^.]*.//g')"
+      execute "code --install-extension $i --force" "Setting up $name"
+      unset name
     done
   }
 
-  if [ -n "$PLUGINS_TO_INSTALL" ]; then
+  if [ -n "${PLUGINS_TO_INSTALL[*]}" ]; then
     execute "installcmd ${PLUGINS_TO_INSTALL[*]}" "Setting up plugins"
     unset PLUGINS_TO_INSTALL
   fi
@@ -311,27 +309,20 @@ install_settings() {
 EOF
   #
   if [ -f "$FILE_PATH" ]; then
-    isInFile=$(cat "$FILE_PATH" | grep -c "shellcheck.exclude")
-    if [ $isInFile -eq 0 ]; then
-
-      execute \
-        "printf '%s' '$CONFIGS' >$FILE_PATH" \
-        "settings.json → $FILE_PATH"
+    isInFile=$(grep -c "shellcheck.exclude" "$FILE_PATH")
+    if [ "$isInFile" -eq 0 ]; then
+      execute "printf '%s' '$CONFIGS' >$FILE_PATH" "settings.json → $FILE_PATH"
     fi
   fi
-
 }
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
 main() {
-
   install_code
   install_plugins
   install_settings
-
 }
-
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
 main
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# end

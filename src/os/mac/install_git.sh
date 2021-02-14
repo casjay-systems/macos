@@ -1,13 +1,11 @@
 #!/usr/bin/env bash
 
-cd "$(dirname "${BASH_SOURCE[0]}")" &&
-  . "../utils.sh"
-
+cd "$(dirname "${BASH_SOURCE[0]}")" && . "../utils.sh"
 srcdir="$(cd .. && pwd)"
-
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
 install_git() {
+  __cmd_exists dfmgr && dfmgr install git && return
+  [ -d "$srcdir/config/git" ] || return
   if [ -f "$srcdir/config/git/install.sh" ]; then
     execute "bash -c $srcdir/config/git/install.sh" "Installing GIT: $srcdir/config/git/install.sh"
   elif [ -d "$srcdir/config/git" ]; then
@@ -19,8 +17,8 @@ install_git() {
   fi
 }
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
 install_ohmygit() {
+  [ -d "$srcdir/config/git" ] || return
   if [ ! -f "$srcdir/config/git/install.sh" ]; then
     if [ ! -d "$HOME/.local/share/git/oh-my-git/.git" ]; then
       execute \
@@ -33,35 +31,27 @@ install_ohmygit() {
         "Updating oh-my-git"
     fi
   fi
-
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
   if [ -f "$HOME/.config/local/bash.local" ]; then
-    isInFile=$(cat "$HOME/.config/local/bash.local" | grep -c "oh-my-git")
-    if [ $isInFile -eq 0 ]; then
-
+    isInFile=$(grep -c "oh-my-git" "$HOME/.config/local/bash.local")
+    if [ "$isInFile" -eq 0 ]; then
       declare -r CONFIGS="
 # OH-MY-GIT
 [ -f \"\$HOME/.local/share/git/oh-my-git/prompt.sh\" ] \\
     && source \"\$HOME/.local/share/git/oh-my-git/prompt.sh\"
 "
-
       execute \
         "printf '%s' '$CONFIGS' >> ~/.config/local/bash.local" \
         "Enabling oh-my-git in ~/.config/local/bash.local"
     fi
   fi
 }
-
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
 main() {
-
   install_git
   install_ohmygit
-
 }
-
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
 main
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# end

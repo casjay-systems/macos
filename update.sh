@@ -14,35 +14,31 @@ if [[ ! "$OSTYPE" =~ ^darwin ]]; then
   exit 1
 fi
 
-#clear vars
+# vars
+DOTFILESDIR="${DOTFILESDIR:-$HOME/.local/dotfiles/OS}"
 NEWVERSION=""
 OLDVERSION=""
 choice=""
 
 # Version check
-if [ -n "$DOTFILESDIR" ]; then
-  dotfilesdir="$DOTFILESDIR"
-else
-  dotfilesdir="$HOME/.local/dotfiles/macos"
-fi
 
-if [ -f "$dotfilesdir/version.txt" ]; then
+if [ -f "$DOTFILESDIR/version.txt" ]; then
   printf "\t\t$magenta" "Checking for updates"
-  NEWVERSION="$(echo $(curl -Lsq https://github.com/casjay-systems/macos/raw/master/version.txt | grep -v "#" | tail -n 1))"
-  OLDVERSION="$(echo $(cat $dotfilesdir/version.txt | tail -n 1))"
+  NEWVERSION="$(echo "$(curl -q -LSs https://github.com/casjay-systems/macos/raw/master/version.txt | grep -v "#" | tail -n 1)")"
+  OLDVERSION="$(tail -n 1 "$DOTFILESDIR/version.txt")"
   if [ "$NEWVERSION" == "$OLDVERSION" ]; then
     printf "\t\t$green" "No updates available current version is $OLDVERSION\n"
   else
     printf "\t\t$red" "Update available - New version is $NEWVERSION"
     printf "\t\t$red" "Would you like to update? [y/N]"
-    read -n 1 -s choice
-    if [ $choice == "y" ]; then
-      cd "$dotfilesdir" && git pull -q
+    read -r -n 1 -s choice
+    if [ "$choice" == "y" ]; then
+      git -C "$DOTFILESDIR" pull -q
       printf "\t\t$green" "Updated to latest version = $NEWVERSION\n"
     else
       printf "\t\t$magenta" "You decided not to update\n"
     fi
   fi
 else
-  printf "\t\t$red" "Can't find $dotfilesdir/version.txt"
+  printf "\t\t$red" "Can't find $DOTFILESDIR/version.txt"
 fi

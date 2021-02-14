@@ -8,6 +8,8 @@ srcdir="$(cd .. && pwd)"
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 setup_zsh() {
+  __cmd_exists dfmgr && dfmgr install zsh && return
+  [ -d "$srcdir/config/zsh" ] || return
   if [ -f "$srcdir/config/zsh/install.sh" ]; then
     execute "bash -c $srcdir/config/zsh/install.sh" "Installing zsh: $srcdir/config/zsh/install.sh"
   elif [ -d "$srcdir/config/zsh" ]; then
@@ -23,6 +25,7 @@ setup_zsh() {
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 setup_omyzsh() {
+  [ -d "$srcdir/config/zsh" ] || return
   if [ ! -f "$srcdir/config/zsh/install.sh" ]; then
     if [ -d "$HOME/.local/share/zsh/oh-my-zsh/.git" ]; then
       execute \
@@ -40,6 +43,7 @@ setup_omyzsh() {
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 setup_plugins() {
+  [ -d "$srcdir/config/zsh" ] || return
   if [ ! -f "$srcdir/config/zsh/install.sh" ]; then
     if [ -d "$HOME/.local/share/zsh/oh-my-zsh/custom/plugins/zsh-syntax-highlighting/.git" ]; then
       execute \
@@ -50,9 +54,7 @@ setup_plugins() {
         "git clone -q https://github.com/zsh-users/zsh-syntax-highlighting $HOME/.local/share/zsh/oh-my-zsh/custom/plugins/zsh-syntax-highlighting" \
         "Installing zsh-syntax-highlighting"
     fi
-
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
     if [ -d "$HOME/.local/share/zsh/oh-my-zsh/custom/themes/powerlevel9k/.git" ]; then
       execute \
         "git -C $HOME/.local/share/zsh/oh-my-zsh/custom/themes/powerlevel9k pull -q" \
@@ -63,9 +65,7 @@ setup_plugins() {
         git clone -q https://github.com/bhilburn/powerlevel9k.git $HOME/.local/share/zsh/oh-my-zsh/custom/themes/powerlevel9k" \
         "https://github.com/bhilburn/powerlevel9k.git → $HOME/.local/share/zsh/oh-my-zsh/custom/themes/powerlevel9k"
     fi
-
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
     if [ -d "$HOME/.local/share/zsh/oh-my-zsh/custom/themes/powerlevel10k/.git" ]; then
       execute \
         "git -C $HOME/.local/share/zsh/oh-my-zsh/custom/themes/powerlevel10k pull -q" \
@@ -82,13 +82,12 @@ setup_plugins() {
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 main() {
-
   setup_zsh
   setup_omyzsh
   setup_plugins
-
 }
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
 main
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# end

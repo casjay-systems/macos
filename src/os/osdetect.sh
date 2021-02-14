@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
 #Set OS Detection
 arch=$(uname -m)
 kernel=$(uname -r)
@@ -23,56 +22,47 @@ else
 fi
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
 #Various Arch Distros
 if [[ "$distroname" =~ "ArcoLinux" ]] || [[ "$distroname" =~ "Arch" ]] || [[ "$distroname" =~ "BlackArch" ]]; then
   DISTRO=Arch
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
 #Raspberry pi
 elif [[ "$distroname" =~ "Raspbian" ]]; then
   DISTRO=Raspbian
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
 #Various RedHat Distros
 elif [[ "$distroname" =~ "Scientific" ]] || [[ "$distroname" =~ "RedHat" ]] || [[ "$distroname" =~ "CentOS" ]] || [[ "$distroname" =~ "Casjay" ]]; then
   DISTRO=RHEL
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
 #Various Debian Distros
 elif [[ "$distroname" =~ "Kali" ]] || [[ "$distroname" =~ "Parrot" ]] || [[ "$distroname" =~ "Debian" ]]; then
   DISTRO=Debian
-
   if [[ "$distroname" =~ "Debian" ]]; then
     CODENAME=$(lsb_release -a 2>/dev/null | grep Code | sed 's#Codename:##g' | awk '{print $1}')
   fi
-
   #Kali
   if [[ "$distroname" =~ "Kali" ]]; then
     CODENAME=kali
   fi
-
   #ParrotSec
   if [[ "$distroname" =~ "Parrot" ]]; then
     CODENAME=parrot
   fi
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
 #Various Ubuntu Distros
 elif [[ "$distroname" =~ "Ubuntu" ]] || [[ "$distroname" =~ "Mint" ]] || [[ "$distroname" =~ "Elementary" ]] || [[ "$distroname" =~ "KDE neon" ]]; then
   DISTRO=Ubuntu
   CODENAME=$(lsb_release -a 2>/dev/null | grep Code | sed 's#Codename:##g' | awk '{print $1}')
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
 # Fedora
 elif [[ "$distroname" =~ "Fedora" ]]; then
   DISTRO=Fedora
+fi
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ##
-fi

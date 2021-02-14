@@ -18,7 +18,7 @@ NTPSERVER="0.casjay.pool.ntp.org"
 DOTTEMP="/tmp/dotfiles-desktop-$USER"
 # Default dotfiles dir
 # Set primary dir - not used
-DOTFILES="$HOME/.local/dotfiles/macos"
+DOTFILES="$HOME/.local/dotfiles/OS"
 
 export dotfilesDirectory="$DOTFILES"
 export srcdir="$dotfilesDirectory/src"
@@ -33,9 +33,9 @@ export HOMEBREW_CASK_OPTS="--appdir=/Applications"
 export SUDO_PROMPT="$(printf "\033[1;36m")  • [sudo]$(printf "\033[0m") password for %p: "
 
 ##### for when I'm forgetful
-if [ -z $dotfilesDirectory ]; then printf "\n${RED}   *** dotfiles directory not specified ***${NC}\n"; fi
-if [ -z $srcdir ]; then printf "\n${RED}   *** dotfiles src directory not specified ***${NC}\n"; fi
-if [ -z $macosdir ]; then printf "\n${RED}   *** dotfiles macos directory not specified ***${NC}\n"; fi
+if [ -z "$dotfilesDirectory" ]; then printf "\n${RED}   *** dotfiles directory not specified ***${NC}\n"; fi
+if [ -z "$srcdir" ]; then printf "\n${RED}   *** dotfiles src directory not specified ***${NC}\n"; fi
+if [ -z "$macosdir" ]; then printf "\n${RED}   *** dotfiles macos directory not specified ***${NC}\n"; fi
 #####
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -184,18 +184,18 @@ fi
 
 # Grab the OS detection script if it doesn't exist script
 
-if [ -f $srcdir/os/osdetect.sh ]; then
-  source $srcdir/os/osdetect.sh
+if [ -f "$srcdir/os/osdetect.sh" ]; then
+  source "$srcdir/os/osdetect.sh"
 else
-  curl -Lsq https://raw.githubusercontent.com/casjay-systems/macos/master/src/os/osdetect.sh -o /tmp/osdetect.sh
-  source /tmp/osdetect.sh
-  rm -Rf /tmp/osdetect.sh
+  curl -Lsq https://raw.githubusercontent.com/casjay-systems/macos/master/src/os/osdetect.sh -o "/tmp/osdetect.sh"
+  source "/tmp/osdetect.sh"
+  rm -Rf "/tmp/osdetect.sh"
 fi
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Set version from git
 
-CURDOTFVERSION="$(echo $(curl -Lsq https://github.com/casjay-systems/macos/raw/master/version.txt | grep -v "#" | head -n 1))"
+CURDOTFVERSION="$(echo "$(curl -Lsq https://github.com/casjay-systems/macos/raw/master/version.txt | grep -v "#" | head -n 1)")"
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Print distro info
@@ -208,24 +208,22 @@ printf "${GREEN}   *** • Installing version $CURDOTFVERSION • ***${NC}\n"
 # Setup the dotfiles Directory
 
 printf "\n${PURPLE}   • Setting up the git repo${NC}\n"
-if [ -d $dotfilesDirectory/.git ]; then
+if [ -d "$dotfilesDirectory"/.git ]; then
   cd "$srcdir/os" && source "utils.sh"
 
   execute \
     "git -C $dotfilesDirectory pull --recurse-submodules -fq" \
     "Updating $dotfilesDirectory"
-  NEWVERSION="$(echo $(cat $dotfilesDirectory/version.txt | tail -n 1))"
-  REVER="$(cd $dotfilesDirectory && git rev-parse --short HEAD)"
+  NEWVERSION="$(tail -n 1 "$dotfilesDirectory/version.txt")"
+  REVER="$(git -C $dotfilesDirectory rev-parse --short HEAD)"
   printf "${GREEN}   [✔] Updated to $NEWVERSION - revision: $REVER${NC}\n"
-
 else
-
   rm -Rf "$dotfilesDirectory"
   execute \
-    "git clone --depth=1 -q --recursive https://github.com/casjay-systems/macos.git "$dotfilesDirectory" >/dev/null 2>&1" \
+    "git clone --depth=1 -q --recursive https://github.com/casjay-systems/macos.git $dotfilesDirectory >/dev/null 2>&1" \
     "clone https://github.com/casjay-systems/macos.git  → $dotfilesDirectory"
-  NEWVERSION="$(echo $(cat $dotfilesDirectory/version.txt | tail -n 1))"
-  REVER="$(cd $dotfilesDirectory && git rev-parse --short HEAD)"
+  NEWVERSION="$(tail -n 1 "$dotfilesDirectory/version.txt")"
+  REVER="$(git -C $dotfilesDirectory rev-parse --short HEAD)"
   printf "${GREEN}   [✔] downloaded version $NEWVERSION - revision: $REVER${NC}\n"
   cd "$srcdir/os" && source "utils.sh"
 fi
@@ -260,40 +258,46 @@ if [ -z "$UPDATE" ] || [ "$1" = "--force" ]; then
   fi
 fi
 
-###################################################################
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# Install additional
+print_in_purple "\n   • Installing additional tools\n"
+if [ -f "$(command -v dfmgr 2>/dev/null)" ]; then
+  execute "dfmgr install misc"
+fi
+print_in_purple "   • Installing additional tools completed\n\n"
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Create user directories
 print_in_purple "\n   • Creating directories\n"
-$macosdir/create_directories.sh
+"$macosdir/create_directories.sh"
 print_in_purple "   • Creating directories completed\n\n"
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Install additional system files if root
 if (sudo true && sudo -ln) 2>&1 | grep -v 'may not' >/dev/null; then
   print_in_purple "\n   • Installing system files\n"
-  sudo $macosdir/install_system_files.sh
+  sudo "$macosdir/install_system_files.sh"
   print_in_purple "   • Installing system files completed\n\n"
 fi
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Create user themes/fonts/icons or install to system if root
 print_in_purple "\n   • Installing Customizations\n"
-$macosdir/install_customizations.sh
+"$macosdir/install_customizations.sh"
 print_in_purple "   • Installing Customizations completed\n\n"
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Create user .local files
 print_in_purple "\n   • Create local config files\n"
-$macosdir/create_local_config_files.sh
+"$macosdir/create_local_config_files.sh"
 print_in_purple "   • Create local config files completed\n\n"
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Create user dotfile symlinks
 print_in_purple "\n   • Create user files\n"
-$macosdir/create_symbolic_links.sh
+"$macosdir/create_symbolic_links.sh"
 print_in_purple "   • Create user files completed\n"
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Create and Setup git
 GIT=$(command -v git 2>/dev/null)
 if [ -z "$GIT" ]; then print_in_red "\n • The git package is not installed\n\n"; else
   print_in_purple "\n   • Installing GIT\n"
-  $macosdir/install_git.sh
+  "$macosdir/install_git.sh"
   print_in_purple "   • Installing GIT completed\n\n"
 fi
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -301,7 +305,7 @@ fi
 VIM=$(command -v vim 2>/dev/null)
 if [ -z "$VIM" ]; then print_in_red "\n • The vim package is not installed\n\n"; else
   print_in_purple "\n   • Installing vim with plugins\n"
-  $macosdir/install_vim.sh
+  "$macosdir/install_vim.sh"
   print_in_purple "   • Installing vim with plugins completed\n\n"
 fi
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -309,7 +313,7 @@ fi
 TMUX=$(command -v tmux 2>/dev/null)
 if [ -z "$TMUX" ]; then print_in_red "\n • The tmux package is not installed\n\n"; else
   print_in_purple "\n   • Installing tmux plugins\n"
-  $macosdir/install_tmux.sh
+  "$macosdir/install_tmux.sh"
   print_in_purple "   • Installing tmux plugins completed\n\n"
 fi
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -317,7 +321,7 @@ fi
 ZSH=$(command -v zsh 2>/dev/null)
 if [ -z "$ZSH" ]; then print_in_red "\n • The zsh package is not installed\n\n"; else
   print_in_purple "\n   • Installing zsh with plugins\n"
-  $macosdir/install_ohmyzsh.sh
+  "$macosdir/install_ohmyzsh.sh"
   print_in_purple "   • Installing zsh with plugins completed\n\n"
 fi
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -325,7 +329,7 @@ fi
 FISH=$(command -v fish 2>/dev/null)
 if [ -z "$FISH" ]; then print_in_red "\n • The fish package is not installed\n\n"; else
   print_in_purple "\n   • Installing fish shell and plugins\n"
-  $macosdir/install_ohmyfish.sh
+  "$macosdir/install_ohmyfish.sh"
   print_in_purple "   • Installing fish shell and plugins completed\n"
 fi
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -333,7 +337,7 @@ fi
 CODE=$(command -v code 2>/dev/null)
 if [ -z "$CODE" ]; then print_in_red "\n • The Visual Studio code package is not installed\n\n"; else
   print_in_purple "\n   • Installing Visual Studio code and plugins\n"
-  $macosdir/install_vscode.sh
+  "$macosdir/install_vscode.sh"
   print_in_purple "   • Installing Visual Studio code shell and plugins completed\n"
 fi
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -345,11 +349,11 @@ if [ -f "$(command -v pip3 2>/dev/null) " ]; then
     print_in_purple "\n   • Installing terminal tools\n"
     for PIPTOOLS in git+https://github.com/sixohsix/python-irclib shodan ytmdl toot castero rainbowstream; do
       if "(sudo -vn && sudo -ln)" 2>&1 | grep -v 'may not' >/dev/null; then
-        execute \
+        __am_i_online && execute \
           "sudo sh -c $PIP install $PIPTOOLS >/dev/null 2>&1" \
           "Installing pip package: $PIPTOOLS"
       else
-        execute \
+        __am_i_online && execute \
           "sh -c $PIP install --user $PIPTOOLS >/dev/null 2>&1" \
           "Installing pip package: $PIPTOOLS"
       fi
@@ -359,17 +363,6 @@ if [ -f "$(command -v pip3 2>/dev/null) " ]; then
 fi
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-# Install additional
-print_in_purple "\n   • Installing additional tools\n"
-if [ -f "$(command -v dfmgr 2>/dev/null)" ]; then
-  execute "dfmgr install misc"
-fi
-
-print_in_purple "   • Installing additional tools completed\n\n"
-
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
 # Go home
 cd "$HOME"
 
@@ -397,20 +390,20 @@ if [ ! -d "$HOME"/.config/dotfiles ]; then mkdir -p "$HOME"/.config/dotfiles; fi
 if [ ! -f "$HOME"/.config/dotfiles/env ]; then
   echo "" >"$HOME"/.config/dotfiles/env
   echo "UPDATE="yes"" >>"$HOME"/.config/dotfiles/env
-  echo "dotfilesDirectory="$dotfilesDirectory"" >>"$HOME"/.config/dotfiles/env
-  echo "srcdir="$dotfilesDirectory/src"" >>"$HOME"/.config/dotfiles/env
-  echo "macosdir="$srcdir/os/mac"" >>"$HOME"/.config/dotfiles/env
-  echo "INSTALLEDVER="$NEWVERSION"" >>"$HOME"/.config/dotfiles/env
-  echo "DISTRO="$DISTRO"" >>"$HOME"/.config/dotfiles/env
-  echo "CODENAME="$CODENAME"" >>"$HOME"/.config/dotfiles/env
-  echo "GIT="$GIT"" >>"$HOME"/.config/dotfiles/env
-  echo "CURL="$CURL"" >>"$HOME"/.config/dotfiles/env
-  echo "WGET="$WGET"" >>"$HOME"/.config/dotfiles/env
-  echo "VIM="$VIM"" >>"$HOME"/.config/dotfiles/env
-  echo "TMUX="$TMUX"" >>"$HOME"/.config/dotfiles/env
-  echo "ZSH="$ZSH"" >>"$HOME"/.config/dotfiles/env
-  echo "FISH="$FISH"" >>"$HOME"/.config/dotfiles/env
-  echo "BREW="$BREW"" >>"$HOME"/.config/dotfiles/env
+  echo "dotfilesDirectory="$dotfilesDirectory"" >>"$HOME/.config/dotfiles/env"
+  echo "srcdir="$dotfilesDirectory/src"" >>"$HOME/.config/dotfiles/env"
+  echo "macosdir="$srcdir/os/mac"" >>"$HOME/.config/dotfiles/env"
+  echo "INSTALLEDVER="$NEWVERSION"" >>"$HOME/.config/dotfiles/env"
+  echo "DISTRO="$DISTRO"" >>"$HOME/.config/dotfiles/env"
+  echo "CODENAME="$CODENAME"" >>"$HOME/.config/dotfiles/env"
+  echo "GIT="$GIT"" >>"$HOME/.config/dotfiles/env"
+  echo "CURL="$CURL"" >>"$HOME/.config/dotfiles/env"
+  echo "WGET="$WGET"" >>"$HOME/.config/dotfiles/env"
+  echo "VIM="$VIM"" >>"$HOME/.config/dotfiles/env"
+  echo "TMUX="$TMUX"" >>"$HOME/.config/dotfiles/env"
+  echo "ZSH="$ZSH"" >>"$HOME/.config/dotfiles/env"
+  echo "FISH="$FISH"" >>"$HOME/.config/dotfiles/env"
+  echo "BREW="$BREW"" >>"$HOME/.config/dotfiles/env"
 fi
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -431,7 +424,7 @@ fi
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Print installed version
 
-NEWVERSION="$(echo $(cat $dotfilesDirectory/version.txt | tail -n 1))"
+NEWVERSION="$(tail -n 1 "$dotfilesDirectory/version.txt")"
 # End Install
 #RESULT=$?
 printf "\n${GREEN}   *** 😃 installation of dotfiles completed 😃 *** ${NC}\n"
