@@ -33,10 +33,10 @@ understand [what it does][setup]. Seriously, **DON'T**!).
   
 | OS                  | Snippet                                                                                                                                                                                  |
 | :------------------ | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `Auto`              | `bash -c "$(curl -LsS https://github.com/casjay-systems/linux/raw/master/install.sh)"`                                                                                                   |
-| `Linux Installer`   | `bash -c "$(curl -LsS https://github.com/casjay-systems/linux/raw/master/install.sh)"`                                                                                                   |
-| `MacOS Installer`   | `bash -c "$(curl -LsS https://github.com/casjay-systems/macos/raw/master/install.sh)"`                                                                                                   |
-| `Windows Installer` | `powershell.exe -Command Invoke-WebRequest https://github.com/casjay-systems/windows/raw/master/install.cmd -o %USERPROFILE%\Downloads\install.cmd; %USERPROFILE%\Downloads\install.cmd` |
+| `Auto`              | `bash -c "$(curl -LsS https://github.com/casjay-systems/linux/raw/main/install.sh)"`                                                                                                   |
+| `Linux Installer`   | `bash -c "$(curl -LsS https://github.com/casjay-systems/linux/raw/main/install.sh)"`                                                                                                   |
+| `MacOS Installer`   | `bash -c "$(curl -LsS https://github.com/casjay-systems/macos/raw/main/install.sh)"`                                                                                                   |
+| `Windows Installer` | `powershell.exe -Command Invoke-WebRequest https://github.com/casjay-systems/windows/raw/main/install.cmd -o %USERPROFILE%\Downloads\install.cmd; %USERPROFILE%\Downloads\install.cmd` |
 
 That's it! :sparkles:
 

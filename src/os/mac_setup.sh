@@ -59,8 +59,8 @@ if [ -f "$srcdir/os/osdetect.sh" ] && [ -f "$srcdir/os/utils.sh" ]; then
   source "$srcdir/os/utils.sh"
   source "$srcdir/os/osdetect.sh"
 else
-  curl -Lsq "https://$GITREPO/raw/master/src/os/utils.sh" -o /tmp/utils.sh
-  curl -Lsq "https://$GITREPO/raw/master/src/os/osdetect.sh" -o /tmp/osdetect.sh
+  curl -Lsq "https://$GITREPO/raw/main/src/os/utils.sh" -o /tmp/utils.sh
+  curl -Lsq "https://$GITREPO/raw/main/src/os/osdetect.sh" -o /tmp/osdetect.sh
   if [ -f "/tmp/osdetect.sh" ] && [ -f "/tmp/utils.sh" ]; then
     source /tmp/utils.sh
     source /tmp/osdetect.sh
@@ -121,7 +121,7 @@ fi
 SUDU=$(command -v sudo 2>/dev/null)
 if ! (sudo true && sudo -ln) 2>&1 | grep -v 'may not' >/dev/null; then
   if [[ -z "$SUDU" ]] && [[ -z "$UPDATE" ]]; then
-    printf "\n${GREEN}   *** ${RED}•${GREEN} UPDATE=yes bash -c "$(curl -LsS https://github.com/casjay-systems/macos/raw/master/src/os/setup.sh)" ${RED}•${GREEN} ***${NC}\n"
+    printf "\n${GREEN}   *** ${RED}•${GREEN} UPDATE=yes bash -c "$(curl -LsS https://github.com/casjay-systems/macos/raw/main/src/os/setup.sh)" ${RED}•${GREEN} ***${NC}\n"
     printf "\n${GREEN}   *** ${RED}•${GREEN} to install just the dotfiles ${RED}•${GREEN} ***${NC}\n"
     printf "\n${RED}   *** ${RED}•${GREEN} No sudo or root privileges ${RED}•${GREEN} ***${NC}\n\n"
     exit
@@ -195,7 +195,7 @@ fi
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Set version from git
 
-CURDOTFVERSION="$(echo "$(curl -Lsq https://github.com/casjay-systems/macos/raw/master/version.txt | grep -v "#" | head -n 1)")"
+CURDOTFVERSION="$(echo "$(curl -Lsq https://github.com/casjay-systems/macos/raw/main/version.txt | grep -v "#" | head -n 1)")"
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Print distro info
