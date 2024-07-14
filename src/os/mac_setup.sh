@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# shellcheck disable=2155,2027,2288,2140,2059,2164
 
 export PATH="/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin:$PATH"
 
@@ -99,9 +100,8 @@ else
   exit 1
 fi
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
 # Welcome message
-
+clear
 wait_time=10 # seconds
 temp_cnt=${wait_time}
 printf "\n\n\n\n\n${GREEN}   *** ${RED}•${GREEN} Welcome to my dotfiles Installer for MacOS ${RED}•${GREEN} ***${NC}\n"
@@ -116,7 +116,6 @@ printf "${NC}\n\n"
 if [ ! -f "$(command -v brew)" ]; then
   execute "echo | /bin/bash -c $(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)" "Installing brew"
 fi
-
 # no sudo can't continue
 SUDU=$(command -v sudo 2>/dev/null)
 if ! (sudo true && sudo -ln) 2>&1 | grep -v 'may not' >/dev/null; then
@@ -135,11 +134,8 @@ if [ -z "$UPDATE" ]; then
     exit
   fi
 fi
-
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
 # Lets check for git, curl, wget
-
 GIT=$(command -v git 2>/dev/null)
 CURL=$(command -v curl 2>/dev/null)
 WGET=$(command -v wget 2>/dev/null)
@@ -183,7 +179,6 @@ fi
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 # Grab the OS detection script if it doesn't exist script
-
 if [ -f "$srcdir/os/osdetect.sh" ]; then
   source "$srcdir/os/osdetect.sh"
 else
@@ -191,26 +186,19 @@ else
   source "/tmp/osdetect.sh"
   rm -Rf "/tmp/osdetect.sh"
 fi
-
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Set version from git
-
 CURDOTFVERSION="$(echo "$(curl -Lsq https://github.com/casjay-systems/macos/raw/main/version.txt | grep -v "#" | head -n 1)")"
-
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Print distro info
-
 printf "\n\n${PURPLE}   *** • Your Distro is a Mac and is based on BSD • ***${NC}\n"
 printf "${GREEN}   *** • git, curl, wget, vim, tmux, zsh, fish, sudo are present • ***${NC}\n"
 printf "${GREEN}   *** • Installing version $CURDOTFVERSION • ***${NC}\n"
-
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Setup the dotfiles Directory
-
 printf "\n${PURPLE}   • Setting up the git repo${NC}\n"
 if [ -d "$dotfilesDirectory"/.git ]; then
   cd "$srcdir/os" && source "utils.sh"
-
   execute \
     "git -C $dotfilesDirectory pull --recurse-submodules -fq" \
     "Updating $dotfilesDirectory"
@@ -228,21 +216,16 @@ else
   cd "$srcdir/os" && source "utils.sh"
 fi
 printf "${PURPLE}   • Setting up the git repo completed${NC}\n\n"
-
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Make Directories and fix permissions
-
 mkdir -p "$HOME"/.gnupg "$HOME"/.ssh 2>/dev/null
 find "$HOME" -xtype l -delete 2>/dev/null
 find "$HOME"/.gnupg "$HOME"/.ssh -type f -exec chmod 600 {} \; 2>/dev/null
 find "$HOME"/.gnupg "$HOME"/.ssh -type d -exec chmod 700 {} \; 2>/dev/null
-
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
 # Check for then get root permissions
 if [ -z "$UPDATE" ] || [ "$1" = "--force" ]; then
   if (sudo true && sudo -ln) 2>&1 | grep -v 'may not' >/dev/null; then
-
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     # Install Packages
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -257,7 +240,6 @@ if [ -z "$UPDATE" ] || [ "$1" = "--force" ]; then
     printf "\n${PURPLE}   • Done Setting up for the Mac${NC}\n\n"
   fi
 fi
-
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Install additional
 print_in_purple "\n   • Installing additional tools\n"
@@ -341,7 +323,6 @@ if [ -z "$CODE" ]; then print_in_red "\n • The Visual Studio code package is n
   print_in_purple "   • Installing Visual Studio code shell and plugins completed\n"
 fi
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
 if [ -f "$(command -v pip3 2>/dev/null) " ]; then
   PIP="python3 -mpip install"
   if [ -z "$(command -v shodan 2>/dev/null)" ] || [ -z "$(command -v ytmdl 2>/dev/null)" ] || [ -z "$(command -v toot 2>/dev/null)" ] ||
@@ -361,18 +342,15 @@ if [ -f "$(command -v pip3 2>/dev/null) " ]; then
     print_in_purple "   • Installing terminal tools completed\n\n"
   fi
 fi
-
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Go home
 cd "$HOME"
-
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Fix permissions again
 find "$HOME" -xtype l -delete find "$HOME" -xtype l -delete 2>/dev/null
 find "$HOME"/.gnupg "$HOME"/.ssh -type f -exec chmod 600 {} \; 2>/dev/null
 find "$HOME"/.gnupg "$HOME"/.ssh -type d -exec chmod 700 {} \; 2>/dev/null
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
 # Create env file
 GIT=$(command -v git 2>/dev/null)
 CURL=$(command -v curl 2>/dev/null)
@@ -385,7 +363,6 @@ SUDO=$(command -v sudo 2>/dev/null)
 BREW=$(command -v brew 2>/dev/null)
 DISTRO="$(sw_vers -productName) $(sw_vers -productVersion)"
 CODENAME="$(sed -nE '/SOFTWARE LICENSE AGREEMENT FOR/s/([A-Za-z]+ ){5}|\\$//gp' /System/Library/CoreServices/Setup\ Assistant.app/Contents/Resources/en.lproj/OSXSoftwareLicense.rtf | awk '{print $2}')"
-
 if [ ! -d "$HOME"/.config/dotfiles ]; then mkdir -p "$HOME"/.config/dotfiles; fi
 if [ ! -f "$HOME"/.config/dotfiles/env ]; then
   echo "" >"$HOME"/.config/dotfiles/env
@@ -405,25 +382,19 @@ if [ ! -f "$HOME"/.config/dotfiles/env ]; then
   echo "FISH="$FISH"" >>"$HOME/.config/dotfiles/env"
   echo "BREW="$BREW"" >>"$HOME/.config/dotfiles/env"
 fi
-
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
 # run clean up
 print_in_purple "\n   • Running cleanup\n"
 if (sudo true && sudo -ln) 2>&1 | grep -v 'may not' >/dev/null; then
   execute "brew cleanup"
 fi
 print_in_purple "\n   • Running cleanup complete\n"
-
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
 if (sudo true && sudo -ln) 2>&1 | grep -v 'may not' >/dev/null; then
   sudo touch /usr/local/Homebrew/.srcinstall
 fi
-
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Print installed version
-
 NEWVERSION="$(tail -n 1 "$dotfilesDirectory/version.txt")"
 # End Install
 #RESULT=$?
@@ -432,5 +403,6 @@ printf "${GREEN}   *** 😃 You now have version number: "$NEWVERSION" 😃 *** 
 printf "${RED}   *** For the configurations to take effect *** ${NC} \n "
 printf "${RED}   *** you should logoff or reboot your system *** ${NC} \n\n\n\n "
 ##################################################################################################
-
+[ "$TRAVIS" ] || say 'installation of dotfiles completed! You should now reboot your system!'
+##################################################################################################
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

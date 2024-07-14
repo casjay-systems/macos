@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-
+# shellcheck disable=all
 # // TODO: Add the ability to specify custom git repo
 
 # Detect the platform (similar to $OSTYPE)
@@ -17,7 +17,7 @@ case $OS in
   ;;
 'Darwin')
   OS='Mac'
-  if [ -z "$UPDATE ]"; then
+  if [ -z "$UPDATE" ]; then
     echo "Detected os is $OS"
     echo "Running the installer" && sleep 3 && bash -c "$(curl -LsS https://github.com/casjay-systems/macos/raw/main/src/os/mac_setup.sh)"
   else
