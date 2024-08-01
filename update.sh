@@ -10,7 +10,7 @@ cyan='\e[1;36m%s\e[0m\n'
 NC='\033[0m'
 
 if [[ ! "$OSTYPE" =~ ^darwin ]]; then
-  printf "\n\t\t${RED} This script is for MacOS ${NC}\n\n"
+  printf "\n\t\t%b\n\n" ${RED} This script is for MacOS ${NC}
   exit 1
 fi
 

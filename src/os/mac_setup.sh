@@ -113,8 +113,8 @@ done
 printf "${NC}\n\n"
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-if [ ! -f "$(command -v brew)" ]; then
-  execute "echo | /bin/bash -c $(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)" "Installing brew"
+if [ -z "$(command -v brew 2>/dev/null)" ]; then
+  execute "/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"" "Installing brew"
 fi
 # no sudo can't continue
 SUDU=$(command -v sudo 2>/dev/null)
